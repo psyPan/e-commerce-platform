@@ -16,7 +16,7 @@ def create_app():
     bcrypt.init_app(app)
     login_manager.init_app(app)
     with app.app_context():
-        from store.login.routes import login
+        from store.users.routes import users
         db.create_all()
-        app.register_blueprint(login)
+        app.register_blueprint(users)
     return app
