@@ -1,0 +1,50 @@
+{% extends "index.html" %}
+{% block content %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='style/register.css') }}">
+    <div class="col-md-8 container">
+        <div class="right-section">
+            <h1 class="form-title">Login</h1>
+            <!-- Flask Form with Jinja -->
+            <form method="POST" action="">
+                {{ form.hidden_tag() }}
+                <!-- First Name and Last Name Row -->
+                <!-- Email Field -->
+                <div class="form-group">
+                    {{ form.email.label(class="form-label") }}
+                    {% if form.email.errors %}
+                        {{ form.email(class="form-input is-invalid", placeholder="john@example.com") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.email.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.email(class="form-input", placeholder="john@example.com") }}
+                    {% endif %}
+                </div>
+                <!-- Password-->
+                <div class="form-group">
+                    {{ form.password.label(class="form-label") }}
+                    {% if form.password.errors %}
+                        {{ form.password(class="form-input is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.password.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.password(class="form-input") }}
+                    {% endif %}
+                </div>
+                <!-- Login Button -->
+                <div class="form-group">
+                    {{ form.submit(class="btn-register") }}
+                </div>
+            </form>
+
+            <div class="login-link">
+                Don't have an account? <a href="#">Sign Up</a>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

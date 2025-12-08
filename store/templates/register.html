@@ -1,0 +1,150 @@
+{% extends "index.html" %}
+{% block content %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='style/register.css') }}">
+    <div class="col-md-8 container">
+        <div class="right-section">
+            <h1 class="form-title">Create Account</h1>
+            <p class="form-subtitle">Fill in the details below to get started</p>
+
+            <!-- Flask Form with Jinja -->
+            <form method="POST" action="">
+                {{ form.hidden_tag() }}
+
+                <!-- First Name and Last Name Row -->
+                <div class="form-row">
+                    <!-- First Name Field -->
+                    <div class="form-group">
+                        {{ form.f_name.label(class="form-label") }}
+                        {% if form.f_name.errors %}
+                            {{ form.f_name(class="form-input is-invalid", placeholder="John") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.f_name.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.f_name(class="form-input") }}
+                        {% endif %}
+                    </div>
+
+                    <!-- Last Name Field -->
+                    <div class="form-group">
+                        {{ form.l_name.label(class="form-label") }}
+                        {% if form.l_name.errors %}
+                            {{ form.l_name(class="form-input is-invalid", placeholder="Doe") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.l_name.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.l_name(class="form-input") }}
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Email Field -->
+                <div class="form-group">
+                    {{ form.email.label(class="form-label") }}
+                    {% if form.email.errors %}
+                        {{ form.email(class="form-input is-invalid", placeholder="john@example.com") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.email.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.email(class="form-input", placeholder="john@example.com") }}
+                    {% endif %}
+                </div>
+
+                <!-- Phone Number Field -->
+                <div class="form-group">
+                    {{ form.phone.label(class="form-label") }}
+                    {% if form.phone.errors %}
+                        {{ form.phone(class="form-input is-invalid", placeholder="09XXXXXXXX") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.phone.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.phone(class="form-input", placeholder="09XXXXXXXX") }}
+                    {% endif %}
+                </div>
+
+                <!-- Address Field -->
+                <div class="form-group">
+                    {{ form.address.label(class="form-label") }}
+                    {% if form.address.errors %}
+                        {{ form.address(class="form-input is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.address.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.address(class="form-input") }}
+                    {% endif %}
+                </div>
+
+                <!-- Date of Birth Field -->
+                <div class="form-group">
+                    {{ form.birth.label(class="form-label") }}
+                    {% if form.birth.errors %}
+                        {{ form.birth(class="form-input is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.birth.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.birth(class="form-input") }}
+                    {% endif %}
+                </div>
+
+                <!-- Password and Confirm Password Row -->
+                <div class="form-row">
+                    <!-- Password Field -->
+                    <div class="form-group">
+                        {{ form.password.label(class="form-label") }}
+                        {% if form.password.errors %}
+                            {{ form.password(class="form-input is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.password.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.password(class="form-input") }}
+                        {% endif %}
+                    </div>
+
+                    <!-- Confirm Password Field -->
+                    <div class="form-group">
+                        {{ form.confirm_password.label(class="form-label") }}
+                        {% if form.confirm_password.errors %}
+                            {{ form.confirm_password(class="form-input is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.confirm_password.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.confirm_password(class="form-input") }}
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="form-group">
+                    {{ form.submit(class="btn-register") }}
+                </div>
+            </form>
+
+            <div class="login-link">
+                Already have an account? <a href="#">Sign In</a>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

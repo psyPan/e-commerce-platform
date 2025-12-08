@@ -1,16 +1,22 @@
-from store import db
+from datetime import datetime
+from store import db, login_manager
+from flask_login import UserMixin
 
-class User(db.Model):
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
+
+class User(db.Model, UserMixin): # We need UserMixin for handling user's logged in sessions
     id = db.Column(db.Integer, primary_key=True)
-    f_name = db.Column(db.String(20), unique=True, nullable=False)
-    l_name = db.Column(db.String(20), unique=True, nullable=False)
+    f_name = db.Column(db.String(20), nullable=False)
+    l_name = db.Column(db.String(20), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(60), nullable=False)
     store_id = db.Column(db.Integer, db.ForeignKey('store.id'))
     phone = db.Column(db.String(10), nullable=False)
     birth = db.Column(db.Date)
     address = db.Column(db.String(200))
-    reg_date = db.Column(db.Date, nullable=False)
+    reg_date = db.Column(db.Date, nullable=False, default=lambda: datetime.utcnow().date())
     a_flag = db.Column(db.Boolean, nullable=False)
     o_flag = db.Column(db.Boolean, nullable=False)
     c_flag = db.Column(db.Boolean, nullable=False)
@@ -25,3 +31,15 @@ class User(db.Model):
 
     def __repr__(self):
         return f"User('{self.username}', '{self.email}', '{self.get_user_type()}')"
+
+class Store(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50), unique=True, nullable=False)
+    email = db.Column(db.String(120), unique=True, nullable=False)
+    phone = db.Column(db.String(10), nullable=False)
+    reg_date = db.Column(db.Date, nullable=False, default=lambda: datetime.utcnow().date())
+    balance = db.Column(db.Integer)
+    owners = db.relationship('User', backref='owner', lazy=True)
+
+    def __repr__(self):
+        return f"Store('{self.name}')"
