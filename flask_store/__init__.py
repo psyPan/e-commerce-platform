@@ -20,15 +20,11 @@ def create_app():
     login_manager.init_app(app)
     
     with app.app_context():
-        # Import blueprints
-        from store.users.routes import users
-        from store.stores.routes import stores
-        
-        # Create database tables
+        from flask_store.users.routes import users
+        from flask_store.stores.routes import stores
         db.create_all()
         
         # Register blueprints
         app.register_blueprint(users)
         app.register_blueprint(stores)
-    
     return app

@@ -1,4 +1,4 @@
-from store import create_app
+from flask_store import create_app
 # POSTGRES = {
 #    'user':'postgres',
 #    'password':'test',
