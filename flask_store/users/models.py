@@ -1,5 +1,5 @@
 from datetime import datetime
-from store import db, login_manager
+from flask_store import db, login_manager
 from flask_login import UserMixin
 
 @login_manager.user_loader
@@ -30,16 +30,4 @@ class User(db.Model, UserMixin): # We need UserMixin for handling user's logged 
             return "customer"
 
     def __repr__(self):
-        return f"User('{self.username}', '{self.email}', '{self.get_user_type()}')"
-
-class Store(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(50), unique=True, nullable=False)
-    email = db.Column(db.String(120), unique=True, nullable=False)
-    phone = db.Column(db.String(10), nullable=False)
-    reg_date = db.Column(db.Date, nullable=False, default=lambda: datetime.utcnow().date())
-    balance = db.Column(db.Integer)
-    owners = db.relationship('User', backref='owner', lazy=True)
-
-    def __repr__(self):
-        return f"Store('{self.name}')"
+        return f"User('{self.f_name}' '{self.l_name}', '{self.email}', '{self.get_user_type()}')"

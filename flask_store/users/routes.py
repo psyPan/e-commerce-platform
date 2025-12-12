@@ -1,15 +1,15 @@
 from flask import render_template, url_for, flash, redirect, request, Blueprint
 from flask_login import login_user, current_user, logout_user, login_required
-from store import db, bcrypt
-from store.users.forms import RegistrationForm, LoginForm
-from store.users.models import User
+from flask_store import db, bcrypt
+from flask_store.users.forms import RegistrationForm, LoginForm
+from flask_store.users.models import User
 
 users = Blueprint('users', __name__)
 
 @users.route('/')
 @users.route('/home')
 def home():
-    return render_template('home.html',title='Home')
+    return render_template('home.html', title='Home')
 
 @users.route('/register', methods=['GET', 'POST'])
 def register():
