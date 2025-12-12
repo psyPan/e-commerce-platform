@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Store Directory</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .page-header {
+            text-align: center;
+            padding: 40px 0;
+            background: white;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .page-header h1 {
+            margin: 0 0 10px 0;
+            color: #333;
+        }
+        .page-header p {
+            color: #666;
+            margin: 0;
+        }
+        .stores-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+        .store-card {
+            background: white;
+            border-radius: 8px;
+            padding: 25px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+        .store-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        .store-card h2 {
+            margin: 0 0 15px 0;
+            color: #2c3e50;
+            font-size: 1.5em;
+        }
+        .store-info {
+            margin-bottom: 15px;
+        }
+        .store-info p {
+            margin: 8px 0;
+            color: #666;
+            font-size: 0.95em;
+        }
+        .store-info strong {
+            color: #333;
+        }
+        .store-stats {
+            display: flex;
+            justify-content: space-between;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+            margin-top: 15px;
+        }
+        .stat {
+            text-align: center;
+        }
+        .stat-value {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #3498db;
+        }
+        .stat-label {
+            font-size: 0.85em;
+            color: #666;
+            margin-top: 5px;
+        }
+        .view-store-btn {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 10px 20px;
+            background: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background 0.2s;
+            text-align: center;
+        }
+        .view-store-btn:hover {
+            background: #2980b9;
+        }
+        .pagination {
+            text-align: center;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .pagination a, .pagination span {
+            display: inline-block;
+            padding: 8px 12px;
+            margin: 0 5px;
+            border: 1px solid #ddd;
+            text-decoration: none;
+            color: #333;
+            border-radius: 4px;
+        }
+        .pagination a:hover {
+            background: #f0f0f0;
+        }
+        .pagination .active {
+            background: #3498db;
+            color: white;
+            border-color: #3498db;
+        }
+        .no-stores {
+            text-align: center;
+            padding: 60px 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .no-stores h3 {
+            color: #666;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Page Header -->
+    <div class="page-header">
+        <h1>🏪 Store Directory</h1>
+        <p>Browse all available stores</p>
+    </div>
+
+    <!-- Stores Grid -->
+    {% if stores %}
+    <div class="stores-grid">
+        {% for store_info in stores %}
+        <a href="{{ url_for('stores.view_store', store_id=store_info.store.store_id) }}" class="store-card">
+            <h2>{{ store_info.store.name }}</h2>
+            
+            <div class="store-info">
+                {% if store_info.store.address %}
+                <p><strong>📍 Address:</strong> {{ store_info.store.address }}</p>
+                {% endif %}
+                
+                {% if store_info.store.phone %}
+                <p><strong>📞 Phone:</strong> {{ store_info.store.phone }}</p>
+                {% endif %}
+                
+                {% if store_info.store.email %}
+                <p><strong>✉️ Email:</strong> {{ store_info.store.email }}</p>
+                {% endif %}
+            </div>
+            
+            <div class="store-stats">
+                <div class="stat">
+                    <div class="stat-value">{{ store_info.product_count }}</div>
+                    <div class="stat-label">Total Products</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">{{ store_info.in_stock_count }}</div>
+                    <div class="stat-label">In Stock</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">
+                        {% if store_info.store.balance %}
+                        ${{ "%.2f"|format(store_info.store.balance) }}
+                        {% else %}
+                        $0.00
+                        {% endif %}
+                    </div>
+                    <div class="stat-label">Balance</div>
+                </div>
+            </div>
+            
+            <div class="view-store-btn">
+                Visit Store →
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+
+    <!-- Pagination -->
+    {% if pagination.pages > 1 %}
+    <div class="pagination">
+        {% if pagination.has_prev %}
+        <a href="{{ url_for('stores.list_stores', page=pagination.prev_num) }}">← Previous</a>
+        {% endif %}
+        
+        {% for page_num in pagination.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+            {% if page_num %}
+                <a href="{{ url_for('stores.list_stores', page=page_num) }}" 
+                   class="{% if page_num == pagination.page %}active{% endif %}">
+                    {{ page_num }}
+                </a>
+            {% else %}
+                <span>...</span>
+            {% endif %}
+        {% endfor %}
+        
+        {% if pagination.has_next %}
+        <a href="{{ url_for('stores.list_stores', page=pagination.next_num) }}">Next →</a>
+        {% endif %}
+    </div>
+    {% endif %}
+
+    {% else %}
+    <!-- No Stores -->
+    <div class="no-stores">
+        <h3>No stores available yet</h3>
+        <p>Check back soon for new stores!</p>
+    </div>
+    {% endif %}
+</body>
+</html>

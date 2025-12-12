@@ -1,0 +1,157 @@
+{% extends "index.html" %}
+
+{% block title %}{{ product.name }} - {{ store.name }}{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <!-- Breadcrumb -->
+    <nav class="mb-6 text-sm">
+        <ol class="flex items-center space-x-2 text-gray-600">
+            <li><a href="{{ url_for('stores.list_stores') }}" class="hover:text-blue-600">Stores</a></li>
+            <li><i class="fas fa-chevron-right text-xs"></i></li>
+            <li><a href="{{ url_for('stores.view_store', store_id=store.store_id) }}" class="hover:text-blue-600">{{ store.name }}</a></li>
+            <li><i class="fas fa-chevron-right text-xs"></i></li>
+            <li class="text-gray-800 font-semibold">{{ product.name }}</li>
+        </ol>
+    </nav>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+        <!-- Product Image -->
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <div class="aspect-square bg-gray-200 rounded-lg flex items-center justify-center mb-4">
+                {% if product.image %}
+                <img src="{{ product.image }}" alt="{{ product.name }}" class="max-h-full max-w-full object-contain">
+                {% else %}
+                <i class="fas fa-box text-9xl text-gray-400"></i>
+                {% endif %}
+            </div>
+            
+            {% if product.discount and product.discount > 0 %}
+            <div class="bg-red-100 border-l-4 border-red-600 p-4 rounded">
+                <p class="text-red-800 font-bold">
+                    <i class="fas fa-tag"></i> Special Offer: {{ product.discount }}% OFF!
+                </p>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Product Details -->
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <h1 class="text-3xl font-bold text-gray-800 mb-4">{{ product.name }}</h1>
+            
+            <!-- Store Info -->
+            <div class="mb-4 pb-4 border-b">
+                <p class="text-gray-600">
+                    Sold by: <a href="{{ url_for('stores.view_store', store_id=store.store_id) }}" 
+                               class="text-blue-600 hover:underline font-semibold">{{ store.name }}</a>
+                </p>
+            </div>
+
+            <!-- Price Section -->
+            <div class="mb-6">
+                {% if product.discount and product.discount > 0 %}
+                <div class="flex items-center gap-3 mb-2">
+                    <span class="text-gray-500 line-through text-2xl">${{ "%.2f"|format(product.sell_price) }}</span>
+                    <span class="bg-red-600 text-white px-3 py-1 rounded-full font-bold">
+                        Save {{ product.discount }}%
+                    </span>
+                </div>
+                <div class="text-4xl font-bold text-red-600">
+                    ${{ "%.2f"|format(product.get_final_price()) }}
+                </div>
+                {% else %}
+                <div class="text-4xl font-bold text-gray-800">
+                    ${{ "%.2f"|format(product.sell_price) }}
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Stock Status -->
+            <div class="mb-6">
+                {% if product.stock > 0 %}
+                <div class="flex items-center text-green-600 font-semibold text-lg">
+                    <i class="fas fa-check-circle mr-2"></i>
+                    <span>In Stock - {{ product.stock }} units available</span>
+                </div>
+                {% else %}
+                <div class="flex items-center text-red-600 font-semibold text-lg">
+                    <i class="fas fa-times-circle mr-2"></i>
+                    <span>Out of Stock</span>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Product Specifications -->
+            <div class="bg-gray-50 rounded-lg p-4 mb-6">
+                <h3 class="font-bold text-lg mb-3">Product Information</h3>
+                <dl class="grid grid-cols-2 gap-3">
+                    {% if product.type %}
+                    <dt class="text-gray-600">Category:</dt>
+                    <dd class="font-semibold">{{ product.type }}</dd>
+                    {% endif %}
+                    
+                    {% if product.manufacturer %}
+                    <dt class="text-gray-600">Manufacturer:</dt>
+                    <dd class="font-semibold">{{ product.manufacturer }}</dd>
+                    {% endif %}
+                    
+                    {% if product.model %}
+                    <dt class="text-gray-600">Model:</dt>
+                    <dd class="font-semibold">{{ product.model }}</dd>
+                    {% endif %}
+                    
+                    <dt class="text-gray-600">Product ID:</dt>
+                    <dd class="font-semibold">#{{ product.product_id }}</dd>
+                </dl>
+            </div>
+
+            <!-- Description -->
+            {% if product.description %}
+            <div class="mb-6">
+                <h3 class="font-bold text-lg mb-2">Description</h3>
+                <p class="text-gray-700 leading-relaxed">{{ product.description }}</p>
+            </div>
+            {% endif %}
+
+            <!-- Action Buttons -->
+            <div class="flex gap-4">
+                {% if product.stock > 0 %}
+                <button class="flex-1 bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 font-semibold text-lg transition">
+                    <i class="fas fa-shopping-cart mr-2"></i> Add to Cart
+                </button>
+                <button class="bg-gray-200 text-gray-700 px-6 py-3 rounded-lg hover:bg-gray-300 transition">
+                    <i class="fas fa-heart"></i>
+                </button>
+                {% else %}
+                <button class="flex-1 bg-gray-400 text-white px-6 py-3 rounded-lg cursor-not-allowed" disabled>
+                    <i class="fas fa-ban mr-2"></i> Out of Stock
+                </button>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Related Products -->
+    {% if related_products %}
+    <div class="bg-white rounded-lg shadow-md p-6">
+        <h2 class="text-2xl font-bold mb-6">Related Products</h2>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {% for related in related_products %}
+            <a href="{{ url_for('stores.product_detail', store_id=store.store_id, product_id=related.product_id) }}" 
+               class="block bg-gray-50 rounded-lg p-4 hover:shadow-md transition">
+                <div class="h-32 bg-gray-200 rounded mb-3 flex items-center justify-center">
+                    {% if related.image %}
+                    <img src="{{ related.image }}" alt="{{ related.name }}" class="max-h-full max-w-full object-contain">
+                    {% else %}
+                    <i class="fas fa-box text-4xl text-gray-400"></i>
+                    {% endif %}
+                </div>
+                <h4 class="font-semibold text-sm mb-1 truncate">{{ related.name }}</h4>
+                <p class="text-blue-600 font-bold">${{ "%.2f"|format(related.get_final_price()) }}</p>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

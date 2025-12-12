@@ -6,17 +6,29 @@ from flask_login import LoginManager
 db = SQLAlchemy()
 bcrypt = Bcrypt()
 login_manager = LoginManager()
+login_manager.login_view = 'users.login'  # Redirect to login page if not authenticated
+login_manager.login_message_category = 'info'  # Flash message category
 
 def create_app():
     app = Flask(__name__)
-    app.config['SECRET_KEY'] = 'YourSecretKey'
+    app.config['SECRET_KEY'] = 'YourSecretKey'  # Change this in production!
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    
     db.init_app(app)
     bcrypt.init_app(app)
     login_manager.init_app(app)
+    
     with app.app_context():
+        # Import blueprints
         from store.users.routes import users
+        from store.stores.routes import stores
+        
+        # Create database tables
         db.create_all()
+        
+        # Register blueprints
         app.register_blueprint(users)
+        app.register_blueprint(stores)
+    
     return app

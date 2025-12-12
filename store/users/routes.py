@@ -2,7 +2,7 @@ from flask import render_template, url_for, flash, redirect, request, Blueprint
 from flask_login import login_user, current_user, logout_user, login_required
 from store import db, bcrypt
 from store.users.forms import RegistrationForm, LoginForm
-from store.users.models import User
+from store.models import User
 
 users = Blueprint('users', __name__)
 
