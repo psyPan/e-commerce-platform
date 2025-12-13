@@ -14,7 +14,7 @@
                 <p class="text-xl">Special offers from {{ store.name }}</p>
             </div>
             <div class="text-right">
-                <a href="{{ url_for('stores.view_store', store_id=store.store_id) }}" 
+                <a href="{{ url_for('stores.view_store', store_id=store.id) }}" 
                    class="bg-white text-red-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition inline-block">
                     <i class="fas fa-arrow-left mr-2"></i> Back to Store
                 </a>
@@ -43,7 +43,7 @@
             </div>
             {% endif %}
 
-            <a href="{{ url_for('stores.product_detail', store_id=store.store_id, product_id=product.product_id) }}">
+            <a href="{{ url_for('stores.product_detail', store_id=store.id, product_id=product.product_id) }}">
                 <div class="h-48 bg-gray-200 flex items-center justify-center">
                     {% if product.image %}
                     <img src="{{ product.image }}" alt="{{ product.name }}" class="h-full w-full object-cover">

@@ -147,7 +147,7 @@
     {% if stores %}
     <div class="stores-grid">
         {% for store_info in stores %}
-        <a href="{{ url_for('stores.view_store', store_id=store_info.store.store_id) }}" class="store-card">
+        <a href="{{ url_for('stores.view_store', store_id=store_info.store.id) }}" class="store-card">
             <h2>{{ store_info.store.name }}</h2>
             
             <div class="store-info">

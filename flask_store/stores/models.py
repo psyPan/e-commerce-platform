@@ -1,6 +1,7 @@
 from datetime import datetime
 from flask_store import db
 
+
 class Store(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), unique=True, nullable=False)
@@ -9,6 +10,54 @@ class Store(db.Model):
     reg_date = db.Column(db.Date, nullable=False, default=lambda: datetime.utcnow().date())
     balance = db.Column(db.Integer)
     owners = db.relationship('User', backref='store', lazy=True)
+    products = db.relationship('Product', backref='store', lazy=True)
 
     def __repr__(self):
         return f"Store('{self.name}')"
+    
+
+class Product(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    store_id = db.Column(db.Integer, db.ForeignKey('store.id'), nullable=False)
+    discount_id = db.Column(db.Integer, db.ForeignKey('discount.id'))
+    name = db.Column(db.String(100), nullable=False)
+    description = db.Column(db.Text)
+    discount = db.Column(db.Float, default=0.0)
+    image = db.Column(db.String(200))
+    discounted_price = db.Column(db.Float)
+    sell_price = db.Column(db.Float, nullable=False)
+    stock = db.Column(db.Integer, default=0, nullable=False)
+    manufacturer = db.Column(db.String(100))
+    type = db.Column(db.String(50))
+    model = db.Column(db.String(100))
+    
+    # Relationship
+    discount_obj = db.relationship('Discount', back_populates='products')
+    #line_items = db.relationship('LineItem', backref='product', lazy=True)
+    
+    def get_final_price(self):
+        """Calculate the final price considering discounts"""
+        if self.discounted_price:
+            return self.discounted_price
+        elif self.discount > 0:
+            return self.sell_price * (1 - self.discount / 100)
+        return self.sell_price
+    
+    def is_in_stock(self):
+        """Check if product is available"""
+        return self.stock > 0
+    
+    def __repr__(self):
+        return f"Product('{self.name}', ${self.sell_price})"
+    
+# flask_store/stores/models.py (or a separate discounts/models.py)
+
+class Discount(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    User_id = db.Column(db.Integer, db.ForeignKey('user.id')) 
+    name = db.Column(db.String)
+    description = db.Column(db.Text)
+    discount_percent = db.Column(db.Float)
+    Is_Active = db.Column(db.Float)
+    code = db.Column(db.String)
+    products = db.relationship('Product', back_populates='discount_obj')

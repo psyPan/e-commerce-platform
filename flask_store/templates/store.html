@@ -98,7 +98,7 @@
 
     <!-- Filters -->
     <div class="filters">
-        <form method="GET" action="{{ url_for('stores.view_store', store_id=store.store_id) }}">
+        <form method="GET" action="{{ url_for('stores.view_store', store_id=store.id) }}">
             <!-- Search -->
             <input type="text" name="q" placeholder="Search products..." 
                    value="{{ current_filters.search or '' }}">
@@ -140,7 +140,7 @@
             </label>
             
             <button type="submit">Apply Filters</button>
-            <a href="{{ url_for('stores.view_store', store_id=store.store_id) }}">Clear</a>
+            <a href="{{ url_for('stores.view_store', store_id=store.id) }}">Clear</a>
         </form>
     </div>
 
@@ -182,7 +182,7 @@
                     {% endif %}
                 </div>
                 
-                <a href="{{ url_for('stores.product_detail', store_id=store.store_id, product_id=product.product_id) }}">
+                <a href="{{ url_for('stores.product_detail', store_id=store.id, product_id=product.id) }}">
                     View Details
                 </a>
             </div>
@@ -196,12 +196,12 @@
     {% if pagination.pages > 1 %}
     <div class="pagination">
         {% if pagination.has_prev %}
-        <a href="{{ url_for('stores.view_store', store_id=store.store_id, page=pagination.prev_num) }}">Previous</a>
+        <a href="{{ url_for('stores.view_store', store_id=store.id, page=pagination.prev_num) }}">Previous</a>
         {% endif %}
         
         {% for page_num in pagination.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
             {% if page_num %}
-                <a href="{{ url_for('stores.view_store', store_id=store.store_id, page=page_num) }}" 
+                <a href="{{ url_for('stores.view_store', store_id=store.id, page=page_num) }}" 
                    class="{% if page_num == pagination.page %}active{% endif %}">
                     {{ page_num }}
                 </a>
@@ -211,7 +211,7 @@
         {% endfor %}
         
         {% if pagination.has_next %}
-        <a href="{{ url_for('stores.view_store', store_id=store.store_id, page=pagination.next_num) }}">Next</a>
+        <a href="{{ url_for('stores.view_store', store_id=store.id, page=pagination.next_num) }}">Next</a>
         {% endif %}
     </div>
     {% endif %}
