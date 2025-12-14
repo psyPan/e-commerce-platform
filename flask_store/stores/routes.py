@@ -8,7 +8,6 @@ from sqlalchemy import func, or_, and_
 
 stores = Blueprint('stores', __name__)
 
-
 @stores.route('/add_store', methods=['GET', 'POST'])
 def add_store():
     form = StoreForm()

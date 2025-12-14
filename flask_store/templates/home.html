@@ -1,4 +1,35 @@
 {% extends "index.html" %}
 {% block content %}
-    <h1>Home Page</h1>
+<link rel="stylesheet" href="{{ url_for('static', filename='style/home.css') }}">
+
+<div class="home-wrapper">
+
+    <!-- BANNER -->
+    <div class="banner">
+        Discount advertisement
+    </div>
+
+    <!-- PRODUCT GRID -->
+    <div class="product-grid">
+        {% for i in range(12) %}
+        <div class="product">
+            <div class="img-box"></div>
+            <div class="product-name">Product name</div>
+            <div class="product-price">Price</div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- PAGINATION -->
+    <div class="pagination">
+        <a class="pg-btn">«</a>
+        <a class="pg-btn active">1</a>
+        <a class="pg-btn">2</a>
+        <a class="pg-btn">3</a>
+        <span>...</span>
+        <a class="pg-btn">5</a>
+        <a class="pg-btn">»</a>
+    </div>    
+</div>
+
 {% endblock content %}
