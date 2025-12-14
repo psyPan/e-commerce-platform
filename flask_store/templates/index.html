@@ -44,16 +44,15 @@
             {% if request.endpoint in ['users.login', 'users.register', 'users.logout'] %}
                 <!-- LOGIN & REGISTER PAGES → sembunyikan navbar -->
             {% else %}
-                
                 {% if current_user.is_authenticated %}
+                    {% if current_user.c_flag %}
+                    <a href=#>My Profile</a>
+                    {% endif %}
                     <a href="{{ url_for('users.logout') }}">Log Out</a>
                 {% else %}
                     <a href="{{ url_for('users.register') }}">Sign Up</a>
                     <a href="{{ url_for('users.login') }}">Login</a>
                 {% endif %}
-
-                <a href="{{ url_for('users.home') }}">Home</a>
-
             {% endif %}
         </div>
 
