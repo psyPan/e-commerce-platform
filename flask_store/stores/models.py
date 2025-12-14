@@ -49,15 +49,3 @@ class Product(db.Model):
     
     def __repr__(self):
         return f"Product('{self.name}', ${self.sell_price})"
-    
-# flask_store/stores/models.py (or a separate discounts/models.py)
-
-class Discount(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    User_id = db.Column(db.Integer, db.ForeignKey('user.id')) 
-    name = db.Column(db.String)
-    description = db.Column(db.Text)
-    discount_percent = db.Column(db.Float)
-    Is_Active = db.Column(db.Float)
-    code = db.Column(db.String)
-    products = db.relationship('Product', back_populates='discount_obj')

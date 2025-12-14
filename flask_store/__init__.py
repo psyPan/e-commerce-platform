@@ -22,9 +22,11 @@ def create_app():
     with app.app_context():
         from flask_store.users.routes import users
         from flask_store.stores.routes import stores
+        from flask_store.discounts.routes import discounts
         db.create_all()
         
         # Register blueprints
         app.register_blueprint(users)
         app.register_blueprint(stores)
+        app.register_blueprint(discounts)
     return app
