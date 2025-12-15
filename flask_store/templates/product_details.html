@@ -9,7 +9,7 @@
         <ol class="flex items-center space-x-2 text-gray-600">
             <li><a href="{{ url_for('stores.list_stores') }}" class="hover:text-blue-600">Stores</a></li>
             <li><i class="fas fa-chevron-right text-xs"></i></li>
-            <li><a href="{{ url_for('stores.view_store', store_id=store.store_id) }}" class="hover:text-blue-600">{{ store.name }}</a></li>
+            <li><a href="{{ url_for('stores.view_store', store_id=store.id) }}" class="hover:text-blue-600">{{ store.name }}</a></li>
             <li><i class="fas fa-chevron-right text-xs"></i></li>
             <li class="text-gray-800 font-semibold">{{ product.name }}</li>
         </ol>
@@ -42,7 +42,7 @@
             <!-- Store Info -->
             <div class="mb-4 pb-4 border-b">
                 <p class="text-gray-600">
-                    Sold by: <a href="{{ url_for('stores.view_store', store_id=store.store_id) }}" 
+                    Sold by: <a href="{{ url_for('stores.view_store', store_id=store.id) }}" 
                                class="text-blue-600 hover:underline font-semibold">{{ store.name }}</a>
                 </p>
             </div>
@@ -101,7 +101,7 @@
                     {% endif %}
                     
                     <dt class="text-gray-600">Product ID:</dt>
-                    <dd class="font-semibold">#{{ product.product_id }}</dd>
+                    <dd class="font-semibold">#{{ product.id }}</dd>
                 </dl>
             </div>
 
@@ -137,7 +137,7 @@
         <h2 class="text-2xl font-bold mb-6">Related Products</h2>
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
             {% for related in related_products %}
-            <a href="{{ url_for('stores.product_detail', store_id=store.store_id, product_id=related.product_id) }}" 
+            <a href="{{ url_for('stores.product_detail', store_id=store.id, product_id=related.id) }}" 
                class="block bg-gray-50 rounded-lg p-4 hover:shadow-md transition">
                 <div class="h-32 bg-gray-200 rounded mb-3 flex items-center justify-center">
                     {% if related.image %}
