@@ -41,7 +41,7 @@ body {
     align-items: center;
     justify-content: space-between;
 
-    padding: 25px 40px;
+    padding: 15px 40px;
     background: #43341e;
     color: white;
     border-radius: 0;
@@ -66,10 +66,10 @@ body {
 }
 
 .search-box {
-    padding: 11px 18px;
-    border-radius: 25px;
+    padding: 7px 15px;
+    border-radius: 20px;
     border: 2px solid #e0e0e0;
-    width: 300px;
+    width: 250px;
     font-size: 14px;
     transition: all 0.2s ease;
     background: white;
@@ -83,7 +83,7 @@ body {
 
 .search-icon {
     cursor: pointer;
-    font-size: 20px;
+    font-size: 5px;
     user-select: none;
 }
 
@@ -97,7 +97,7 @@ body {
     background: #c9a876;
     border: none;
     border-radius: 20px;
-    padding: 8px 14px;
+    padding: 5px 12px;
     font-size: 18px;
     cursor: pointer;
     transition: 0.2s;
