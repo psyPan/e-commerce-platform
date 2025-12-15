@@ -180,7 +180,7 @@ def product_detail(store_id, product_id):
         Product.stock > 0
     ).limit(4).all()
     
-    return render_template('product_detail.html',
+    return render_template('product_details.html',
                          store=store,
                          product=product,
                          related_products=related_products)

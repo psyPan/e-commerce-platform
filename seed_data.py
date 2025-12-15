@@ -1,5 +1,6 @@
 from flask_store import db, create_app, bcrypt
-from flask_store.stores.models import Store, Product, Discount
+from flask_store.stores.models import Store, Product
+from flask_store.discounts.models import Discount
 from flask_store.users.models import User
 from datetime import date
 
@@ -58,7 +59,8 @@ with app.app_context():
     summer_sale = Discount(
         name="Summer Sale", 
         discount_percent=20.0, 
-        code="SUMMER20"
+        code="SUMMER20",
+        type='seasoning'
     )
     db.session.add(summer_sale)
     db.session.commit()
