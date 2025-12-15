@@ -1,11 +1,16 @@
-.credit-wrapper {
+/* =========================
+   LAYOUT
+   ========================= */
+   .credit-wrapper {
     max-width: 1100px;
     margin: 50px auto;
     display: flex;
     gap: 40px;
 }
 
-/* SIDE MENU */
+/* =========================
+   SIDE MENU
+   ========================= */
 .side-menu {
     width: 200px;
     display: flex;
@@ -14,7 +19,6 @@
 }
 
 .side-btn {
-    display: block;
     padding: 12px 20px;
     background: #f3e8dd;
     border-radius: 20px;
@@ -34,7 +38,9 @@
     color: white;
 }
 
-/* MAIN CONTENT */
+/* =========================
+   MAIN CONTENT
+   ========================= */
 .credit-container {
     flex: 1;
     text-align: center;
@@ -47,36 +53,188 @@
     margin-bottom: 25px;
 }
 
-/* EMPTY CARD LIST */
-.no-card {
-    font-size: 15px;
-    margin-bottom: 25px;
-    color: #666;
+/* =========================
+   CARD LIST CONTAINER
+   ========================= */
+.card-list {
+    max-width: 700px;
+    margin: 0 auto;
+    background: rgba(255,255,255,0.35);
+    padding: 40px;
+    border-radius: 30px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+
+    min-height: 420px;
 }
 
-/* ADD CARD BUTTON */
+/* =========================
+   CARD ITEM
+   ========================= */
+.card-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    background: white;
+    border-radius: 20px;
+    padding: 20px 24px;
+
+    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+}
+
+/* LEFT */
+.card-left {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.card-icon {
+    width: 48px;
+    height: 38px;
+    background: #c9a876;
+    border-radius: 8px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: white;
+    font-size: 18px;
+}
+
+.card-info {
+    text-align: left;
+}
+
+.bank-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: #43341e;
+}
+
+.card-number {
+    font-size: 13px;
+    color: #777;
+    margin-top: 2px;
+}
+
+/* RIGHT */
+.card-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.card-type {
+    font-size: 14px;
+    font-weight: 600;
+    color: #43341e;
+}
+
+/* =========================
+   DELETE (X) BUTTON
+   ========================= */
+.delete-card-btn {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    border: none;
+
+    background: #e74c3c;
+    color: white;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 16px;
+    font-weight: bold;
+    line-height: 1;
+
+    cursor: pointer;
+    transition: background 0.15s ease, transform 0.15s ease;
+}
+
+.delete-card-btn:hover {
+    background: #cf3e30;
+    transform: scale(1.05);
+}
+
+/* =========================
+   ACTION BUTTONS (BOTTOM RIGHT)
+   ========================= */
+.card-actions {
+    margin-top: auto;
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+}
+
+/* =========================
+   BUTTON STYLES
+   ========================= */
+.edit-btn,
 .add-card-btn {
     padding: 12px 25px;
     background: #c9a876;
     color: white;
     border: none;
-    border-radius: 12px;
+    border-radius: 14px;
     font-size: 15px;
     cursor: pointer;
-    transition: 0.2s;
+    transition: background 0.2s;
 }
 
+.edit-btn:hover,
 .add-card-btn:hover {
     background: #b08d5c;
 }
 
-/* POPUP BACKDROP */
+.cancel-btn {
+    padding: 12px 25px;
+    background: #d9d9d9;
+    color: #333;
+    border: none;
+    border-radius: 14px;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+/* =========================
+   EDIT MODE VISIBILITY CONTROL
+   ========================= */
+
+/* default (normal mode) */
+.card-list .delete-card-btn,
+.card-list .edit-actions {
+    display: none;
+}
+
+/* edit mode active */
+.card-list.edit-mode .delete-card-btn {
+    display: flex;
+}
+
+.card-list.edit-mode .edit-actions {
+    display: flex;
+    gap: 12px;
+}
+
+.card-list.edit-mode .edit-btn {
+    display: none;
+}
+
+/* =========================
+   POPUP
+   ========================= */
 .popup {
     display: none;
     position: fixed;
-    top: 0; left: 0;
-    width: 100%;
-    height: 100%;
+    inset: 0;
     background: rgba(0,0,0,0.4);
     justify-content: center;
     align-items: center;
@@ -87,7 +245,6 @@
     display: flex;
 }
 
-/* POPUP CONTENT */
 .popup-inner {
     width: 420px;
     background: white;
@@ -123,58 +280,17 @@
     gap: 10px;
 }
 
-/* POPUP BUTTONS */
 .popup-buttons {
     display: flex;
     justify-content: space-between;
     margin-top: 10px;
 }
 
-.cancel-btn, .add-btn {
-    padding: 10px 22px;
-    border-radius: 12px;
-    border: none;
-    cursor: pointer;
-}
-
-.cancel-btn {
-    background: #d9d9d9;
-}
-
 .add-btn {
     background: #43341e;
     color: white;
-}
-
-.canva-navbar a {
-    color: white !important;
-    text-decoration: none !important;
-    font-weight: 600;
-}
-
-.canva-navbar a:hover {
-    color: #c9a876 !important;
-}
-
-/* NEW TOP NAVBAR LIKE CANVA */
-.navbar {
-    display: flex;
-    align-items: center;
-}
-
-.nav-links {
-    margin-left: auto;
-    display: flex;
-    align-items: center;
-}
-
-.nav-left-links {
-    display: flex;
-    gap: 16px;
-}
-
-.nav-right-links {
-    display: flex;
-    gap: 16px;
-    margin-left: 24px;
+    border-radius: 12px;
+    padding: 10px 22px;
+    border: none;
+    cursor: pointer;
 }

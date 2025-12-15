@@ -44,3 +44,7 @@ def login():
 def logout():
     logout_user()
     return redirect(url_for('users.login'))
+
+@users.route('/credit')
+def credit():
+    return render_template('credit_card.html')
