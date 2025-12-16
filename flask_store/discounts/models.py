@@ -26,6 +26,9 @@ class Discount(db.Model):
     # Relationship to special_event details (one-to-one)
     special_event_details = db.relationship('SpecialEvent', back_populates='discount', uselist=False)
 
+    def __repr__(self):
+        return f"Discount('{self.name}', '{self.code}', '{self.type}')"
+
 class Shipping(db.Model):
     discount_id = db.Column(db.Integer, db.ForeignKey('discount.id', onupdate="CASCADE", ondelete="CASCADE"), 
                             primary_key=True, nullable=False)

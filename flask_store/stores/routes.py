@@ -1,9 +1,10 @@
 from flask import render_template, url_for, flash, redirect, request, Blueprint, jsonify, abort
-from flask_login import login_user, current_user, logout_user, login_required
+from flask_login import current_user, login_required
 from flask_store import db
 from flask_store.stores.forms import StoreForm
 from flask_store.users.models import User
-from flask_store.stores.models import Store, Product  # Add Product import
+from flask_store.stores.models import Store
+from flask_store.products.models import Product
 from sqlalchemy import func, or_, and_
 
 stores = Blueprint('stores', __name__)
@@ -13,11 +14,15 @@ def add_store():
     form = StoreForm()
     
     if form.validate_on_submit():
-        # Search for user by first name and last name, and check if o_flag is True
-        owner = User.query.filter_by(
-            f_name=form.owner_f_name.data,
-            l_name=form.owner_l_name.data,
-            o_flag=True
+        # Search for user by first name and last name, and check if o_flag or a_flag is True
+        owner = User.query.filter(
+            User.f_name == form.owner_f_name.data,
+            User.l_name == form.owner_l_name.data,
+            # Use or_() to check if EITHER condition is true
+            or_(
+                User.a_flag == True,
+                User.o_flag == True
+            )
         ).first()
         
         if not owner:
