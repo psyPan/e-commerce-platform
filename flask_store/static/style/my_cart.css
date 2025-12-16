@@ -42,14 +42,21 @@
 .cart-subtotal {
     display: grid;
     grid-template-columns:
-        50px minmax(260px,1fr) 140px 160px 140px 50px;
-    align-items: center;
+        50px                 /* checkbox */
+        minmax(260px, 1fr)   /* product */
+        140px                /* unit price */
+        160px                /* quantity */
+        140px                /* total */
+        50px;                /* delete */
 
+    align-items: center;
     background: white;
     border-radius: 30px;
     padding: 18px 22px;
+    margin-bottom: 30px;
     font-weight: 600;
 }
+
 
 .cart-header,
 .cart-item,
@@ -282,4 +289,48 @@
         140px                /* total */
         50px;                /* delete */
     align-items: center;
+}
+
+.summary-card {
+    background: white;
+    border-radius: 30px;
+    padding: 30px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    margin: 12px 0;
+    font-size: 15px;
+    color: #333;
+}
+
+.summary-row span:last-child {
+    font-weight: 600;
+}
+
+.summary-row.total {
+    margin-top: 18px;
+    padding-top: 12px;
+    border-top: 1px solid #eee;
+    font-size: 17px;
+    font-weight: 700;
+    color: #43341e;
+}
+
+.col-check {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.col-check input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+}
+
+.col-check input[type="checkbox"] {
+    accent-color: #43341e; /* warna coklat theme kamu */
 }

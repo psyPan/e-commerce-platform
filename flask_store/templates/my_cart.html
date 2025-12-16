@@ -22,7 +22,9 @@
 
     <!-- HEADER -->
     <div class="cart-header">
-        <div class="col-check"><input type="checkbox"></div>
+        <div class="col-check">
+            <input type="checkbox" id="select-all">
+        </div>        
         <div class="col-product">Select All</div>
         <div class="col-price">Unit Price</div>
         <div class="col-qty">Quantity</div>
@@ -31,9 +33,10 @@
     </div>
 
     <!-- ITEM -->
-    <div class="cart-item">
-        <div class="col-check"><input type="checkbox"></div>
-
+    <div class="cart-item" data-price="150">
+        <div class="col-check">
+            <input type="checkbox" class="item-checkbox">
+        </div>        
         <div class="col-product product-info">
             <div class="product-img">Image</div>
             <div class="product-name">Product Name</div>
@@ -43,7 +46,7 @@
 
         <div class="col-qty qty-box">
             <button>-</button>
-            <input type="text" value="1">
+            <input type="text" value="0">
             <button>+</button>
         </div>
 
@@ -54,8 +57,10 @@
         </div>
     </div>
 
-    <div class="cart-item">
-        <div class="col-check"><input type="checkbox"></div>
+    <div class="cart-item" data-price="100">
+        <div class="col-check">
+            <input type="checkbox" class="item-checkbox">
+        </div>        
 
         <div class="col-product product-info">
             <div class="product-img">Image</div>
@@ -66,7 +71,7 @@
 
         <div class="col-qty qty-box">
             <button>-</button>
-            <input type="text" value="2">
+            <input type="text" value="0">
             <button>+</button>
         </div>
 
@@ -79,10 +84,13 @@
 
     <!-- SUBTOTAL -->
     <div class="cart-subtotal">
-        <span>Subtotal</span>
-        <div style="text-align:center;">3 item</div>
-        <div style="text-align:center;">$350</div>
-    </div>
+        <div></div> <!-- checkbox kosong -->
+        <div>Subtotal</div>
+        <div></div> <!-- unit price kosong -->
+        <div style="text-align:center;" id="subtotal-items">7 items</div>
+        <div style="text-align:center;" id="subtotal-price">$950</div>
+        <div></div> <!-- delete kosong -->
+    </div>    
 
     <!-- BOTTOM SECTION -->
     <div class="cart-bottom">
@@ -114,17 +122,125 @@
 
         <div class="summary-card">
             <h3>Summary</h3>
-            <p><span>Discounted Price</span><span>100</span></p>
-            <p><span>Saved</span><span>0</span></p>
-            <p><span>Shipping</span><span>0</span></p>
-            <p class="total"><span>Total</span><span>100</span></p>
+        
+            <div class="summary-row">
+                <span>Subtotal</span>
+                <span id="summary-subtotal">$350</span>
+            </div>
+        
+            <div class="summary-row">
+                <span>Discount</span>
+                <span id="summary-discount">-$0</span>
+            </div>
+        
+            <div class="summary-row">
+                <span>Shipping</span>
+                <span id="summary-shipping">$0</span>
+            </div>
+        
+            <div class="summary-row total">
+                <span>Total</span>
+                <span id="summary-total">$350</span>
+            </div>
         </div>
+        
 
     </div>
 
     <div class="checkout-area">
         <button class="checkout-btn">Check Out</button>
     </div>
+
+    <script>
+        function updateCart() {
+            let items = document.querySelectorAll(".cart-item");
+            let totalQty = 0;
+            let totalPrice = 0;
+        
+            items.forEach(item => {
+                const checkbox = item.querySelector(".item-checkbox");
+                const price = parseInt(item.dataset.price);
+                const qtyInput = item.querySelector(".qty-box input");
+                const qty = parseInt(qtyInput.value);
+
+                if (!checkbox || checkbox.checked) {
+                    const itemTotal = price * qty;
+                    item.querySelector(".col-total").innerText = `$${itemTotal}`;
+
+                    totalQty += qty;
+                    totalPrice += itemTotal;
+                }
+            });
+
+        
+            document.getElementById("subtotal-items").innerText =
+                `${totalQty} item${totalQty > 1 ? "s" : ""}`;
+        
+            document.getElementById("subtotal-price").innerText = `$${totalPrice}`;
+            document.getElementById("summary-total").innerText = `$${totalPrice}`;
+        }
+        
+        /* PLUS / MINUS BUTTON */
+        document.querySelectorAll(".qty-box").forEach(box => {
+            const input = box.querySelector("input");
+            const minus = box.querySelector("button:first-child");
+            const plus = box.querySelector("button:last-child");
+        
+            minus.onclick = () => {
+                let val = parseInt(input.value);
+                if (val > 1) {
+                    input.value = val - 1;
+                    updateCart();
+                }
+            };
+        
+            plus.onclick = () => {
+                input.value = parseInt(input.value) + 1;
+                updateCart();
+            };
+        
+            input.onchange = updateCart;
+        });
+        
+        /* DELETE ITEM */
+        document.querySelectorAll(".delete-btn").forEach(btn => {
+            btn.onclick = () => {
+                btn.closest(".cart-item").remove();
+                updateCart();
+            };
+        });
+        
+        /* INIT */
+        updateCart();
+        </script>        
+
+<script>
+    /* =========================
+       SELECT ALL CHECKBOX
+    ========================= */
+    const selectAll = document.getElementById("select-all");
+    
+    function syncSelectAll() {
+        const items = document.querySelectorAll(".item-checkbox");
+        const checkedItems = document.querySelectorAll(".item-checkbox:checked");
+    
+        selectAll.checked = items.length === checkedItems.length && items.length > 0;
+    }
+    
+    selectAll.addEventListener("change", () => {
+        document.querySelectorAll(".item-checkbox").forEach(cb => {
+            cb.checked = selectAll.checked;
+        });
+    });
+    
+    /* item checkbox change */
+    document.addEventListener("change", (e) => {
+        if (e.target.classList.contains("item-checkbox")) {
+            syncSelectAll();
+        }
+    });
+    </script>
+    
 
 </div>
 {% endblock %}
