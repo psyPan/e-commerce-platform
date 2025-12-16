@@ -81,3 +81,6 @@ def change_password():
 def order_history():
     return render_template('order_history.html')
 
+@users.route('/my_cart')
+def my_cart():
+    return render_template('my_cart.html')

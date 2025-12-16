@@ -1,0 +1,130 @@
+{% extends "index.html" %}
+
+{% block navbar %}
+<div class="navbar">
+    <div class="logo">
+        <a href="{{ url_for('users.home') }}">Our Logo</a>
+    </div>
+    <div class="nav-links">
+        <a href="{{ url_for('users.home') }}">Home</a>
+        <a href="{{ url_for('users.logout') }}">Log Out</a>
+    </div>
+</div>
+{% endblock navbar %}
+
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='style/home.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='style/my_cart.css') }}">
+
+<div class="cart-wrapper">
+
+    <div class="cart-title">My Cart</div>
+
+    <!-- HEADER -->
+    <div class="cart-header">
+        <div class="col-check"><input type="checkbox"></div>
+        <div class="col-product">Select All</div>
+        <div class="col-price">Unit Price</div>
+        <div class="col-qty">Quantity</div>
+        <div class="col-total">Total</div>
+        <div class="col-action"></div>
+    </div>
+
+    <!-- ITEM -->
+    <div class="cart-item">
+        <div class="col-check"><input type="checkbox"></div>
+
+        <div class="col-product product-info">
+            <div class="product-img">Image</div>
+            <div class="product-name">Product Name</div>
+        </div>
+
+        <div class="col-price">$150</div>
+
+        <div class="col-qty qty-box">
+            <button>-</button>
+            <input type="text" value="1">
+            <button>+</button>
+        </div>
+
+        <div class="col-total">$150</div>
+
+        <div class="col-action">
+            <button class="delete-btn">✕</button>
+        </div>
+    </div>
+
+    <div class="cart-item">
+        <div class="col-check"><input type="checkbox"></div>
+
+        <div class="col-product product-info">
+            <div class="product-img">Image</div>
+            <div class="product-name">Product Name</div>
+        </div>
+
+        <div class="col-price">$100</div>
+
+        <div class="col-qty qty-box">
+            <button>-</button>
+            <input type="text" value="2">
+            <button>+</button>
+        </div>
+
+        <div class="col-total">$200</div>
+
+        <div class="col-action">
+            <button class="delete-btn">✕</button>
+        </div>
+    </div>
+
+    <!-- SUBTOTAL -->
+    <div class="cart-subtotal">
+        <span>Subtotal</span>
+        <div style="text-align:center;">3 item</div>
+        <div style="text-align:center;">$350</div>
+    </div>
+
+    <!-- BOTTOM SECTION -->
+    <div class="cart-bottom">
+
+        <div class="receiver-card">
+            <h3>Receiver’s Information</h3>
+        
+            <div class="receiver-row">
+                <span>First name</span>
+                <p>John</p>
+            </div>
+        
+            <div class="receiver-row">
+                <span>Last name</span>
+                <p>Doe</p>
+            </div>
+        
+            <div class="receiver-row">
+                <span>Phone</span>
+                <p>0912345678</p>
+            </div>
+        
+            <div class="receiver-row">
+                <span>Address</span>
+                <p>Taipei</p>
+            </div>
+        </div>
+        
+
+        <div class="summary-card">
+            <h3>Summary</h3>
+            <p><span>Discounted Price</span><span>100</span></p>
+            <p><span>Saved</span><span>0</span></p>
+            <p><span>Shipping</span><span>0</span></p>
+            <p class="total"><span>Total</span><span>100</span></p>
+        </div>
+
+    </div>
+
+    <div class="checkout-area">
+        <button class="checkout-btn">Check Out</button>
+    </div>
+
+</div>
+{% endblock %}
