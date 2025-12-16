@@ -23,10 +23,10 @@
 <div class="credit-wrapper">
 
     <div class="side-menu">
-        <a href="#" class="side-btn">My Profile</a>
-        <a href="#" class="side-btn active">My Credit Card</a>
-        <a href="#" class="side-btn">Change Password</a>
-        <a href="#" class="side-btn">Order History</a>
+        <a class="side-btn" href="{{ url_for('users.profile') }}">My Profile</a>
+        <a class="side-btn active">My Credit Card</a>
+        <a class="side-btn" href="{{ url_for('users.change_password') }}">Change Password</a>
+        <a class="side-btn" href="{{ url_for('users.order_history') }}">Order History</a>
         <a href="#" class="side-btn">My Cart</a>
     </div>
 

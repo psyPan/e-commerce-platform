@@ -1,7 +1,7 @@
 from flask import render_template, url_for, flash, redirect, request, Blueprint
 from flask_login import login_user, current_user, logout_user, login_required
 from flask_store import db, bcrypt
-from flask_store.users.forms import RegistrationForm, LoginForm
+from flask_store.users.forms import RegistrationForm, LoginForm, EditProfileForm
 from flask_store.users.models import User
 
 users = Blueprint('users', __name__)
@@ -48,3 +48,40 @@ def logout():
 @users.route('/credit')
 def credit():
     return render_template('credit_card.html')
+
+@users.route('/profile', methods=['GET', 'POST'])
+def profile():
+    form = EditProfileForm(obj=current_user)
+
+    if form.validate_on_submit():
+        current_user.f_name = form.f_name.data
+        current_user.l_name = form.l_name.data
+        current_user.birth = form.birth.data
+        current_user.gender = form.gender.data
+        current_user.phone = form.phone.data
+        current_user.address = form.address.data
+
+        db.session.commit()
+        flash('Profile updated!', 'success')
+        return redirect(url_for("users.profile"))
+
+    return render_template(
+        'profile.html',
+        form=form
+    )
+
+@users.route("/change_password", methods=["GET", "POST"])
+def change_password():
+    if request.method == "POST":
+        # sementara UI testing dulu
+        # nanti baru isi logic:
+        # - check current password
+        # - validate new password
+        # - hash & save
+        return redirect(url_for("users.profile"))
+
+    return render_template("change_password.html")
+
+@users.route('/order_history')
+def order_history():
+    return render_template('order_history.html')

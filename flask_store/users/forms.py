@@ -31,3 +31,19 @@ class LoginForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[DataRequired()])
     submit = SubmitField('Login')
+
+from flask_wtf import FlaskForm
+from wtforms import StringField, DateField, SubmitField, SelectField
+from wtforms.validators import DataRequired
+
+class EditProfileForm(FlaskForm):
+    f_name = StringField('First Name', validators=[DataRequired()])
+    l_name = StringField('Last Name', validators=[DataRequired()])
+    birth = DateField('Birthday', format='%Y-%m-%d')
+    gender = SelectField(
+        'Gender',
+        choices=[('Male', 'Male'), ('Female', 'Female')]
+    )
+    phone = StringField('Phone')
+    address = StringField('Address')
+    submit = SubmitField('Save')

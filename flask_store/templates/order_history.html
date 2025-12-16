@@ -1,0 +1,79 @@
+{% extends "index.html" %}
+
+{% block navbar %}
+<div class="navbar">
+    <div class="logo">
+        <a href="{{ url_for('users.home') }}">Our Logo</a>
+    </div>
+    <div class="nav-links">
+        <a href="{{ url_for('users.home') }}">Home</a>
+        <a href="{{ url_for('users.logout') }}">Log Out</a>
+    </div>
+</div>
+{% endblock navbar %}
+
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='style/home.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='style/order_history.css') }}">
+
+<div class="credit-wrapper">
+
+    <!-- SIDEBAR (PAKAI YANG PROFILE) -->
+    <div class="side-menu">
+        <a class="side-btn" href="{{ url_for('users.profile') }}">My Profile</a>
+        <a class="side-btn" href="{{ url_for('users.credit') }}">Credit Card</a>
+        <a class="side-btn" href="{{ url_for('users.change_password') }}">Change Password</a>
+        <a class="side-btn active">Order History</a>
+        <a class="side-btn" href="#">My Cart</a>
+    </div>
+
+    <!-- MAIN -->
+    <div class="credit-container profile-container">
+
+        <div class="profile-card">
+
+            <!-- TABS -->
+            <div class="order-tabs">
+                <button class="order-tab active">Total Order</button>
+                <button class="order-tab">Processing</button>
+                <button class="order-tab">Shipping</button>
+                <button class="order-tab">Received</button>
+                <button class="order-tab">Closed</button>
+            </div>            
+
+            <h1 class="credit-title">Order History</h1>
+
+            <!-- ORDER LIST -->
+            <div class="order-list">
+
+                <!-- ORDER ITEM -->
+                <div class="order-box">
+                    <div class="order-header">Order ID : 5</div>
+
+                    <div class="order-item">
+                        <img src="/static/img/book1.jpg" class="order-img">
+                        <div class="order-name">The Da Vinci Code</div>
+                        <div class="order-qty">1</div>
+                        <div class="order-price">$800</div>
+                        <div class="order-status shipping">Shipping</div>
+                    </div>
+                </div>
+
+                <div class="order-box">
+                    <div class="order-header">Order ID : 7</div>
+
+                    <div class="order-item">
+                        <img src="/static/img/book2.jpg" class="order-img">
+                        <div class="order-name">Animal Farm</div>
+                        <div class="order-qty">1</div>
+                        <div class="order-price">$890</div>
+                        <div class="order-status closed">Closed</div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}
