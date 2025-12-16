@@ -14,12 +14,12 @@
 
 {% block content %}
 <link rel="stylesheet" href="{{ url_for('static', filename='style/home.css') }}">
-<link rel="stylesheet" href="{{ url_for('static', filename='style/credit_card.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='style/profile.css') }}">
 
-<div class="credit-wrapper">
+<div class="profile-wrapper">
 
     <!-- SIDE MENU -->
-    <div class="side-menu">
+    <div class="profile-sidebar">
         <a class="side-btn active">My Profile</a>
         <a class="side-btn" href="{{ url_for('users.credit') }}">My Credit Card</a>
         <a class="side-btn" href="{{ url_for('users.change_password') }}">Change Password</a>
@@ -28,10 +28,10 @@
     </div>
 
     <!-- MAIN CONTENT -->
-    <div class="credit-container profile-container">
+    <div class="profile-content">
 
         <div class="profile-card" id="profileBox">
-            <h1 class="credit-title">My Profile</h1>
+            <h1 class="profile-title">My Profile</h1>
 
             <!-- ================= VIEW MODE ================= -->
             <div class="profile-view">
@@ -44,11 +44,6 @@
                 <div class="profile-row">
                     <span>Birth Date</span>
                     <p>{{ current_user.birth or "1998-03-24" }}</p>
-                </div>
-
-                <div class="profile-row">
-                    <span>Gender</span>
-                    <p>{{ current_user.gender or "Male" }}</p>
                 </div>
 
                 <div class="profile-row">
@@ -83,29 +78,11 @@
                         <input type="text" class="profile-input">
                     </div>
                 </div>
-                
 
                 <div class="profile-form-row">
                     {{ form.birth.label }}
                     {{ form.birth(class="profile-input") }}
                 </div>
-
-                <div class="profile-form-row">
-                    <label for="gender">Gender</label>
-                    <select name="gender" id="gender" class="profile-input">
-                        <option value="">Select gender</option>
-                        <option value="Male" {% if current_user.gender == "Male" %}selected{% endif %}>
-                            Male
-                        </option>
-                        <option value="Female" {% if current_user.gender == "Female" %}selected{% endif %}>
-                            Female
-                        </option>
-                        <option value="Other" {% if current_user.gender == "Other" %}selected{% endif %}>
-                            Other
-                        </option>
-                    </select>
-                </div>
-                
 
                 <div class="profile-form-row">
                     {{ form.phone.label }}

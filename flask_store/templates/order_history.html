@@ -21,7 +21,7 @@
     <!-- SIDEBAR (PAKAI YANG PROFILE) -->
     <div class="side-menu">
         <a class="side-btn" href="{{ url_for('users.profile') }}">My Profile</a>
-        <a class="side-btn" href="{{ url_for('users.credit') }}">Credit Card</a>
+        <a class="side-btn" href="{{ url_for('users.credit') }}">My Credit Card</a>
         <a class="side-btn" href="{{ url_for('users.change_password') }}">Change Password</a>
         <a class="side-btn active">Order History</a>
         <a class="side-btn" href="#">My Cart</a>
@@ -30,7 +30,9 @@
     <!-- MAIN -->
     <div class="credit-container profile-container">
 
-        <div class="profile-card">
+        <div class="profile-card">            
+
+            <h1 class="credit-title">Order History</h1>
 
             <!-- TABS -->
             <div class="order-tabs">
@@ -39,38 +41,37 @@
                 <button class="order-tab">Shipping</button>
                 <button class="order-tab">Received</button>
                 <button class="order-tab">Closed</button>
-            </div>            
-
-            <h1 class="credit-title">Order History</h1>
+            </div>
 
             <!-- ORDER LIST -->
             <div class="order-list">
 
-                <!-- ORDER ITEM -->
                 <div class="order-box">
-                    <div class="order-header">Order ID : 5</div>
-
-                    <div class="order-item">
+                    <div class="order-header">Order ID : 01</div>
+            
+                    <div class="order-row">
                         <img src="/static/img/book1.jpg" class="order-img">
-                        <div class="order-name">The Da Vinci Code</div>
+            
+                        <div class="order-name">Iphone 17 Pro Max</div>
                         <div class="order-qty">1</div>
-                        <div class="order-price">$800</div>
+                        <div class="order-price">$500</div>
                         <div class="order-status shipping">Shipping</div>
                     </div>
                 </div>
-
+            
                 <div class="order-box">
-                    <div class="order-header">Order ID : 7</div>
-
-                    <div class="order-item">
+                    <div class="order-header">Order ID : 02</div>
+            
+                    <div class="order-row">
                         <img src="/static/img/book2.jpg" class="order-img">
-                        <div class="order-name">Animal Farm</div>
+            
+                        <div class="order-name">Ipad Air</div>
                         <div class="order-qty">1</div>
-                        <div class="order-price">$890</div>
+                        <div class="order-price">$400</div>
                         <div class="order-status closed">Closed</div>
                     </div>
                 </div>
-
+            
             </div>
 
         </div>

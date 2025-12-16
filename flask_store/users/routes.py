@@ -73,11 +73,6 @@ def profile():
 @users.route("/change_password", methods=["GET", "POST"])
 def change_password():
     if request.method == "POST":
-        # sementara UI testing dulu
-        # nanti baru isi logic:
-        # - check current password
-        # - validate new password
-        # - hash & save
         return redirect(url_for("users.profile"))
 
     return render_template("change_password.html")
@@ -85,3 +80,4 @@ def change_password():
 @users.route('/order_history')
 def order_history():
     return render_template('order_history.html')
+
