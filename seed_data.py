@@ -1,6 +1,7 @@
 from flask_store import db, create_app, bcrypt
-from flask_store.stores.models import Store, Product
+from flask_store.stores.models import Store
 from flask_store.discounts.models import Discount
+from flask_store.products.models import Product
 from flask_store.users.models import User
 from datetime import date
 
@@ -70,8 +71,9 @@ with app.app_context():
         id = 44444444,
         store_id=store1.id,
         name="Gaming Laptop", 
-        description="High performance laptop", 
-        sell_price=1200.0, 
+        description="High performance laptop",
+        buy_price=1000,
+        sell_price=1200, 
         stock=10, 
         manufacturer="Asus", 
         type="Electronics",
@@ -81,7 +83,8 @@ with app.app_context():
         id = 55555555,        
         store_id=store1.id,
         name="Wireless Mouse", 
-        description="Ergonomic mouse", 
+        description="Ergonomic mouse",
+        buy_price=30,
         sell_price=50.0, 
         stock=0, # Out of stock to test filter
         manufacturer="Logitech", 

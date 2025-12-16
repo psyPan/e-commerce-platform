@@ -13,7 +13,6 @@ class User(db.Model, UserMixin): # We need UserMixin for handling user's logged 
     l_name = db.Column(db.String(20), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(60), nullable=False)
-    store_id = db.Column(db.Integer, db.ForeignKey('store.id'), nullable=True)
     phone = db.Column(db.String(10), nullable=False)
     birth = db.Column(db.Date)
     address = db.Column(db.String(200))
@@ -21,6 +20,13 @@ class User(db.Model, UserMixin): # We need UserMixin for handling user's logged 
     a_flag = db.Column(db.Boolean, nullable=False)
     o_flag = db.Column(db.Boolean, nullable=False)
     c_flag = db.Column(db.Boolean, nullable=False)
+
+    # Foreign keys
+    store_id = db.Column(db.Integer, db.ForeignKey('store.id'), nullable=True)
+
+    # Relationships
+    # Relationship with store
+    store = db.relationship('Store', back_populates='owners')
 
     def get_user_type(self):
         if self.a_flag:
