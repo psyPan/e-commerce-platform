@@ -48,3 +48,18 @@ def logout():
 @users.route('/credit')
 def credit():
     return render_template('credit_card.html')
+
+@users.route('/admin/user-management')
+# @login_required
+def user_list():
+    return render_template('admin/user_management.html')
+
+@users.route('/admin/user/1')
+# @login_required
+def user_detail():
+    return render_template('admin/user_detail.html')
+
+@users.route('/admin/user/1/edit')
+# @login_required
+def user_edit():
+    return render_template('admin/user_edit.html')
