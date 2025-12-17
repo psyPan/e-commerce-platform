@@ -70,6 +70,8 @@ def profile():
         form=form
     )
 
+
+
 @users.route("/change_password", methods=["GET", "POST"])
 def change_password():
     if request.method == "POST":
@@ -81,9 +83,6 @@ def change_password():
 def order_history():
     return render_template('order_history.html')
 
-@users.route('/my_cart')
-def my_cart():
-    return render_template('my_cart.html')
 
 # admin youssel test
 @users.route('/admin/user-management')

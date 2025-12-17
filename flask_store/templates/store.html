@@ -1,110 +1,212 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stores</title>
+{% extends "index.html" %}
 
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        .store-header {
-            border-bottom: 2px solid #333;
-            padding-bottom: 20px;
-            margin-bottom: 30px;
-        }
-        .filters {
-            background: #f5f5f5;
-            padding: 15px;
-            margin-bottom: 20px;
-            border-radius: 5px;
-        }
-        .filters form {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-        .filters input, .filters select, .filters button {
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 3px;
-        }
-        .products-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 20px;
-        }
-        .product-card {
-            border: 1px solid #ddd;
-            padding: 15px;
-            border-radius: 5px;
-            text-align: center;
-        }
-        .product-card img {
-            max-width: 100%;
-            height: 200px;
-            object-fit: cover;
-        }
-        .product-price {
-            font-size: 1.2em;
-            font-weight: bold;
-            color: #2c5;
-        }
-        .product-price.discounted {
-            color: #e74c3c;
-        }
-        .original-price {
-            text-decoration: line-through;
-            color: #999;
-            font-size: 0.9em;
-        }
-        .stock-info {
-            color: #666;
-            font-size: 0.9em;
-        }
-        .out-of-stock {
-            color: #e74c3c;
-        }
-        .pagination {
-            margin-top: 30px;
-            text-align: center;
-        }
-        .pagination a {
-            padding: 8px 12px;
-            margin: 0 5px;
-            border: 1px solid #ddd;
-            text-decoration: none;
-            color: #333;
-        }
-        .pagination a.active {
-            background: #333;
-            color: white;
-        }
-    </style>
-</head>
-<body>
-    <!-- Store Header -->
-    <div class="store-header">
-        <h1>{{ store.name }}</h1>
-        <p>Email: {{ store.email }} | Phone: {{ store.phone }}</p>
-        {% if store.address %}
-        <p>Address: {{ store.address }}</p>
-        {% endif %}
+{% block content %}
+<style>
+    /* Wrapper styling */
+    .store-view-wrapper {
+        background-color: #f8f9fa;
+        min-height: 100vh;
+        padding: 20px;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    /* Store Header */
+    .store-header-card {
+        background: white;
+        border-radius: 12px;
+        padding: 30px;
+        margin-bottom: 30px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        border-left: 5px solid #3498db;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+    .store-header-info h1 {
+        margin: 0 0 10px 0;
+        color: #2c3e50;
+        font-weight: 700;
+    }
+    .store-header-info p {
+        color: #7f8c8d;
+        margin: 0;
+        font-size: 1rem;
+    }
+
+    /* Filters Section */
+    .filters-card {
+        background: white;
+        padding: 20px;
+        border-radius: 12px;
+        margin-bottom: 30px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+    .filters-form {
+        display: flex;
+        gap: 15px;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+    /* Customizing form elements to fit nicely */
+    .filter-input {
+        min-width: 200px;
+    }
+
+    /* Products Grid */
+    .products-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+        gap: 25px;
+        margin-bottom: 40px;
+    }
+
+    /* Product Card */
+    .product-card {
+        background: white;
+        border-radius: 10px;
+        overflow: hidden; /* Keeps image inside corners */
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        transition: transform 0.2s, box-shadow 0.2s;
+        border: 1px solid #eee;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .product-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+    }
+
+    .product-img-container {
+        width: 100%;
+        height: 200px;
+        background-color: #f9f9f9;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+    }
+    
+    .product-img-container img {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: cover;
+    }
+
+    .product-body {
+        padding: 15px;
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+        text-align: center;
+    }
+
+    .product-title {
+        font-size: 1.1em;
+        font-weight: 600;
+        margin-bottom: 5px;
+        color: #333;
+        min-height: 2.5em; /* Ensures alignment */
+    }
+
+    .product-mfr {
+        color: #999;
+        font-size: 0.85em;
+        margin-bottom: 10px;
+    }
+
+    .price-section {
+        margin: 10px 0;
+    }
+
+    .current-price {
+        font-size: 1.3em;
+        font-weight: bold;
+        color: #2c3e50;
+    }
+    .current-price.discounted {
+        color: #e74c3c;
+    }
+    
+    .original-price {
+        text-decoration: line-through;
+        color: #999;
+        font-size: 0.9em;
+        margin-left: 5px;
+    }
+
+    .stock-status {
+        font-size: 0.85em;
+        margin-bottom: 15px;
+        font-weight: 500;
+    }
+    .text-success { color: #27ae60 !important; }
+    .text-danger { color: #e74c3c !important; }
+
+    /* Action Buttons */
+    .card-actions {
+        margin-top: auto; /* Pushes to bottom */
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .view-details-link {
+        font-size: 0.9em;
+        color: #3498db;
+        text-decoration: none;
+        margin-top: 5px;
+    }
+    .view-details-link:hover {
+        text-decoration: underline;
+    }
+
+    /* Pagination */
+    .custom-pagination {
+        display: flex;
+        justify-content: center;
+        gap: 5px;
+        padding-bottom: 40px;
+    }
+    .custom-pagination a, .custom-pagination span {
+        padding: 8px 16px;
+        border: 1px solid #dee2e6;
+        background-color: white;
+        color: #3498db;
+        border-radius: 4px;
+        text-decoration: none;
+    }
+    .custom-pagination .active {
+        background-color: #3498db;
+        color: white;
+        border-color: #3498db;
+    }
+</style>
+
+<div class="store-view-wrapper">
+
+    <div class="store-header-card">
+        <div class="store-header-info">
+            <h1>{{ store.name }}</h1>
+            <p>
+                {% if store.address %}📍 {{ store.address }} | {% endif %}
+                📞 {{ store.phone }} | ✉️ {{ store.email }}
+            </p>
+        </div>
+        <div>
+            <a href="{{ url_for('stores.list_stores') }}" class="btn btn-outline-secondary btn-sm">← Back to Directory</a>
+        </div>
     </div>
 
-    <!-- Filters -->
-    <div class="filters">
-        <form method="GET" action="{{ url_for('stores.view_store', store_id=store.id) }}">
-            <!-- Search -->
-            <input type="text" name="q" placeholder="Search products..." 
+    <div class="filters-card">
+        <form method="GET" action="{{ url_for('stores.view_store', store_id=store.id) }}" class="filters-form">
+            
+            <input type="text" name="q" class="form-control filter-input" placeholder="Search products..." 
                    value="{{ current_filters.search or '' }}">
             
-            <!-- Type Filter -->
-            <select name="type">
+            <select name="type" class="form-select filter-input" style="width:auto;">
                 <option value="">All Types</option>
                 {% for type in types %}
                 <option value="{{ type }}" {% if current_filters.type == type %}selected{% endif %}>
@@ -113,8 +215,7 @@
                 {% endfor %}
             </select>
             
-            <!-- Manufacturer Filter -->
-            <select name="manufacturer">
+            <select name="manufacturer" class="form-select filter-input" style="width:auto;">
                 <option value="">All Manufacturers</option>
                 {% for mfr in manufacturers %}
                 <option value="{{ mfr }}" {% if current_filters.manufacturer == mfr %}selected{% endif %}>
@@ -123,8 +224,7 @@
                 {% endfor %}
             </select>
             
-            <!-- Sort -->
-            <select name="sort">
+            <select name="sort" class="form-select filter-input" style="width:auto;">
                 <option value="newest" {% if current_filters.sort == 'newest' %}selected{% endif %}>Newest</option>
                 <option value="price_asc" {% if current_filters.sort == 'price_asc' %}selected{% endif %}>Price: Low to High</option>
                 <option value="price_desc" {% if current_filters.sort == 'price_desc' %}selected{% endif %}>Price: High to Low</option>
@@ -132,89 +232,88 @@
                 <option value="discount" {% if current_filters.sort == 'discount' %}selected{% endif %}>Best Discount</option>
             </select>
             
-            <!-- In Stock Only -->
-            <label>
-                <input type="checkbox" name="in_stock" value="true" 
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="in_stock" value="true" id="inStockCheck"
                        {% if current_filters.in_stock %}checked{% endif %}>
-                In Stock Only
-            </label>
+                <label class="form-check-label" for="inStockCheck">
+                    In Stock Only
+                </label>
+            </div>
             
-            <button type="submit">Apply Filters</button>
-            <a href="{{ url_for('stores.view_store', store_id=store.id) }}">Clear</a>
+            <button type="submit" class="btn btn-primary">Apply</button>
+            <a href="{{ url_for('stores.view_store', store_id=store.id) }}" class="btn btn-outline-secondary">Clear</a>
         </form>
     </div>
 
-    <!-- Products Grid -->
     <div class="products-grid">
         {% if products %}
             {% for product in products %}
             <div class="product-card">
-                {% if product.image %}
-                <img src="{{ product.image }}" alt="{{ product.name }}">
-                {% else %}
-                <img src="https://via.placeholder.com/200x200?text=No+Image" alt="{{ product.name }}">
-                {% endif %}
-                
-                <h3>{{ product.name }}</h3>
-                
-                {% if product.manufacturer %}
-                <p><small>{{ product.manufacturer }}</small></p>
-                {% endif %}
-                
-                <div class="product-price {% if product.discount_obj %}discounted{% endif %}">
-                 ${{ "%.2f"|format(product.get_final_price()) }}
-                </div>
-
-                {% if product.discount_obj %}
-                <div class="original-price">
-                    Was: ${{ "%.2f"|format(product.sell_price) }}
-                    ({{ "%.0f"|format(product.discount_obj.discount_percent) }}% off)
-                </div>
-                {% endif %}
-  
-                
-                <div class="stock-info {% if not product.is_in_stock() %}out-of-stock{% endif %}">
-                    {% if product.is_in_stock() %}
-                    In Stock: {{ product.stock }} units
+                <div class="product-img-container">
+                    {% if product.image %}
+                    <img src="{{ product.image }}" alt="{{ product.name }}">
                     {% else %}
-                    Out of Stock
+                    <img src="https://via.placeholder.com/200x200?text=No+Image" alt="{{ product.name }}">
                     {% endif %}
                 </div>
                 
-             <form action="{{ url_for('cart.add_to_cart', product_id=product.id) }}" method="POST" style="margin-top: 10px;">
-    
-    {% if product.is_in_stock() %}
-        <div style="display: flex; gap: 5px; justify-content: center; align-items: center;">
-            <input type="number" name="quantity" value="1" min="1" max="{{ product.stock }}" 
-                   style="width: 60px; padding: 5px;">
-            
-            <button type="submit" style="background-color: #28a745; color: white; border: none; padding: 6px 12px; cursor: pointer; border-radius: 4px;">
-                Add to Cart
-            </button>
-        </div>
-    {% else %}
-        <button disabled style="background-color: #ccc; border: none; padding: 6px 12px; border-radius: 4px; cursor: not-allowed;">
-            Out of Stock
-        </button>
-    {% endif %}
+                <div class="product-body">
+                    <div class="product-title">{{ product.name }}</div>
+                    
+                    {% if product.manufacturer %}
+                    <div class="product-mfr">{{ product.manufacturer }}</div>
+                    {% endif %}
+                    
+                    <div class="price-section">
+                        {% if product.discount_obj %}
+                            <span class="current-price discounted">${{ "%.2f"|format(product.get_final_price()) }}</span>
+                            <span class="original-price">${{ "%.2f"|format(product.sell_price) }}</span>
+                            <div style="font-size: 0.8em; color: #e74c3c;">
+                                ({{ "%.0f"|format(product.discount_obj.discount_percent) }}% OFF)
+                            </div>
+                        {% else %}
+                            <span class="current-price">${{ "%.2f"|format(product.sell_price) }}</span>
+                        {% endif %}
+                    </div>
+  
+                    <div class="stock-status">
+                        {% if product.is_in_stock() %}
+                            <span class="text-success">In Stock ({{ product.stock }})</span>
+                        {% else %}
+                            <span class="text-danger">Out of Stock</span>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="card-actions">
+                        <form action="{{ url_for('cart.add_to_cart', product_id=product.id) }}" method="POST">
+                            {% if product.is_in_stock() %}
+                                <div class="input-group mb-2">
+                                    <input type="number" name="quantity" value="1" min="1" max="{{ product.stock }}" 
+                                           class="form-control text-center" style="max-width: 60px;">
+                                    <button type="submit" class="btn btn-success flex-grow-1">Add to Cart</button>
+                                </div>
+                            {% else %}
+                                <button disabled class="btn btn-secondary w-100 mb-2">Out of Stock</button>
+                            {% endif %}
+                        </form>
 
-</form>
-
-<div style="margin-top: 10px;">
-    <a href="{{ url_for('stores.product_detail', store_id=store.id, product_id=product.id) }}" style="text-decoration: none; color: #007bff;">
-        View Details
-    </a>
-</div>
+                        <a href="{{ url_for('stores.product_detail', store_id=store.id, product_id=product.id) }}" class="view-details-link">
+                            View Details
+                        </a>
+                    </div>
+                </div>
             </div>
             {% endfor %}
         {% else %}
-            <p>No products found matching your criteria.</p>
+            <div class="col-12 text-center py-5">
+                <h3>No products found</h3>
+                <p class="text-muted">Try adjusting your filters.</p>
+            </div>
         {% endif %}
     </div>
 
-    <!-- Pagination -->
     {% if pagination.pages > 1 %}
-    <div class="pagination">
+    <div class="custom-pagination">
         {% if pagination.has_prev %}
         <a href="{{ url_for('stores.view_store', store_id=store.id, page=pagination.prev_num) }}">Previous</a>
         {% endif %}
@@ -235,5 +334,7 @@
         {% endif %}
     </div>
     {% endif %}
-</body>
-</html>
+
+</div>
+
+{% endblock content %}

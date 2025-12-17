@@ -18,88 +18,108 @@
 
 <div class="profile-wrapper">
 
-    <!-- SIDE MENU -->
     <div class="profile-sidebar">
-        <a class="side-btn active">My Profile</a>
+        <a class="side-btn active" href="{{ url_for('users.profile') }}">My Profile</a>
         <a class="side-btn" href="{{ url_for('users.credit') }}">My Credit Card</a>
         <a class="side-btn" href="{{ url_for('users.change_password') }}">Change Password</a>
         <a class="side-btn" href="{{ url_for('users.order_history') }}">Order History</a>
-        <a class="side-btn" href="{{ url_for('users.my_cart') }}">My Cart</a>
+        <a class="side-btn" href="{{ url_for('cart.My_cart') }}">My Cart</a>
     </div>
 
-    <!-- MAIN CONTENT -->
     <div class="profile-content">
 
-        <div class="profile-card" id="profileBox">
+        <div class="profile-card {% if form.errors %}editing{% endif %}" id="profileBox">
             <h1 class="profile-title">My Profile</h1>
 
-            <!-- ================= VIEW MODE ================= -->
             <div class="profile-view">
 
                 <div class="profile-row">
                     <span>Full Name</span>
-                    <p>{{ current_user.f_name or "John" }} {{ current_user.l_name or "Doe" }}</p>
+                    <p>{{ current_user.f_name }} {{ current_user.l_name }}</p>
                 </div>
 
                 <div class="profile-row">
                     <span>Birth Date</span>
-                    <p>{{ current_user.birth or "1998-03-24" }}</p>
+                    <p>{{ current_user.birth or "Not Set" }}</p>
                 </div>
 
                 <div class="profile-row">
                     <span>Phone</span>
-                    <p>{{ current_user.phone or "+886 912 345 678" }}</p>
+                    <p>{{ current_user.phone or "Not Set" }}</p>
                 </div>
 
                 <div class="profile-row">
                     <span>Address</span>
-                    <p>{{ current_user.address or "Taipei, Taiwan" }}</p>
+                    <p>{{ current_user.address or "Not Set" }}</p>
                 </div>
 
             </div>
 
-            <!-- ================= EDIT BUTTON (KANAN BAWAH) ================= -->
             <div class="profile-actions profile-actions-view">
                 <button type="button" class="edit-btn" onclick="enterEdit()">Edit Profile</button>
             </div>
 
-            <!-- ================= EDIT MODE ================= -->
             <form method="POST" class="profile-form">
                 {{ form.hidden_tag() }}
 
                 <div class="profile-form-row two-col">
                     <div class="form-group">
                         <label>First Name</label>
-                        <input type="text" class="profile-input">
+                        {% if form.f_name.errors %}
+                            {{ form.f_name(class="profile-input is-invalid") }}
+                            <div class="error-msg">{{ form.f_name.errors[0] }}</div>
+                        {% else %}
+                            {{ form.f_name(class="profile-input") }}
+                        {% endif %}
                     </div>
                 
                     <div class="form-group">
                         <label>Last Name</label>
-                        <input type="text" class="profile-input">
+                        {% if form.l_name.errors %}
+                            {{ form.l_name(class="profile-input is-invalid") }}
+                            <div class="error-msg">{{ form.l_name.errors[0] }}</div>
+                        {% else %}
+                            {{ form.l_name(class="profile-input") }}
+                        {% endif %}
                     </div>
                 </div>
 
                 <div class="profile-form-row">
                     {{ form.birth.label }}
-                    {{ form.birth(class="profile-input") }}
+                    {% if form.birth.errors %}
+                        {{ form.birth(class="profile-input is-invalid") }}
+                        <div class="error-msg">{{ form.birth.errors[0] }}</div>
+                    {% else %}
+                        {{ form.birth(class="profile-input") }}
+                    {% endif %}
                 </div>
 
                 <div class="profile-form-row">
                     {{ form.phone.label }}
-                    {{ form.phone(class="profile-input") }}
+                    {% if form.phone.errors %}
+                        {{ form.phone(class="profile-input is-invalid") }}
+                        <div class="error-msg">{{ form.phone.errors[0] }}</div>
+                    {% else %}
+                        {{ form.phone(class="profile-input") }}
+                    {% endif %}
                 </div>
 
                 <div class="profile-form-row">
                     {{ form.address.label }}
-                    {{ form.address(class="profile-input") }}
+                    {% if form.address.errors %}
+                        {{ form.address(class="profile-input is-invalid") }}
+                        <div class="error-msg">{{ form.address.errors[0] }}</div>
+                    {% else %}
+                        {{ form.address(class="profile-input") }}
+                    {% endif %}
                 </div>
 
                 <div class="profile-actions profile-actions-form">
                     <button type="button" class="cancel-btn" onclick="exitEdit()">
                         Cancel
                     </button>
-                    <button type="button" class="btn-gold" onclick="exitEdit()">
-                        Save
+                    <button type="submit" class="btn-gold">
+                        Save Changes
                     </button>                    
                 </div>                
             </form>
@@ -114,7 +134,28 @@ function enterEdit() {
 }
 
 function exitEdit() {
+    // If we cancel, we can remove the class.
+    // However, if we Save, the form submits and page reloads.
     document.getElementById("profileBox").classList.remove("editing");
 }
 </script>
+
+<style>
+    /* Add this specific style just in case you don't have it in profile.css 
+       to handle the visibility toggling 
+    */
+    .profile-form { display: none; }
+    .profile-view { display: block; }
+    .profile-actions-view { display: block; }
+    .profile-actions-form { display: none; }
+
+    /* When editing class is added */
+    .profile-card.editing .profile-form { display: block; }
+    .profile-card.editing .profile-view { display: none; }
+    .profile-card.editing .profile-actions-view { display: none; }
+    .profile-card.editing .profile-actions-form { display: flex; gap: 10px; justify-content: flex-end; }
+    
+    .error-msg { color: red; font-size: 0.85em; margin-top: 4px; }
+</style>
+
 {% endblock %}

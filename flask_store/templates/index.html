@@ -41,12 +41,12 @@
         <!-- NAVIGATION LINKS -->
         <div class="nav-links">
             
-            {% if request.endpoint in ['users.login', 'users.register', 'users.logout'] %}
+            {% if request.endpoint in ['users.login', 'users.register', 'users.logout', 'users.profile'] %}
                 <!-- LOGIN & REGISTER PAGES → sembunyikan navbar -->
             {% else %}
                 {% if current_user.is_authenticated %}
                     {% if current_user.c_flag %}
-                    <a href=#>My Profile</a>
+                    <a href="{{ url_for('users.profile') }}">My Profile</a>
                     {% endif %}
                     <a href="{{ url_for('users.logout') }}">Log Out</a>
                 {% else %}

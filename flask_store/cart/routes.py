@@ -8,7 +8,7 @@ from flask_store.products.models import Product
 
 cart = Blueprint('cart', __name__)
 
-@cart.route('/cart', methods=['GET', 'POST'])
+@cart.route('/my_cart', methods=['GET', 'POST'])
 @login_required
 def My_cart(): # You can rename this to 'view_cart' for standard python naming convention
     
@@ -24,7 +24,7 @@ def My_cart(): # You can rename this to 'view_cart' for standard python naming c
         subtotal += product.sell_price * cart_item.quantity
 
     # 3. Render
-    return render_template('cart.html', 
+    return render_template('my_cart.html', 
                            title='My Cart', 
                            cart_items=Cart_items, 
                            subtotal=subtotal)
