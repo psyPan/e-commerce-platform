@@ -60,3 +60,20 @@ def add_to_cart(product_id):
     
     # Redirect back to the same page they were on
     return redirect(request.referrer)
+
+@cart.route('/remove_from_cart/<int:product_id>')
+@login_required
+def remove_from_cart(product_id):
+    # 1. Find the specific cart item for this user and product
+    cart_item = Cart.query.filter_by(user_id=current_user.id, product_id=product_id).first()
+    
+    # 2. If it exists, delete it
+    if cart_item:
+        db.session.delete(cart_item)
+        db.session.commit()
+        flash('Item removed from your cart.', 'success')
+    else:
+        flash('Item not found in your cart.', 'warning')
+        
+    # 3. Redirect back to the cart page
+    return redirect(url_for('cart.My_cart'))

@@ -161,18 +161,17 @@
                 <p><small>{{ product.manufacturer }}</small></p>
                 {% endif %}
                 
-                <div class="product-price {% if product.discount > 0 or product.discounted_price %}discounted{% endif %}">
-                    ${{ "%.2f"|format(product.get_final_price()) }}
+                <div class="product-price {% if product.discount_obj %}discounted{% endif %}">
+                 ${{ "%.2f"|format(product.get_final_price()) }}
                 </div>
-                
-                {% if product.discount > 0 or product.discounted_price %}
+
+                {% if product.discount_obj %}
                 <div class="original-price">
                     Was: ${{ "%.2f"|format(product.sell_price) }}
-                    {% if product.discount > 0 %}
-                    ({{ "%.0f"|format(product.discount) }}% off)
-                    {% endif %}
+                    ({{ "%.0f"|format(product.discount_obj.discount_percent) }}% off)
                 </div>
                 {% endif %}
+  
                 
                 <div class="stock-info {% if not product.is_in_stock() %}out-of-stock{% endif %}">
                     {% if product.is_in_stock() %}
