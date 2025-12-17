@@ -3,7 +3,9 @@ from flask_login import login_user, current_user, logout_user, login_required
 from flask_store import db
 from flask_store.stores.forms import StoreForm
 from flask_store.users.models import User
-from flask_store.stores.models import Store, Product  # Add Product import
+from flask_store.stores.models import Store  
+from flask_store.products.models import Product  # Add Product import
+
 from sqlalchemy import func, or_, and_
 
 stores = Blueprint('stores', __name__)
@@ -234,3 +236,5 @@ def global_search():
                          query=query,
                          products=products,
                          stores=stores_found)
+
+

@@ -43,7 +43,7 @@
             </div>
             {% endif %}
 
-            <a href="{{ url_for('stores.product_detail', store_id=store.id, product_id=product.product_id) }}">
+            <a href="{{ url_for('stores.product_detail', store_id=store.id, product_id=product.id) }}">
                 <div class="h-48 bg-gray-200 flex items-center justify-center">
                     {% if product.image %}
                     <img src="{{ product.image }}" alt="{{ product.name }}" class="h-full w-full object-cover">
@@ -55,7 +55,7 @@
             
             <div class="p-4">
                 <h3 class="font-bold text-lg mb-2 truncate">
-                    <a href="{{ url_for('stores.product_detail', store_id=store.store_id, product_id=product.product_id) }}" 
+                    <a href="{{ url_for('stores.product_detail', store_id=store.id, product_id=product.id) }}" 
                        class="text-gray-800 hover:text-blue-600">
                         {{ product.name }}
                     </a>
@@ -88,7 +88,7 @@
                     </span>
                     {% endif %}
                     
-                    <a href="{{ url_for('stores.product_detail', store_id=store.store_id, product_id=product.product_id) }}" 
+                    <a href="{{ url_for('stores.product_detail', store_id=store.id, product_id=product.id) }}" 
                        class="text-blue-600 hover:text-blue-700 text-sm font-semibold">
                         View Details <i class="fas fa-arrow-right"></i>
                     </a>
@@ -106,7 +106,7 @@
         <p class="text-gray-600 mb-4">
             These deals won't last forever. Check back regularly for new discounts and special offers.
         </p>
-        <a href="{{ url_for('stores.view_store', store_id=store.store_id) }}" 
+        <a href="{{ url_for('stores.view_store', store_id=store.id) }}" 
            class="inline-block bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition">
             Browse All Products
         </a>
@@ -120,7 +120,7 @@
         <p class="text-gray-600 mb-6">
             This store doesn't have any discounted products at the moment, but check back soon for special offers!
         </p>
-        <a href="{{ url_for('stores.view_store', store_id=store.store_id) }}" 
+        <a href="{{ url_for('stores.view_store', store_id=store.id) }}" 
            class="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 font-semibold">
             <i class="fas fa-arrow-left mr-2"></i> Browse All Products
         </a>
