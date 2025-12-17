@@ -1,3 +1,4 @@
+from datetime import datetime
 from flask_store import db
 
 class Product(db.Model):
@@ -23,28 +24,36 @@ class Product(db.Model):
     store = db.relationship('Store', back_populates='products')
     # Relationship to line_item
     # line_items = db.relationship('LineItem', back_populates='product')
-    
+
     def get_final_price(self):
         """Calculate the final price considering discounts"""
-        if self.discount_obj and self.discount_obj.is_active:
-            return self.sell_price * (1 - self.discount_obj.discount_percent)
+        # 1. Check if a discount object is attached
+        if self.discount_obj:
+            # OPTIONAL: Check if the discount is "active" (if your Discount model has an is_active field)
+            if not self.discount_obj.is_active:
+                return self.sell_price
+
+            # 2. Get the percentage (assuming stored as decimal like 0.10 for 10%)
+            # We use the relationship 'self.discount_obj' to get the data
+            discount_percent = self.discount_obj.discount_percent
+            
+            # 3. Calculate final price
+            discount_amount = self.sell_price * discount_percent
+            return self.sell_price - discount_amount
+
+        # If no discount, return normal price
         return self.sell_price
+    
+    def is_in_stock(self):
+        """Check if product is available"""
+        return self.stock > 0
+    
     
     def get_discount_percent(self):
         """Get the discount percentage if any"""
         if self.discount_obj and self.discount_obj.is_active:
             return self.discount_obj.discount_percent * 100  # Convert to percentage
         return 0
-    
-    def get_savings(self):
-        """Calculate how much the customer saves"""
-        if self.discount_obj and self.discount_obj.is_active:
-            return self.sell_price * self.discount_obj.discount_percent
-        return 0
-    
-    def is_in_stock(self):
-        """Check if product is available"""
-        return self.stock > 0
-    
+
     def __repr__(self):
         return f"Product('{self.name}', ${self.sell_price})"
