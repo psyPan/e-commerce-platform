@@ -31,4 +31,5 @@ def create_app():
         app.register_blueprint(stores)
         app.register_blueprint(cart)
         app.register_blueprint(discounts)
+        app.register_blueprint(products)
     return app

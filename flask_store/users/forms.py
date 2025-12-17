@@ -31,3 +31,11 @@ class LoginForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[DataRequired()])
     submit = SubmitField('Login')
+
+class EditProfileForm(FlaskForm):
+    f_name = StringField('First Name', validators=[DataRequired()])
+    l_name = StringField('Last Name', validators=[DataRequired()])
+    birth = DateField('Birthday', format='%Y-%m-%d')
+    phone = StringField('Phone')
+    address = StringField('Address')
+    submit = SubmitField('Save')

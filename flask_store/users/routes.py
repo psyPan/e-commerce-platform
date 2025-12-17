@@ -1,7 +1,7 @@
 from flask import render_template, url_for, flash, redirect, request, Blueprint
 from flask_login import login_user, current_user, logout_user, login_required
 from flask_store import db, bcrypt
-from flask_store.users.forms import RegistrationForm, LoginForm
+from flask_store.users.forms import RegistrationForm, LoginForm, EditProfileForm
 from flask_store.users.models import User
 
 users = Blueprint('users', __name__)
@@ -22,7 +22,7 @@ def register():
         db.session.add(user)
         db.session.commit()
         flash('Your account has been created! You are now able to log in', 'success')
-        return redirect(url_for('users.home'))
+        return redirect(url_for('users.login'))
     return render_template('register.html',title='Register', form=form)
 
 @users.route('/login', methods=['GET', 'POST'])
@@ -44,3 +44,59 @@ def login():
 def logout():
     logout_user()
     return redirect(url_for('users.login'))
+
+@users.route('/credit')
+def credit():
+    return render_template('credit_card.html')
+
+@users.route('/profile', methods=['GET', 'POST'])
+def profile():
+    form = EditProfileForm(obj=current_user)
+
+    if form.validate_on_submit():
+        current_user.f_name = form.f_name.data
+        current_user.l_name = form.l_name.data
+        current_user.birth = form.birth.data
+        current_user.gender = form.gender.data
+        current_user.phone = form.phone.data
+        current_user.address = form.address.data
+
+        db.session.commit()
+        flash('Profile updated!', 'success')
+        return redirect(url_for("users.profile"))
+
+    return render_template(
+        'profile.html',
+        form=form
+    )
+
+@users.route("/change_password", methods=["GET", "POST"])
+def change_password():
+    if request.method == "POST":
+        return redirect(url_for("users.profile"))
+
+    return render_template("change_password.html")
+
+@users.route('/order_history')
+def order_history():
+    return render_template('order_history.html')
+
+@users.route('/my_cart')
+def my_cart():
+    return render_template('my_cart.html')
+
+# admin youssel test
+@users.route('/admin/user-management')
+# @login_required
+def user_list():
+    return render_template('admin/user_management.html')
+
+@users.route('/admin/user/1')
+# @login_required
+def user_detail():
+    return render_template('admin/user_detail.html')
+
+@users.route('/admin/user/1/edit')
+# @login_required
+def user_edit():
+    return render_template('admin/user_edit.html')

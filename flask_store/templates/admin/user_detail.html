@@ -1,0 +1,79 @@
+{% extends "index.html" %}
+
+{% block navbar %}
+<div class="navbar">
+    <div class="logo">
+        <a href="{{ url_for('users.home') }}">Our Logo</a>
+    </div>
+
+    <div class="nav-links">
+        <a href="{{ url_for('users.home') }}">Profile</a>
+        <a href="{{ url_for('users.logout') }}">Log Out</a>
+    </div>
+</div>
+{% endblock navbar %}
+
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='style/home.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='style/admin_user_management.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='style/admin_user_detail.css') }}">
+
+<div class="admin-wrapper">
+
+  <!-- LEFT SIDEBAR (SAME AS USER MANAGEMENT) -->
+  <div class="left">
+    <div class="bar-list">
+      <a href="/admin/finance" class="bar-row">Finance</a>
+      <a href="/admin/user-management" class="bar-row selected-bar">User Management</a>
+      <a href="/owner/order" class="bar-row">Owner Centre</a>
+    </div>
+  </div>
+
+  <!-- RIGHT CONTENT (ONLY THIS IS DIFFERENT) -->
+  <div class="right user-detail">
+
+    <div class="detail-header">
+      <span></span>
+      <h3>Member Account</h3>
+      <span></span>
+    </div>
+
+    <div class="detail-content">
+
+      <div class="detail-row">
+        <span class="label">Name</span>
+        <div class="value name-split">
+            <input type="text" value="Hudson" placeholder="First name">
+            <input type="text" value="Smith" placeholder="Last name">
+        </div>
+      </div>
+
+      <div class="detail-row">
+        <span class="label">Email</span>
+        <span class="value">hudson247@gmail.com</span>
+      </div>
+
+      <div class="detail-row">
+        <span class="label">Phone</span>
+        <span class="value">0923456789</span>
+      </div>
+
+      <div class="detail-row">
+        <span class="label">Address</span>
+        <span class="value">456 Elm St, Springfield</span>
+      </div>
+
+      <div class="detail-row">
+        <span class="label">Birth</span>
+        <span class="value">1992-05-20</span>
+      </div>
+
+    </div>
+
+    <div class="action-buttons">
+        <a href="/admin/user-management" class="action-btn back-btn">Back</a>
+        <a href="/admin/user/1/edit" class="action-btn edit-btn">Edit</a>
+    </div>
+
+</div>
+{% endblock %}
