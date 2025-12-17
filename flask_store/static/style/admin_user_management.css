@@ -2,23 +2,31 @@
    ADMIN LAYOUT
    ========================= */
 .admin-wrapper{
-  max-width: 1200px;
+  /* max-width: 1200px;
   margin: 10px auto 70px;
   display: flex;
   gap: 40px;
-  align-items: flex-start;
+  align-items: flex-start; */
+  max-width: 1100px;
+  margin: 5px auto 70px;
+  display: flex;
+  gap: 40px;
 }
 
 /* =========================
    LEFT SIDEBAR (credit-card style)
    ========================= */
 .left{
-  flex: 0 0 220px;
+  /* flex: 0 0 220px;
   display: flex;
   flex-direction: column;
   gap: 14px;
   background: transparent;
-  padding-top: 10px;
+  padding-top: 10px; */
+  width: 200px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
 }
 
 .bar-list{

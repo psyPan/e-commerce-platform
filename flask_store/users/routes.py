@@ -126,3 +126,9 @@ def user_detail():
 # @login_required
 def user_edit():
     return render_template('admin/user_edit.html')
+
+# to see credit card page
+@users.route('/cart')
+# @login_required
+def my_cart():
+    return render_template('cart.html')
