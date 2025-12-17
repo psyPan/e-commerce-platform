@@ -1,0 +1,210 @@
+:root{
+  --brown:#4a3a22;
+  --cream:#efe1d2;
+  --cream2:#e6d3c0;
+  --pill:#c9a468;
+  --text:#3a2a16;
+  --shadow:0 16px 40px rgba(0,0,0,.12);
+}
+
+*{margin:0;padding:0;box-sizing:border-box}
+
+body{
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;
+  background:linear-gradient(180deg,var(--cream),var(--cream2));
+  color:var(--text);
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+}
+
+/* TOPBAR */
+.topbar{
+  height:80px;
+  background:var(--brown);
+  padding:0 48px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.brand{color:#fff;font-size:26px;font-weight:800}
+.top-actions span{color:#fff;margin-left:24px}
+
+/* PAGE */
+.page{
+  flex:1;
+  padding:32px 48px;
+  display:flex;
+  justify-content:center;
+}
+.layout{
+  width:1200px;
+  display:grid;
+  grid-template-columns:260px 1fr;
+  gap:36px;
+}
+
+/* SIDEBAR */
+.sidebar{padding-top:20px}
+.side-title{
+  background:var(--brown);
+  color:#fff;
+  border-radius:14px;
+  padding:14px;
+  font-weight:700;
+  margin-bottom:20px;
+  text-align:center;
+}
+.side-btn{
+  width:100%;
+  height:54px;
+  border:none;
+  border-radius:999px;
+  background:#f6ede4;
+  margin-bottom:16px;
+}
+.side-btn.active{
+  background:var(--pill);
+  color:#fff;
+}
+
+/* PANEL */
+.panel{
+  background:rgba(255,255,255,.25);
+  border-radius:28px;
+  padding:24px;
+  box-shadow:var(--shadow);
+}
+.panel-inner{
+  background:rgba(255,255,255,.15);
+  border-radius:28px;
+  padding:36px 40px;
+}
+
+/* TITLE */
+.form-title{
+  display:grid;
+  grid-template-columns:1fr auto 1fr;
+  align-items:center;
+  gap:20px;
+  margin-bottom:28px;
+}
+.form-title span{
+  height:1px;
+  background:rgba(0,0,0,.2);
+}
+.form-title h3{
+  font-size:20px;
+  font-weight:800;
+}
+
+/* FORM */
+.product-form{
+  max-width:760px;
+  margin:auto;
+}
+
+.form-row{
+  display:grid;
+  grid-template-columns:240px 1fr;
+  align-items:center;
+  gap:24px;
+  margin-bottom:18px;
+}
+
+.form-row label{
+  font-size:14px;
+  color:#6f604b;
+}
+
+.form-row input{
+  height:42px;
+  border-radius:10px;
+  border:1px solid rgba(0,0,0,.2);
+  padding:0 14px;
+}
+
+/* CATEGORY */
+.category{
+  align-items:flex-start;
+}
+.radio-group{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:10px 20px;
+}
+.radio-group label{
+  font-size:14px;
+}
+
+/* DIVIDER */
+.divider{
+  border:none;
+  height:1px;
+  background:rgba(0,0,0,.15);
+  margin:28px 0;
+}
+
+/* ACTIONS */
+.form-actions{
+  display:flex;
+  justify-content:center;
+  gap:40px;
+}
+
+.btn{
+  width:140px;
+  height:42px;
+  border:none;
+  border-radius:12px;
+  font-weight:700;
+}
+
+.btn.cancel{
+  background:#ccc;
+  color:#fff;
+}
+
+.btn.save{
+  background:var(--pill);
+  color:#fff;
+}
+
+/* FOOTER */
+.footer{
+  background:var(--brown);
+  padding:32px 24px;
+  color:#fff;
+}
+.footer-grid{
+  max-width:1200px;
+  margin:auto;
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  text-align:center;
+}
+.f-name{font-weight:900;margin-bottom:8px}
+.f-sub{font-size:14px}
+
+/* ===== NORMAL RADIO, RAPI & SEJAJAR ===== */
+
+.radio-group{
+  display:grid;
+  grid-template-columns:repeat(2, minmax(180px, 1fr));
+  gap:12px 28px;
+}
+
+/* rapikan label + radio */
+.radio-group label{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-size:14px;
+  color:var(--text);
+  cursor:pointer;
+}
+
+/* pakai radio DEFAULT browser */
+.radio-group input[type="radio"]{
+  accent-color: var(--pill); /* warna ikut tema */
+}

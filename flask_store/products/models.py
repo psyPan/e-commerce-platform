@@ -16,9 +16,14 @@ class Product(db.Model):
     # Foreign keys
     store_id = db.Column(db.Integer, db.ForeignKey('store.id'), nullable=False)
     discount_id = db.Column(db.Integer, db.ForeignKey('discount.id'))
-    
+
+    # Relationships
+    # Relationship to discount
     discount_obj = db.relationship('Discount', back_populates='products')
+    # Relationship to store
     store = db.relationship('Store', back_populates='products')
+    # Relationship to line_item
+    # line_items = db.relationship('LineItem', back_populates='product')
 
     def get_final_price(self):
         """Calculate the final price considering discounts"""

@@ -1,0 +1,274 @@
+:root{
+  --brown:#4a3a22;
+  --cream:#efe1d2;
+  --cream2:#e6d3c0;
+  --pill:#c9a468;
+  --text:#3a2a16;
+  --shadow:0 16px 40px rgba(0,0,0,.12);
+}
+
+*{margin:0;padding:0;box-sizing:border-box}
+
+body{
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;
+  background:linear-gradient(180deg,var(--cream),var(--cream2));
+  color:var(--text);
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+}
+
+/* TOP BAR */
+.topbar{
+  height:80px;
+  background:var(--brown);
+  padding:0 48px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.brand{color:#fff;font-size:26px;font-weight:800}
+.top-actions span{color:#fff;margin-left:24px}
+
+/* PAGE */
+.page{
+  flex:1;
+  padding:48px;
+  display:flex;
+  justify-content:center;
+}
+.layout{
+  width:1200px;
+  display:grid;
+  grid-template-columns:260px 1fr;
+  gap:36px;
+}
+
+/* SIDEBAR */
+.sidebar{padding-top:20px}
+.side-title{
+  background:var(--brown);
+  color:#fff;
+  border-radius:14px;
+  padding:14px;
+  font-weight:700;
+  margin-bottom:20px;
+}
+.side-btn{
+  width:100%;
+  height:54px;
+  border:none;
+  border-radius:999px;
+  background:#f6ede4;
+  margin-bottom:16px;
+}
+.side-btn.active{
+  background:var(--pill);
+  color:#fff;
+}
+
+/* PANEL */
+.panel{
+  background:rgba(255,255,255,.25);
+  border-radius:28px;
+  padding:24px;
+  box-shadow:var(--shadow);
+}
+.panel-inner{
+  background:rgba(255,255,255,.15);
+  border-radius:28px;
+  padding:24px;
+}
+
+/* STATUS TABS */
+.status-tabs{
+  display:flex;
+  gap:14px;
+}
+.st-tab{
+  border:none;
+  background:none;
+  padding:10px 22px;
+  border-radius:999px;
+  font-weight:600;
+  cursor:pointer;
+}
+.st-tab.active{
+  background:var(--pill);
+  color:#fff;
+}
+
+/* DIVIDER */
+.divider{
+  border:none;
+  height:1px;
+  background:rgba(0,0,0,.25);
+  margin:14px 0 22px;
+}
+
+/* SEARCH */
+.search-row{
+  display:grid;
+  grid-template-columns:160px 1fr 120px;
+  gap:14px;
+  margin-bottom:20px;
+}
+.dropdown,.search{
+  height:46px;
+  border:none;
+  border-radius:14px;
+  padding:0 16px;
+}
+.apply{
+  border:none;
+  border-radius:14px;
+  background:var(--pill);
+  color:#fff;
+  font-weight:700;
+}
+
+/* SCROLLABLE ORDER LIST */
+.order-list{
+  max-height:420px;
+  overflow-y:auto;
+  padding-right:6px;
+}
+.order-list::-webkit-scrollbar{
+  width:6px;
+}
+.order-list::-webkit-scrollbar-thumb{
+  background:rgba(0,0,0,.25);
+  border-radius:10px;
+}
+
+/* ORDER CARD */
+.order-card{
+  background:rgba(255,255,255,.45);
+  border-radius:22px;
+  padding:18px;
+  margin-bottom:20px;
+}
+
+.order-head{
+  background:rgba(201,164,104,.35);
+  border-radius:14px;
+  padding:10px 16px;
+  display:flex;
+  justify-content:space-between;
+  font-weight:700;
+  margin-bottom:16px;
+}
+
+.order-item{
+  display:grid;
+  grid-template-columns:90px 1fr 120px 120px;
+  align-items:center;
+  gap:18px;
+  padding:14px 0;
+  border-bottom:1px solid rgba(0,0,0,.08);
+}
+.order-item:last-child{border-bottom:none}
+
+.item-name{font-weight:700}
+.item-meta{font-size:14px;color:#6f604b}
+.item-price{font-weight:700}
+.item-status{
+  text-align:center;
+  font-weight:700;
+  color:var(--text);
+}
+
+/* FOOTER */
+.footer{
+  background:var(--brown);
+  padding:32px 24px;
+  color:#fff;
+}
+.footer-grid{
+  max-width:1200px;
+  margin:auto;
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  text-align:center;
+}
+.f-name{font-weight:900;margin-bottom:8px}
+.f-sub{font-size:14px}
+
+/* ===== COMPACT VERSION (SHORTER PAGE) ===== */
+
+/* page padding diperkecil */
+.page{
+  padding:32px 48px;
+}
+
+/* panel & inner lebih tipis */
+.panel{
+  padding:18px;
+}
+
+.panel-inner{
+  padding:18px;
+}
+
+/* tab status lebih rapat */
+.status-tabs{
+  gap:10px;
+}
+
+.st-tab{
+  padding:8px 18px;
+  font-size:14px;
+}
+
+/* divider lebih dekat */
+.divider{
+  margin:10px 0 16px;
+}
+
+/* search lebih pendek */
+.search-row{
+  margin-bottom:14px;
+}
+
+.dropdown,.search{
+  height:40px;
+}
+
+.apply{
+  height:40px;
+  font-size:14px;
+}
+
+/* LIST ORDER LEBIH PENDEK */
+.order-list{
+  max-height:300px;   /* ⬅ ini kunci utama */
+}
+
+/* card lebih rapat */
+.order-card{
+  padding:14px;
+  margin-bottom:14px;
+}
+
+/* header order lebih kecil */
+.order-head{
+  padding:8px 14px;
+  font-size:14px;
+}
+
+/* item lebih rapat */
+.order-item{
+  padding:10px 0;
+  gap:14px;
+}
+
+/* gambar produk lebih kecil */
+.order-item img{
+  width:70px;
+  height:auto;
+}
+
+/* ===== CENTER STAFF MENU TITLE ===== */
+.side-title{
+  text-align:center;
+}

@@ -6,7 +6,7 @@
         <a href="{{ url_for('users.home') }}">Our Logo</a>
     </div>
     <div class="nav-links">
-        <a href="{{ url_for('users.home') }}">Home</a>
+        <a href="{{ url_for('users.profile') }}">My Profile</a>
         <a href="{{ url_for('users.logout') }}">Log Out</a>
     </div>
 </div>
@@ -36,6 +36,7 @@
                 <div class="profile-row">
                     <span>Full Name</span>
                     <p>{{ current_user.f_name }} {{ current_user.l_name }}</p>
+                    <p>{{ current_user.f_name }} {{ current_user.l_name }}</p>
                 </div>
 
                 <div class="profile-row">
@@ -63,6 +64,7 @@
                 {{ form.hidden_tag() }}
 
                 <div class="profile-form-row two-col">
+                    <!-- First Name Field -->
                     <div class="form-group">
                         <label>First Name</label>
                         {% if form.f_name.errors %}
@@ -123,7 +125,6 @@
                     </button>                    
                 </div>                
             </form>
-
         </div>
     </div>
 </div>
@@ -138,6 +139,14 @@ function exitEdit() {
     // However, if we Save, the form submits and page reloads.
     document.getElementById("profileBox").classList.remove("editing");
 }
+// If success, exit edit mode automatically
+document.addEventListener('DOMContentLoaded', function() {
+    const flashMessages = document.querySelectorAll('.alert-success');
+    if (flashMessages.length > 0) {
+        // Form was successfully submitted, stay in view mode
+        exitEdit();
+    }
+});
 </script>
 
 <style>

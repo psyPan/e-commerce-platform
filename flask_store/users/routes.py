@@ -50,6 +50,7 @@ def credit():
     return render_template('credit_card.html')
 
 @users.route('/profile', methods=['GET', 'POST'])
+@login_required
 def profile():
     form = EditProfileForm(obj=current_user)
 
@@ -57,7 +58,6 @@ def profile():
         current_user.f_name = form.f_name.data
         current_user.l_name = form.l_name.data
         current_user.birth = form.birth.data
-        current_user.gender = form.gender.data
         current_user.phone = form.phone.data
         current_user.address = form.address.data
 
@@ -70,7 +70,34 @@ def profile():
         form=form
     )
 
-
+# Alternative: Separate route for update
+@users.route('/profile/update', methods=['GET', 'POST'])
+@login_required
+def update_profile():
+    """Handle profile update"""
+    form = EditProfileForm()
+    
+    if form.validate_on_submit():
+        current_user.f_name = form.f_name.data
+        current_user.l_name = form.l_name.data
+        current_user.birth = form.birth.data
+        current_user.email = form.email.data
+        current_user.phone = form.phone.data
+        current_user.address = form.address.data
+        
+        try:
+            db.session.commit()
+            flash('Profile updated successfully!', 'success')
+        except Exception as e:
+            db.session.rollback()
+            flash('Error updating profile. Please try again.', 'danger')
+    else:
+        # Display validation errors
+        for field, errors in form.errors.items():
+            for error in errors:
+                flash(f'{field}: {error}', 'danger')
+    
+    return redirect(url_for('users.profile'))
 
 @users.route("/change_password", methods=["GET", "POST"])
 def change_password():
