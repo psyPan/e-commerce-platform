@@ -16,7 +16,8 @@ class Order(db.Model):
     customer_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     # Foreign key to the discount (if shipping discount applied)
     shipping_discount_id = db.Column(db.Integer, db.ForeignKey('discount.id'))
-    # Foreign key to the cart TODO: Place FK cart id here
+    # Foreign key to the cart
+    cart_id = db.Column(db.Integer, db.ForeignKey('cart.id'))
 
     # Relationships
     # Relationship to discount
@@ -25,6 +26,8 @@ class Order(db.Model):
     order_manager = db.relationship('User', foreign_keys=[order_manager_id])
     # Use customer_id to link to User table
     customer = db.relationship('User', foreign_keys=[customer_id])
+    # Relationship to cart
+    cart = db.relationship('Cart', back_populates='orders')
 
 # Event listener to automatically update timestamps 
 @event.listens_for(Order, 'before_update') 

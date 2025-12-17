@@ -36,22 +36,26 @@
                 <div class="profile-row">
                     <span>Full Name</span>
                     <p>{{ current_user.f_name }} {{ current_user.l_name }}</p>
-                    <p>{{ current_user.f_name }} {{ current_user.l_name }}</p>
                 </div>
 
                 <div class="profile-row">
                     <span>Birth Date</span>
-                    <p>{{ current_user.birth or "Not Set" }}</p>
+                    <p>{{ current_user.birth }}</p>
                 </div>
 
                 <div class="profile-row">
                     <span>Phone</span>
-                    <p>{{ current_user.phone or "Not Set" }}</p>
+                    <p>{{ current_user.phone }}</p>
                 </div>
 
                 <div class="profile-row">
                     <span>Address</span>
-                    <p>{{ current_user.address or "Not Set" }}</p>
+                    <p>{{ current_user.address }}</p>
+                </div>
+
+                <div class="profile-row">
+                    <span>Email</span>
+                    <p>{{ current_user.email }}</p>
                 </div>
 
             </div>
@@ -60,60 +64,98 @@
                 <button type="button" class="edit-btn" onclick="enterEdit()">Edit Profile</button>
             </div>
 
-            <form method="POST" class="profile-form">
+            <form method="POST" class="profile-form" action="{{ url_for('users.update_profile') }}">
                 {{ form.hidden_tag() }}
 
                 <div class="profile-form-row two-col">
                     <!-- First Name Field -->
                     <div class="form-group">
-                        <label>First Name</label>
+                        {{ form.f_name.label(class="form-label") }}
                         {% if form.f_name.errors %}
-                            {{ form.f_name(class="profile-input is-invalid") }}
-                            <div class="error-msg">{{ form.f_name.errors[0] }}</div>
+                            {{ form.f_name(class="form-input is-invalid", placeholder="John") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.f_name.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
                         {% else %}
                             {{ form.f_name(class="profile-input") }}
                         {% endif %}
                     </div>
-                
+
                     <div class="form-group">
-                        <label>Last Name</label>
+                        {{ form.l_name.label(class="form-label") }}
                         {% if form.l_name.errors %}
-                            {{ form.l_name(class="profile-input is-invalid") }}
-                            <div class="error-msg">{{ form.l_name.errors[0] }}</div>
+                            {{ form.l_name(class="form-input is-invalid", placeholder="John") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.l_name.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
                         {% else %}
                             {{ form.l_name(class="profile-input") }}
                         {% endif %}
                     </div>
                 </div>
 
-                <div class="profile-form-row">
-                    {{ form.birth.label }}
-                    {% if form.birth.errors %}
-                        {{ form.birth(class="profile-input is-invalid") }}
-                        <div class="error-msg">{{ form.birth.errors[0] }}</div>
-                    {% else %}
-                        {{ form.birth(class="profile-input") }}
-                    {% endif %}
+                <div class="profile-form-row two-col">
+                    <div class="form-group">
+                        {{ form.email.label(class="form-label") }}
+                        {% if form.email.errors %}
+                            {{ form.email(class="form-input is-invalid", placeholder="John") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.email.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.email(class="profile-input") }}
+                        {% endif %}
+                    </div>
+                
+                    <div class="form-group">
+                        {{ form.phone.label(class="form-label") }}
+                        {% if form.phone.errors %}
+                            {{ form.phone(class="form-input is-invalid", placeholder="John") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.phone.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.phone(class="profile-input") }}
+                        {% endif %}
+                    </div>
                 </div>
 
-                <div class="profile-form-row">
-                    {{ form.phone.label }}
-                    {% if form.phone.errors %}
-                        {{ form.phone(class="profile-input is-invalid") }}
-                        <div class="error-msg">{{ form.phone.errors[0] }}</div>
-                    {% else %}
-                        {{ form.phone(class="profile-input") }}
-                    {% endif %}
-                </div>
-
-                <div class="profile-form-row">
-                    {{ form.address.label }}
-                    {% if form.address.errors %}
-                        {{ form.address(class="profile-input is-invalid") }}
-                        <div class="error-msg">{{ form.address.errors[0] }}</div>
-                    {% else %}
-                        {{ form.address(class="profile-input") }}
-                    {% endif %}
+                <div class="profile-form-row two-col">
+                    <div class="form-group">
+                        {{ form.birth.label(class="form-label") }}
+                        {% if form.birth.errors %}
+                            {{ form.birth(class="form-input is-invalid", placeholder="John") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.birth.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.birth(class="profile-input") }}
+                        {% endif %}
+                    </div>
+                
+                    <div class="form-group">
+                        {{ form.address.label(class="form-label") }}
+                        {% if form.address.errors %}
+                            {{ form.address(class="form-input is-invalid", placeholder="John") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.address.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.address(class="profile-input") }}
+                        {% endif %}
+                    </div>
                 </div>
 
                 <div class="profile-actions profile-actions-form">
@@ -121,9 +163,9 @@
                         Cancel
                     </button>
                     <button type="submit" class="btn-gold">
-                        Save Changes
-                    </button>                    
-                </div>                
+                        Save
+                    </button>
+                </div>
             </form>
         </div>
     </div>

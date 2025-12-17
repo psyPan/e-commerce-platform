@@ -22,6 +22,7 @@ class Cart(db.Model):
     # Relationships (Optional but helpful)
     user = db.relationship('User', backref=db.backref('cart_items', lazy=True))
     product = db.relationship('Product', backref=db.backref('in_carts', lazy=True))
+    orders = db.relationship('Order', back_populates='cart')
 
     def __repr__(self):
         return f"Cart(User: {self.user_id}, Product: {self.product_id}, Qty: {self.quantity})"

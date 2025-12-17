@@ -180,7 +180,7 @@
 ========================= */
 
 .profile-actions {
-    margin-top: auto;      /* 🔥 DORONG KE BAWAH TANPA ABSOLUTE */
+    margin-top: 50px;      /* 🔥 DORONG KE BAWAH TANPA ABSOLUTE */
     display: flex;
     justify-content: flex-end;
     gap: 14px;
