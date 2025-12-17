@@ -1,0 +1,36 @@
+.product-list {
+    margin-bottom: 20px;
+}
+
+.product-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    padding: 12px 0;
+    border-bottom: 1px solid #eee;
+    font-size: 14px;
+}
+
+.product-row span {
+    font-weight: 600;
+    color: #555;
+}
+
+.pagination {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+.page-btn {
+    padding: 8px 14px;
+    border-radius: 10px;
+    border: none;
+    background: #eee;
+    cursor: pointer;
+}
+
+.page-btn.active {
+    background: #c9a876;
+    color: white;
+}

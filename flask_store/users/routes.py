@@ -84,7 +84,7 @@ def update_profile():
         current_user.email = form.email.data
         current_user.phone = form.phone.data
         current_user.address = form.address.data
-        
+
         try:
             db.session.commit()
             flash('Profile updated successfully!', 'success')
@@ -132,3 +132,7 @@ def user_edit():
 # @login_required
 def my_cart():
     return render_template('cart.html')
+
+@users.route('/test_product')
+def test_product():
+    return render_template('test_product.html')

@@ -1,0 +1,133 @@
+{% extends "index.html" %}
+
+{% block navbar %}
+<div class="navbar">
+    <div class="logo">
+        <a href="{{ url_for('users.home') }}">Our Logo</a>
+    </div>
+    <div class="nav-links">
+        <a href="{{ url_for('users.profile') }}">My Profile</a>
+        <a href="{{ url_for('users.logout') }}">Log Out</a>
+    </div>
+</div>
+{% endblock navbar %}
+
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='style/home.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='style/profile.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='style/test_product.css') }}">
+
+<div class="profile-wrapper">
+
+    <!-- OWNER SIDEBAR -->
+    <div class="profile-sidebar">
+        <a class="side-btn active">Products</a>
+        <a class="side-btn">Orders</a>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="profile-content">
+
+        <div class="profile-card" id="productBox">
+
+            <!-- ================= PRODUCT LIST ================= -->
+            <div class="profile-view">
+
+                <!-- TITLE -->
+                <h1 class="profile-title">Products Management</h1>
+
+                <div class="product-row">
+                    <span>Product Name</span>
+                    <span>Type</span>
+                    <span>Buy Price</span>
+                    <span>Sell Price</span>
+                </div>
+
+                <!-- Repeat this row for 10 products -->
+                <div class="product-row">
+                    <p>Wireless Mouse</p>
+                    <p>Accessories</p>
+                    <p>$10</p>
+                    <p>$15</p>
+                </div>
+
+                <div class="product-row">
+                    <p>Mechanical Keyboard</p>
+                    <p>Accessories</p>
+                    <p>$50</p>
+                    <p>$75</p>
+                </div>
+
+                <!-- ... up to 10 products -->
+                <!-- ================= PAGINATION ================= -->
+                <div class="pagination">
+                    <button class="page-btn">Prev</button>
+                    <button class="page-btn active">1</button>
+                    <button class="page-btn">2</button>
+                    <button class="page-btn">Next</button>
+                </div>
+            </div>
+
+
+            <!-- ================= ADD PRODUCT BUTTON ================= -->
+            <div class="profile-actions profile-actions-view">
+                <button class="edit-btn" onclick="enterAdd()">Add a Product</button>
+            </div>
+
+            <!-- ================= ADD PRODUCT FORM ================= -->
+            <div class="form-container">
+                <form method="POST" class="profile-form" id="addProductForm">
+                    <h1 class="profile-title">Add Product</h1>
+                    <div class="profile-form-row">
+                        <label>Product Name</label>
+                        <input type="text" class="profile-input" placeholder="Product name">
+                    </div>
+
+                    <div class="profile-form-row two-col">
+                        <div>
+                            <label>Buy Price</label>
+                            <input type="number" class="profile-input" placeholder="0.00">
+                        </div>
+                        <div>
+                            <label>Sell Price</label>
+                            <input type="number" class="profile-input" placeholder="0.00">
+                        </div>
+                    </div>
+
+                    <div class="profile-form-row">
+                        <label>Product Type</label>
+                        <select class="profile-input">
+                            <option>Accessories</option>
+                            <option>Electronics</option>
+                            <option>Gadgets</option>
+                        </select>
+                    </div>
+
+                    <div class="profile-form-row">
+                        <label>Description</label>
+                        <textarea class="profile-input" rows="4"
+                            placeholder="Product description"></textarea>
+                    </div>
+
+                    <div class="profile-actions profile-actions-form">
+                        <button type="button" class="cancel-btn" onclick="exitAdd()">Cancel</button>
+                        <button type="submit" class="btn-gold">Add</button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function enterAdd() {
+    document.getElementById("productBox").classList.add("editing");
+}
+
+function exitAdd() {
+    document.getElementById("productBox").classList.remove("editing");
+}
+</script>
+
+{% endblock %}
