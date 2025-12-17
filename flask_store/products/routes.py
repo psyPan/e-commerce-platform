@@ -42,3 +42,24 @@ def add_product():
         elif form.cancel.data:
             return render_template('add_product.html', title='Add Product', form=form)
     return render_template('add_product.html', title='Add Product', form=form)
+
+def list_products():
+    page = request.args.get('page', 1, type=int)
+    per_page = 9
+    
+    products_pagination = Product.query.paginate(page=page, per_page=per_page, error_out=False)
+    
+    # Enhance store data with product counts
+    product_data = []
+    for product in products_pagination.items:
+        product_data.append({
+            'name': product.name,
+            'in_stock_quantity': product.stock,
+            'description': product.description,
+            'sell_price': product.sell_price,
+            'type': product.type
+        })
+
+    return render_template('stores_list.html', 
+                         products=product_data,
+                         pagination=products_pagination)

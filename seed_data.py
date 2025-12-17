@@ -1,5 +1,7 @@
 from flask_store import db, create_app, bcrypt
 from flask_store.stores.models import Store
+from flask_store.products.models import Product
+
 from flask_store.discounts.models import Discount
 from flask_store.products.models import Product
 from flask_store.users.models import User
@@ -30,7 +32,7 @@ with app.app_context():
         f_name="John", 
         l_name="Doe", 
         email="owner@test.com", 
-        password="OwnerPass",
+        password=bcrypt.generate_password_hash("OwnerPass").decode('utf-8'),
         store_id=store1.id,
         phone = 912345678,
         birth = date(2025,12,13),
@@ -40,21 +42,6 @@ with app.app_context():
         c_flag=False
     )
     db.session.add(owner)
-
-    owner2 = User(
-        id = 987654321,
-        f_name="John", 
-        l_name="Smith", 
-        email="owner2@test.com", 
-        password="Owner2Pass",
-        phone = 812345678,
-        birth = date(2025,12,13),
-        reg_date = date(2025,12,13),
-        o_flag=True, 
-        a_flag=False, 
-        c_flag=False
-    )
-    db.session.add(owner2)
 
     # 4. Create a Discount
     summer_sale = Discount(

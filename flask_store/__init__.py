@@ -24,11 +24,14 @@ def create_app():
         from flask_store.stores.routes import stores
         from flask_store.discounts.routes import discounts
         from flask_store.products.routes import products
+        from flask_store.cart.routes import cart
+
         db.create_all()
         
         # Register blueprints
         app.register_blueprint(users)
         app.register_blueprint(stores)
         app.register_blueprint(discounts)
+        app.register_blueprint(cart)
         app.register_blueprint(products)
     return app

@@ -5,6 +5,7 @@ from flask_store.stores.forms import StoreForm
 from flask_store.users.models import User
 from flask_store.stores.models import Store
 from flask_store.products.models import Product
+from flask_store.discounts.models import Discount  # <--- NEW IMPORT NEEDED
 from sqlalchemy import func, or_, and_
 
 stores = Blueprint('stores', __name__)
@@ -14,11 +15,9 @@ def add_store():
     form = StoreForm()
     
     if form.validate_on_submit():
-        # Search for user by first name and last name, and check if o_flag or a_flag is True
         owner = User.query.filter(
             User.f_name == form.owner_f_name.data,
             User.l_name == form.owner_l_name.data,
-            # Use or_() to check if EITHER condition is true
             or_(
                 User.a_flag == True,
                 User.o_flag == True
@@ -26,28 +25,24 @@ def add_store():
         ).first()
         
         if not owner:
-            flash('Owner not found or the user is not registered as an owner. Please verify the information.', 'danger')
+            flash('Owner not found or the user is not registered as an owner.', 'danger')
             return render_template('add_store.html', title='New Store', form=form)
         
-        # Create new store only if owner exists and is valid
         new_store = Store(
             name=form.store_name.data,
             email=form.email.data,
             phone=form.phone.data,
-            balance=0  # Initialize with 0 balance
+            balance=0
         )
         
         db.session.add(new_store)
-        db.session.flush()  # Flush to get the store.id
+        db.session.flush()
         
-        # Assign the store_id to the owner
         owner.store_id = new_store.id
-        
-        # Commit all changes
         db.session.commit()
         
-        flash(f'Store {new_store.name} has been created and assigned to {owner.f_name} {owner.l_name}!', 'success')
-        return redirect(url_for('users.home'))  # Redirect to appropriate page
+        flash(f'Store {new_store.name} created!', 'success')
+        return redirect(url_for('users.home'))
     
     return render_template('add_store.html', title='New Store', form=form)
 
@@ -59,7 +54,6 @@ def list_stores():
     
     stores_pagination = Store.query.paginate(page=page, per_page=per_page, error_out=False)
     
-    # Enhance store data with product counts
     store_data = []
     for store in stores_pagination.items:
         product_count = Product.query.filter_by(store_id=store.id).count()
@@ -116,7 +110,7 @@ def view_store(store_id):
     if max_price is not None:
         products_query = products_query.filter(Product.sell_price <= max_price)
     
-    # Sorting
+    # Sorting - UPDATED TO HANDLE DISCOUNTS VIA JOIN
     if sort_by == 'price_asc':
         products_query = products_query.order_by(Product.sell_price.asc())
     elif sort_by == 'price_desc':
@@ -124,7 +118,8 @@ def view_store(store_id):
     elif sort_by == 'name':
         products_query = products_query.order_by(Product.name.asc())
     elif sort_by == 'discount':
-        products_query = products_query.order_by(Product.discount.desc())
+        # JOIN Discount table to sort by discount percent
+        products_query = products_query.outerjoin(Discount).order_by(Discount.discount_percent.desc())
     else:
         products_query = products_query.order_by(Product.id.desc())
     
@@ -144,7 +139,6 @@ def view_store(store_id):
         .filter(Product.manufacturer.isnot(None)).distinct().all()
     manufacturers = [m[0] for m in manufacturers]
     
-    # Get store owners
     owners = User.query.filter_by(store_id=store_id, o_flag=True).all()
     
     return render_template('store.html', 
@@ -196,14 +190,12 @@ def store_deals(store_id):
     """Show all discounted products in the store"""
     store = Store.query.get_or_404(store_id)
     
-    products = Product.query.filter(
+    # UPDATED QUERY: Use JOIN to find products with active discounts
+    products = Product.query.join(Discount).filter(
         Product.store_id == store_id,
-        or_(
-            Product.discount > 0,
-            Product.discounted_price.isnot(None)
-        ),
+        Discount.discount_percent > 0,  # Only products with actual discount
         Product.stock > 0
-    ).order_by(Product.discount.desc()).all()
+    ).order_by(Discount.discount_percent.desc()).all()
     
     return render_template('store_deals.html',
                          store=store,
@@ -218,7 +210,6 @@ def global_search():
     if not query:
         return redirect(url_for('stores.list_stores'))
     
-    # Search products
     products = Product.query.filter(
         or_(
             Product.name.ilike(f'%{query}%'),
@@ -227,7 +218,6 @@ def global_search():
         )
     ).limit(20).all()
     
-    # Search stores
     stores_found = Store.query.filter(
         or_(
             Store.name.ilike(f'%{query}%'),
