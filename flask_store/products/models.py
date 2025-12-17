@@ -21,7 +21,8 @@ class Product(db.Model):
     discount_obj = db.relationship('Discount', back_populates='products')
     # Relationship to store
     store = db.relationship('Store', back_populates='products')
-    # TODO: Relationship to line_item
+    # Relationship to line_item
+    # line_items = db.relationship('LineItem', back_populates='product')
     
     def get_final_price(self):
         """Calculate the final price considering discounts"""
