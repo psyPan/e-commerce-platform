@@ -6,7 +6,7 @@ from flask_wtf.file import FileAllowed, FileField, FileRequired
 class ProductForm(FlaskForm):
     name = StringField('Product Name',  validators=[DataRequired(), Length(min=5, max=100)])
     description = TextAreaField('Product Description')
-    image = FileField('Update Profile Picture', validators=[FileAllowed(['jpg', 'png'])])
+    image = FileField('Product Image', validators=[FileAllowed(['jpg', 'png'])])
     buy_price = IntegerField('Buying Price', validators=[DataRequired(), NumberRange(min=1, message='Price cannot be negative')])
     sell_price = IntegerField('Selling Price', validators=[DataRequired(), NumberRange(min=1, message='Price cannot be negative')])
     stock = IntegerField('Stock Quantity', validators=[DataRequired(), NumberRange(min=0, message='In stock quantity cannot be negative value')])
@@ -22,5 +22,4 @@ class ProductForm(FlaskForm):
                         ])
     model = StringField('model', validators=[Length(min=5, max=100)])
     discount_code = StringField('Discount Code', validators=[Length(min=5, max=50)])
-    cancel = SubmitField('Cancel')
     save = SubmitField('Save')

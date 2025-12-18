@@ -1,6 +1,7 @@
 from flask import render_template, url_for, flash, redirect, request, Blueprint
 from flask_login import login_user, current_user, logout_user, login_required
 from flask_store import db, bcrypt
+from flask_store.products.forms import ProductForm
 from flask_store.users.forms import RegistrationForm, LoginForm, EditProfileForm
 from flask_store.users.models import User
 
@@ -135,4 +136,5 @@ def my_cart():
 
 @users.route('/test_product')
 def test_product():
-    return render_template('test_product.html')
+    form = ProductForm()
+    return render_template('test_product.html', form=form)
