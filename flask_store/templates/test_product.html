@@ -76,8 +76,9 @@
 
             <!-- ================= ADD PRODUCT FORM ================= -->
             <div class="form-container">
-                <form method="POST" class="profile-form" id="addProductForm" enctype="multipart/form-data">
+                <form method="POST" class="profile-form" id="addProductForm" enctype="multipart/form-data" action="">
                     <h1 class="profile-title">Add Product</h1>
+                    {{ form.hidden_tag() }}
 
                     <!-- Product Name -->
                     <div class="profile-form-row">

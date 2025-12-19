@@ -20,6 +20,7 @@ class ProductForm(FlaskForm):
                             ('gaming console', 'Gaming Console'),
                             ('home appliance', 'Home Appliance')
                         ])
-    model = StringField('model', validators=[Length(min=5, max=100)])
-    discount_code = StringField('Discount Code', validators=[Length(min=5, max=50)])
+    model = StringField('Model', validators=[Length(min=5, max=100)])
+    # discount_code = StringField('Discount Code', validators=[Length(min=5, max=50)])
+    discount_code = SelectField('Discount Code', choices=[])
     save = SubmitField('Save')
