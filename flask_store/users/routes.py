@@ -4,6 +4,10 @@ from flask_store import db, bcrypt
 from flask_store.products.forms import ProductForm
 from flask_store.users.forms import RegistrationForm, LoginForm, EditProfileForm
 from flask_store.users.models import User
+from flask_store.orders.models import Order
+from flask_store.line_items.models import LineItem
+from flask_store.products.models import Product
+
 
 users = Blueprint('users', __name__)
 
@@ -107,9 +111,15 @@ def change_password():
 
     return render_template("change_password.html")
 
-@users.route('/order_history')
+@users.route("/order_history")
+@login_required
 def order_history():
-    return render_template('order_history.html')
+    # Fetch orders belonging to the current user, ordered by newest first
+    orders = Order.query.filter_by(customer_id=current_user.id)\
+                        .order_by(Order.id.desc())\
+                        .all()
+    
+    return render_template('order_history.html', orders=orders)
 
 
 # admin youssel test
@@ -138,3 +148,35 @@ def my_cart():
 def test_product():
     form = ProductForm()
     return render_template('test_product.html', form=form)
+
+@users.route("/order/<int:order_id>/cancel", methods=['POST'])
+@login_required
+def cancel_order(order_id):
+    # 1. Get the order
+    order = Order.query.get_or_404(order_id)
+            
+    # 3. Status Check: Only allow cancelling if it hasn't shipped yet
+    if order.status not in ['received', 'processed']:
+        flash('This order cannot be cancelled because it has already been shipped or closed.', 'danger')
+        return redirect(url_for('users.order_history'))
+
+    # 4. RESTORE STOCK (Critical Step)
+    # We must find all items in this order and add their quantity back to the Product stock
+    # Assuming you have a relationship or we query LineItem directly:
+    order_items = LineItem.query.filter_by(order_id=order.id).all()
+    
+    for item in order_items:
+        product = Product.query.get(item.product_id)
+        if product:
+            product.stock += item.quantity
+
+    # 5. DELETE THE ORDER
+    # We delete the line items first to avoid foreign key errors (unless you have cascading delete set up)
+    for item in order_items:
+        db.session.delete(item)
+        
+    db.session.delete(order)
+    db.session.commit()
+    
+    flash('Your order has been successfully cancelled.', 'success')
+    return redirect(url_for('users.order_history'))

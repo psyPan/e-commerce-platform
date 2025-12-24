@@ -1,17 +1,5 @@
 {% extends "index.html" %}
 
-{% block navbar %}
-<div class="navbar">
-    <div class="logo">
-        <a href="{{ url_for('users.home') }}">Our Logo</a>
-    </div>
-    <div class="nav-links">
-        <a href="{{ url_for('users.profile') }}">My Profile</a>
-        <a href="{{ url_for('users.logout') }}">Log Out</a>
-    </div>
-</div>
-{% endblock navbar %}
-
 {% block content %}
 <link rel="stylesheet" href="{{ url_for('static', filename='style/home.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='style/profile.css') }}">
@@ -32,32 +20,26 @@
             <h1 class="profile-title">My Profile</h1>
 
             <div class="profile-view">
-
                 <div class="profile-row">
                     <span>Full Name</span>
                     <p>{{ current_user.f_name }} {{ current_user.l_name }}</p>
                 </div>
-
                 <div class="profile-row">
                     <span>Birth Date</span>
                     <p>{{ current_user.birth }}</p>
                 </div>
-
                 <div class="profile-row">
                     <span>Phone</span>
                     <p>{{ current_user.phone }}</p>
                 </div>
-
                 <div class="profile-row">
                     <span>Address</span>
                     <p>{{ current_user.address }}</p>
                 </div>
-
                 <div class="profile-row">
                     <span>Email</span>
                     <p>{{ current_user.email }}</p>
                 </div>
-
             </div>
 
             <div class="profile-actions profile-actions-view">
@@ -68,11 +50,10 @@
                 {{ form.hidden_tag() }}
 
                 <div class="profile-form-row two-col">
-                    <!-- First Name Field -->
                     <div class="form-group">
                         {{ form.f_name.label(class="form-label") }}
                         {% if form.f_name.errors %}
-                            {{ form.f_name(class="form-input is-invalid", placeholder="John") }}
+                            {{ form.f_name(class="form-input is-invalid") }}
                             <div class="invalid-feedback">
                                 {% for error in form.f_name.errors %}
                                     <span>{{ error }}</span>
@@ -86,7 +67,7 @@
                     <div class="form-group">
                         {{ form.l_name.label(class="form-label") }}
                         {% if form.l_name.errors %}
-                            {{ form.l_name(class="form-input is-invalid", placeholder="John") }}
+                            {{ form.l_name(class="form-input is-invalid") }}
                             <div class="invalid-feedback">
                                 {% for error in form.l_name.errors %}
                                     <span>{{ error }}</span>
@@ -102,7 +83,7 @@
                     <div class="form-group">
                         {{ form.email.label(class="form-label") }}
                         {% if form.email.errors %}
-                            {{ form.email(class="form-input is-invalid", placeholder="John") }}
+                            {{ form.email(class="form-input is-invalid") }}
                             <div class="invalid-feedback">
                                 {% for error in form.email.errors %}
                                     <span>{{ error }}</span>
@@ -116,7 +97,7 @@
                     <div class="form-group">
                         {{ form.phone.label(class="form-label") }}
                         {% if form.phone.errors %}
-                            {{ form.phone(class="form-input is-invalid", placeholder="John") }}
+                            {{ form.phone(class="form-input is-invalid") }}
                             <div class="invalid-feedback">
                                 {% for error in form.phone.errors %}
                                     <span>{{ error }}</span>
@@ -132,7 +113,7 @@
                     <div class="form-group">
                         {{ form.birth.label(class="form-label") }}
                         {% if form.birth.errors %}
-                            {{ form.birth(class="form-input is-invalid", placeholder="John") }}
+                            {{ form.birth(class="form-input is-invalid") }}
                             <div class="invalid-feedback">
                                 {% for error in form.birth.errors %}
                                     <span>{{ error }}</span>
@@ -146,7 +127,7 @@
                     <div class="form-group">
                         {{ form.address.label(class="form-label") }}
                         {% if form.address.errors %}
-                            {{ form.address(class="form-input is-invalid", placeholder="John") }}
+                            {{ form.address(class="form-input is-invalid") }}
                             <div class="invalid-feedback">
                                 {% for error in form.address.errors %}
                                     <span>{{ error }}</span>
@@ -159,12 +140,8 @@
                 </div>
 
                 <div class="profile-actions profile-actions-form">
-                    <button type="button" class="cancel-btn" onclick="exitEdit()">
-                        Cancel
-                    </button>
-                    <button type="submit" class="btn-gold">
-                        Save
-                    </button>
+                    <button type="button" class="cancel-btn" onclick="exitEdit()">Cancel</button>
+                    <button type="submit" class="btn-gold">Save</button>
                 </div>
             </form>
         </div>
@@ -177,36 +154,37 @@ function enterEdit() {
 }
 
 function exitEdit() {
-    // If we cancel, we can remove the class.
-    // However, if we Save, the form submits and page reloads.
     document.getElementById("profileBox").classList.remove("editing");
 }
-// If success, exit edit mode automatically
+
+// If form was submitted but had errors (server-side validation), keep editing open
 document.addEventListener('DOMContentLoaded', function() {
-    const flashMessages = document.querySelectorAll('.alert-success');
-    if (flashMessages.length > 0) {
-        // Form was successfully submitted, stay in view mode
+    // If there is an alert-success, we assume things went well and we can close edit mode.
+    // (Optional: You can remove this if you prefer manual closing)
+    const successMessages = document.querySelectorAll('.alert-success');
+    if (successMessages.length > 0) {
         exitEdit();
     }
 });
 </script>
 
 <style>
-    /* Add this specific style just in case you don't have it in profile.css 
-       to handle the visibility toggling 
+    /* Styles to toggle between View/Edit.
+       You can move these to profile.css eventually.
     */
     .profile-form { display: none; }
     .profile-view { display: block; }
     .profile-actions-view { display: block; }
     .profile-actions-form { display: none; }
 
-    /* When editing class is added */
+    /* When the 'editing' class is applied via JS */
     .profile-card.editing .profile-form { display: block; }
     .profile-card.editing .profile-view { display: none; }
     .profile-card.editing .profile-actions-view { display: none; }
     .profile-card.editing .profile-actions-form { display: flex; gap: 10px; justify-content: flex-end; }
     
-    .error-msg { color: red; font-size: 0.85em; margin-top: 4px; }
+    .invalid-feedback { color: #dc3545; font-size: 0.875em; margin-top: 0.25rem; }
+    .is-invalid { border-color: #dc3545 !important; }
 </style>
 
 {% endblock %}

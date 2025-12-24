@@ -1,0 +1,20 @@
+{% extends "index.html" %}
+{% block content %}
+<div style="padding: 20px; max-width: 600px; margin: auto;">
+    <h2>Checkout</h2>
+    
+    <div style="background: #f4f4f4; padding: 15px; margin-bottom: 20px;">
+        <h4>Order Total: ${{ "%.2f"|format(grand_total) }}</h4>
+        <p>Items will be shipped to the address below.</p>
+    </div>
+
+    <form method="POST" action="{{ url_for('cart.checkout') }}">
+        <label>Shipping Address:</label>
+        <textarea name="address" required style="width: 100%; height: 100px;"></textarea>
+        <br><br>
+        <button type="submit" style="background: green; color: white; padding: 10px 20px; border: none;">
+            Confirm Payment
+        </button>
+    </form>
+</div>
+{% endblock %}

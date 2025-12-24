@@ -39,16 +39,26 @@
         {% endif %}
 
         <!-- NAVIGATION LINKS -->
-        <div class="nav-links">
+<div class="nav-links">
             
-            {% if request.endpoint in ['users.login', 'users.register', 'users.logout', 'users.profile'] %}
-                <!-- LOGIN & REGISTER PAGES → sembunyikan navbar -->
-            {% else %}
+            {% if request.endpoint in ['users.login', 'users.register', 'users.logout'] %} 
+                {% else %}
                 {% if current_user.is_authenticated %}
+                    
                     {% if current_user.c_flag %}
-                    <a href="{{ url_for('users.profile') }}">My Profile</a>
+                        {% if request.endpoint != 'users.profile' %}
+                        <a href="{{ url_for('users.profile') }}">My Profile</a>
+                        {% else %}
+                        <a href="{{ url_for('users.home') }}">Home</a>
+                        {% endif %}
                     {% endif %}
+
+                    {% if request.endpoint != 'cart.My_cart' %}
+                        <a href="{{ url_for('cart.My_cart') }}">My Cart</a>
+                    {% endif %}
+
                     <a href="{{ url_for('users.logout') }}">Log Out</a>
+
                 {% else %}
                     <a href="{{ url_for('users.register') }}">Sign Up</a>
                     <a href="{{ url_for('users.login') }}">Login</a>

@@ -4,6 +4,7 @@ class LineItem(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     quantity = db.Column(db.Integer, nullable=False)
     type =db.Column(db.Enum('cart', 'order'), nullable=False)
+    total_price = db.Column(db.Float, nullable = False)
 
     # Foreign keys
     product_id = db.Column(db.Integer, db.ForeignKey('product.id'), nullable=False)

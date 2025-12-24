@@ -7,8 +7,10 @@ class Order(db.Model):
     status = db.Column(db.Enum('received', 'processed', 'shipped', 'closed'), nullable=False)
     total_amount = db.Column(db.Integer, nullable=False)
     shipping_cost = db.Column(db.Integer, nullable=False)
+    cust_address = db.Column(db.String, nullable=False)
     estimated_delivery_date = db.Column(db.Date, nullable=False)
-
+    order_time = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    completion_time = db.Column(db.DateTime, nullable=True, default=datetime.utcnow)
     # Foreign keys
     # Foreign key to the user (admin/owner who manages the order)
     order_manager_id = db.Column(db.Integer, db.ForeignKey('user.id'))
