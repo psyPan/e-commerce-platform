@@ -2,7 +2,7 @@ from flask import render_template, url_for, flash, redirect, request, Blueprint
 from flask_login import login_user, current_user, logout_user, login_required
 from flask_store import db, bcrypt
 from flask_store.products.forms import ProductForm
-from flask_store.users.forms import RegistrationForm, LoginForm, EditProfileForm
+from flask_store.users.forms import RegistrationForm, LoginForm, EditProfileForm, ChangePasswordForm
 from flask_store.users.models import User
 from flask_store.orders.models import Order
 from flask_store.line_items.models import LineItem
@@ -29,6 +29,29 @@ def register():
         flash('Your account has been created! You are now able to log in', 'success')
         return redirect(url_for('users.login'))
     return render_template('register.html',title='Register', form=form)
+
+@users.route('/register_owner', methods=['GET', 'POST'])
+@login_required
+def register_owner():
+    if not current_user.a_flag:
+        flash('You do not have permission to this page', 'danger')
+        return redirect(url_for('users.home'))
+    form = RegistrationForm()
+    if form.validate_on_submit():
+        hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+        owner = User(f_name=form.f_name.data, l_name=form.l_name.data, 
+                    email=form.email.data, password=hashed_password, phone=form.phone.data,
+                    birth=form.birth.data, address=form.address.data, a_flag=False, o_flag=True, c_flag=False)
+        try:
+            db.session.add(owner)
+            db.session.commit()
+            flash(f'Owner account "{owner.email}" created successfully!', 'success')
+            return redirect(url_for('users.home'))
+        except Exception as e:
+            db.session.rollback()
+            flash('An error occurred while creating the owner account.', 'danger')
+            return render_template('test_product.html', form=form)
+    return render_template('register.html',title='Register Owner', form=form)
 
 @users.route('/login', methods=['GET', 'POST'])
 def login():
@@ -105,11 +128,24 @@ def update_profile():
     return redirect(url_for('users.profile'))
 
 @users.route("/change_password", methods=["GET", "POST"])
+@login_required
 def change_password():
-    if request.method == "POST":
-        return redirect(url_for("users.profile"))
-
-    return render_template("change_password.html")
+    form = ChangePasswordForm()
+    if form.validate_on_submit():
+        if not (bcrypt.check_password_hash(current_user.password, form.current_password.data)):
+            flash('Current password is not correct!', 'danger')
+            return redirect(url_for('users.change_password'))
+        hashed_password = bcrypt.generate_password_hash(form.new_password.data).decode('utf-8')
+        if form.current_password.data == form.new_password.data:
+            flash('Your new password is the same as your old password!', 'info')
+        else:
+            current_user.password = hashed_password
+            db.session.commit()
+            flash('New password updated!', 'success')
+            return redirect(url_for("users.profile"))
+    else:
+        print(f"Form validation failed: {form.errors}")
+    return render_template("change_password.html", form=form)
 
 @users.route("/order_history")
 @login_required
