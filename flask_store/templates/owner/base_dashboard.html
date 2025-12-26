@@ -1,0 +1,21 @@
+{% extends "/common/base.html" %}
+
+{% block content %}
+
+<link rel="stylesheet" href="{{ url_for('static', filename='style/old/profile.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='style/old/test_product.css') }}">
+
+<div class="profile-wrapper">
+    <!-- OWNER SIDEBAR -->
+    <div class="profile-sidebar">
+        <a class="side-btn active">Products</a>
+        <a class="side-btn">Orders</a>
+    </div>
+
+    <div class="profile-content">
+    {% if request.endpoint == 'products.add_product' %}
+        {% block product %}{% endblock product%}
+    {% endif %}
+    </div>
+</div>
+{% endblock content %}

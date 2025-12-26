@@ -1,0 +1,190 @@
+{% extends "/owner/base_dashboard.html" %}
+
+{% block product %}
+<div class="profile-card" id="productBox">
+    <!-- ================= PRODUCT LIST ================= -->
+    <div class="profile-view">
+        <!-- TITLE -->
+        <h1 class="profile-title">Products Management</h1>
+        <div class="product-row">
+            <span>Product Name</span>
+            <span>Type</span>
+            <span>Buy Price</span>
+            <span>Sell Price</span>
+        </div>
+        <!-- Repeat this row for 10 products -->
+        <div class="product-row">
+            <p>Wireless Mouse</p>
+            <p>Accessories</p>
+            <p>$10</p>
+            <p>$15</p>
+        </div>
+        <div class="product-row">
+            <p>Mechanical Keyboard</p>
+            <p>Accessories</p>
+            <p>$50</p>
+            <p>$75</p>
+        </div>
+        <!-- ... up to 10 products -->
+        <!-- ================= PAGINATION ================= -->
+        <div class="pagination">
+            <button class="page-btn">Prev</button>
+            <button class="page-btn active">1</button>
+            <button class="page-btn">2</button>
+            <button class="page-btn">Next</button>
+        </div>
+    </div>
+    <!-- ================= ADD PRODUCT BUTTON ================= -->
+    <div class="profile-actions profile-actions-view">
+        <button class="edit-btn" onclick="enterAdd()">Add a Product</button>
+    </div>
+    <!-- ================= ADD PRODUCT FORM ================= -->
+    <div class="form-container">
+        <form method="POST" class="profile-form" id="addProductForm" enctype="multipart/form-data" action="">
+            <h1 class="profile-title">Add Product</h1>
+            {{ form.hidden_tag() }}
+            <!-- Product Name -->
+            <div class="profile-form-row">
+                {{ form.name.label(class="form-label") }}
+                {% if form.name.errors %}
+                    {{ form.name(class="form-input is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.name.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.name(class="profile-input") }}
+                {% endif %}
+            </div>
+            <!-- Product image -->
+            <div class="profile-form-row">
+                {{ form.image.label() }} <br>
+                {{ form.image(class="form-control-file")}} <br>
+                {% if form.image.errors %}
+                    {% for error in form.image.errors %}
+                            <span class="text-danger">{{ error }}</span> <br>
+                    {% endfor %}
+                {% endif%}
+            </div>
+            <!-- Buying Price -->
+            <div class="profile-form-row">
+                {{ form.buy_price.label(class="form-label") }}
+                {% if form.buy_price.errors %}
+                    {{ form.buy_price(class="form-input is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.buy_price.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.buy_price(class="profile-input") }}
+                {% endif %}
+            </div>
+            <!-- Selling Price -->
+            <div class="profile-form-row">
+                {{ form.sell_price.label(class="form-label") }}
+                {% if form.sell_price.errors %}
+                    {{ form.sell_price(class="form-input is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.sell_price.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.sell_price(class="profile-input") }}
+                {% endif %}
+            </div>
+            <!-- Product type -->
+            <div class="profile-form-row">
+                {{ form.type.label(class="form-label") }}
+                {% if form.type.errors %}
+                    {{ form.type(class="form-input is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.type.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.type(class="profile-input") }}
+                {% endif %}
+            </div>
+            <!-- In stock quantity -->
+            <div class="profile-form-row">
+                {{ form.stock.label(class="form-label") }}
+                {% if form.stock.errors %}
+                    {{ form.stock(class="form-input is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.stock.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.stock(class="profile-input") }}
+                {% endif %}
+            </div>
+            <!-- Manufacturer -->
+            <div class="profile-form-row">
+                {{ form.manufacturer.label(class="form-label") }}
+                {% if form.manufacturer.errors %}
+                    {{ form.manufacturer(class="form-input is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.manufacturer.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.manufacturer(class="profile-input") }}
+                {% endif %}
+            </div>
+            <!-- Model -->
+            <div class="profile-form-row">
+                {{ form.model.label(class="form-label") }}
+                {% if form.model.errors %}
+                    {{ form.model(class="form-input is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.model.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.model(class="profile-input") }}
+                {% endif %}
+            </div>
+            <!-- Discount_code -->
+            <div class="profile-form-row">
+                {{ form.discount_code.label(class="form-label") }}
+                {% if form.discount_code.errors %}
+                    {{ form.discount_code(class="form-input is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.discount_code.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.discount_code(class="profile-input") }}
+                {% endif %}
+            </div>
+            <!-- Description -->
+            <div class="profile-form-row">
+                {{ form.description.label(class="form-label") }}
+                {% if form.description.errors %}
+                    {{ form.description(class="form-input is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.description.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.description(class="profile-input") }}
+                {% endif %}
+            </div>
+            <div class="profile-actions profile-actions-form">
+                <button type="button" class="cancel-btn" onclick="exitAdd()">Cancel</button>
+                {{ form.save(class="btn-gold") }}
+            </div>
+        </form>
+    </div>
+</div>
+<script src="{{ url_for('static', filename='script/owner_add_product.js') }}"></script>
+{% endblock product %}

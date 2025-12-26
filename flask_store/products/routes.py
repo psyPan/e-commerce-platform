@@ -34,10 +34,10 @@ def add_product():
             except Exception as e:
                 db.session.rollback()
                 flash('An error occurred while creating the product.', 'danger')
-                return render_template('test_product.html', form=form)
+                return render_template('owner/add_product.html', form=form)
         elif form.cancel.data:
-            return render_template('test_product.html', title='Add Product', form=form)
-    return render_template('test_product.html', title='Add Product', form=form, discounts=discounts)
+            return render_template('owner/add_product.html', title='Add Product', form=form)
+    return render_template('owner/add_product.html', title='Add Product', form=form, discounts=discounts)
 
 def list_products():
     page = request.args.get('page', 1, type=int)
