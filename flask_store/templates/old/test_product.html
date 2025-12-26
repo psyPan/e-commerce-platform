@@ -1,4 +1,4 @@
-{% extends "index.html" %}
+{% extends "/old/index.html" %}
 
 {% block navbar %}
 <div class="navbar">
@@ -13,9 +13,9 @@
 {% endblock navbar %}
 
 {% block content %}
-<link rel="stylesheet" href="{{ url_for('static', filename='style/home.css') }}">
-<link rel="stylesheet" href="{{ url_for('static', filename='style/profile.css') }}">
-<link rel="stylesheet" href="{{ url_for('static', filename='style/test_product.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='style/old/home.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='style/old/profile.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='style/old/test_product.css') }}">
 
 <div class="profile-wrapper">
 

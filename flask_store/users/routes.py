@@ -14,7 +14,7 @@ users = Blueprint('users', __name__)
 @users.route('/')
 @users.route('/home')
 def home():
-    return render_template('home.html', title='Home')
+    return render_template('/customer/home.html', title='Home')
 
 @users.route('/register', methods=['GET', 'POST'])
 def register():
@@ -28,7 +28,7 @@ def register():
         db.session.commit()
         flash('Your account has been created! You are now able to log in', 'success')
         return redirect(url_for('users.login'))
-    return render_template('register.html',title='Register', form=form)
+    return render_template('old/register.html',title='Register', form=form)
 
 @users.route('/register_owner', methods=['GET', 'POST'])
 @login_required
@@ -50,8 +50,8 @@ def register_owner():
         except Exception as e:
             db.session.rollback()
             flash('An error occurred while creating the owner account.', 'danger')
-            return render_template('test_product.html', form=form)
-    return render_template('register.html',title='Register Owner', form=form)
+            return render_template('old/test_product.html', form=form)
+    return render_template('old/register.html',title='Register Owner', form=form)
 
 @users.route('/login', methods=['GET', 'POST'])
 def login():
@@ -66,7 +66,7 @@ def login():
             return redirect(next_page) if next_page else redirect(url_for('users.home'))
         else:
             flash('Login Unsuccessful. Please check email and password', 'danger')
-    return render_template('login.html', title='Login', form=form)
+    return render_template('old/login.html', title='Login', form=form)
 
 @users.route('/logout')
 def logout():
@@ -75,7 +75,7 @@ def logout():
 
 @users.route('/credit')
 def credit():
-    return render_template('credit_card.html')
+    return render_template('old/credit_card.html')
 
 @users.route('/profile', methods=['GET', 'POST'])
 @login_required
@@ -94,7 +94,7 @@ def profile():
         return redirect(url_for("users.profile"))
 
     return render_template(
-        'profile.html',
+        'old/profile.html',
         form=form
     )
 
@@ -145,7 +145,7 @@ def change_password():
             return redirect(url_for("users.profile"))
     else:
         print(f"Form validation failed: {form.errors}")
-    return render_template("change_password.html", form=form)
+    return render_template("old/change_password.html", form=form)
 
 @users.route("/order_history")
 @login_required
@@ -155,24 +155,24 @@ def order_history():
                         .order_by(Order.id.desc())\
                         .all()
     
-    return render_template('order_history.html', orders=orders)
+    return render_template('old/order_history.html', orders=orders)
 
 
 # admin youssel test
 @users.route('/admin/user-management')
 # @login_required
 def user_list():
-    return render_template('admin/user_management.html')
+    return render_template('old/admin/user_management.html')
 
 @users.route('/admin/user/1')
 # @login_required
 def user_detail():
-    return render_template('admin/user_detail.html')
+    return render_template('old/admin/user_detail.html')
 
 @users.route('/admin/user/1/edit')
 # @login_required
 def user_edit():
-    return render_template('admin/user_edit.html')
+    return render_template('old/admin/user_edit.html')
 
 # to see credit card page
 @users.route('/cart')
@@ -183,7 +183,7 @@ def my_cart():
 @users.route('/test_product')
 def test_product():
     form = ProductForm()
-    return render_template('test_product.html', form=form)
+    return render_template('old/test_product.html', form=form)
 
 @users.route("/order/<int:order_id>/cancel", methods=['POST'])
 @login_required
