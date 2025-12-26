@@ -1,0 +1,46 @@
+{% extends "/common/base.html" %}
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='style/customer/home.css') }}">
+<div class="container-fluid">
+    <div class="slider-viewport">
+        <div class="slider-track" id="sliderTrack">
+            
+            <div class="slide slide-discount">
+                <h2>BIG SALE!</h2>
+                <p>Get up to 50% off on selected items.</p>
+            </div>
+
+            <a href="{{ url_for('stores.list_stores') }}" class="slide slide-stores">
+                <h2>BROWSE STORES</h2>
+                <p>Explore our wide variety of vendors and shops.</p>
+                <button class="btn btn-light mt-3" style="border-radius: 20px;">View All Stores</button>
+            </a>
+
+        </div>
+
+        <div class="slider-dots">
+            <div class="dot active" onclick="goToSlide(0)"></div>
+            <div class="dot" onclick="goToSlide(1)"></div>
+        </div>
+    </div>
+    <div class="product-grid">
+        {% for i in range(12) %}
+        <div class="product">
+            <div class="img-box" style="background:#ddd; height:150px;"></div> <div class="product-name">Product {{ i }}</div>
+            <div class="product-price">$100.00</div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="pagination">
+        <a class="pg-btn">«</a>
+        <a class="pg-btn active">1</a>
+        <a class="pg-btn">2</a>
+        <a class="pg-btn">3</a>
+        <span>...</span>
+        <a class="pg-btn">5</a>
+        <a class="pg-btn">»</a>
+    </div>
+</div>
+<script src="{{ url_for('static', filename='script/home.js') }}"></script>
+{% endblock content %}
