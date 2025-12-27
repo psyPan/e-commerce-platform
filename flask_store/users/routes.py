@@ -2,9 +2,10 @@ from flask import render_template, url_for, flash, redirect, request, Blueprint
 from flask_login import login_user, current_user, logout_user, login_required
 from flask_store import db, bcrypt
 from flask_store.products.forms import ProductForm
-from flask_store.users.forms import RegistrationForm, LoginForm, EditProfileForm, ChangePasswordForm
+from flask_store.users.forms import RegistrationForm, LoginForm, EditProfileForm, ChangePasswordForm, AssignOwnerForm
 from flask_store.users.models import User
 from flask_store.orders.models import Order
+from flask_store.stores.models import Store
 from flask_store.line_items.models import LineItem
 from flask_store.products.models import Product
 
@@ -216,3 +217,33 @@ def cancel_order(order_id):
     
     flash('Your order has been successfully cancelled.', 'success')
     return redirect(url_for('users.order_history'))
+
+@users.route("/assign_owner", methods=["GET", "POST"])
+@login_required
+def assign_owner():
+    if not current_user.a_flag:
+        flash('You do not have permission to this page', 'danger')
+        return redirect(url_for('users.home'))
+    form = AssignOwnerForm()
+    stores = Store().query.all()
+    form.store_id.choices = [(s.id, s.name) for s in stores]
+    if form.validate_on_submit():
+        owner = User.query.filter_by(email=form.owner_email.data, o_flag=True).first()
+        store = Store.query.filter_by(id=form.store_id.data).first()
+        if not owner:
+            flash('Owner Not Found!', 'danger')
+            return redirect(url_for('users.assign_owner'))
+        elif not store:
+            flash('Store Not Found!', 'danger')
+            return redirect(url_for('users.assign_owner'))
+        else:
+            owner.store_id = store.id
+        try:
+            db.session.commit()
+            flash('Owner assigned to store successfully!', 'success')
+        except Exception as e:
+            db.session.rollback()
+            flash('Error assigning owner to store. Please try again.', 'danger')
+    else:
+        print(f"Form validation failed: {form.errors}")
+    return render_template("owner/assign_owner.html", form=form)
