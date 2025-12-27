@@ -8,13 +8,16 @@
 <div class="profile-wrapper">
     <!-- OWNER SIDEBAR -->
     <div class="profile-sidebar">
-        <a class="side-btn active">Products</a>
+        <a class="side-btn {% if request.endpoint == 'stores.store_info' %} active {% endif %}" href="{{ url_for('stores.store_info') }}">My Store</a>
+        <a class="side-btn {% if request.endpoint == 'products.add_product' %} active {% endif %}" href="{{ url_for('products.add_product') }}">Products</a>
         <a class="side-btn">Orders</a>
     </div>
 
     <div class="profile-content">
     {% if request.endpoint == 'products.add_product' %}
-        {% block product %}{% endblock product%}
+        {% block product %}{% endblock product %}
+    {% elif request.endpoint == 'stores.store_info' %}
+        {% block my_store %}{% endblock my_store %}
     {% endif %}
     </div>
 </div>

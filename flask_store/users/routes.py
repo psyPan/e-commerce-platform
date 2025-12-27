@@ -159,8 +159,8 @@ def order_history():
 
 
 # admin youssel test
-@users.route('/admin/user-management')
 # @login_required
+@users.route('/admin/user-management')
 def user_list():
     return render_template('old/admin/user_management.html')
 
@@ -178,7 +178,7 @@ def user_edit():
 @users.route('/cart')
 # @login_required
 def my_cart():
-    return render_template('cart.html')
+    return render_template('old/cart.html')
 
 @users.route('/test_product')
 def test_product():

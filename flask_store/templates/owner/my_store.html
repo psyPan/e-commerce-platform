@@ -1,0 +1,85 @@
+{% extends "/owner/base_dashboard.html" %}
+
+{% block my_store %}
+<div class="profile-card {% if form.errors %}editing{% endif %}" id="storeBox">
+    <div class="profile-view">
+        <h1 class="profile-title">My Store</h1> 
+        {% if not current_user.store_id %}
+            <p>No Information Available</p>
+        {% else %}
+        <div class="profile-row">
+            <span>Store Name</span>
+            <p>{{ current_user.store.name }}</p>
+        </div>
+        <div class="profile-row">
+            <span>Store Email</span>
+            <p>{{ current_user.store.email }}</p>
+        </div>
+        <div class="profile-row">
+            <span>Store Phone</span>
+            <p>{{ current_user.store.phone }}</p>
+        </div>
+        <div class="profile-row">
+            <span>Owners</span>
+            {% for owner in current_user.store.owners %}
+                <p>{{ owner.f_name }} {{ owner.l_name }}</p>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+    <div class="profile-actions profile-actions-view">
+        <button type="button" class="edit-btn" onclick="enterEdit()">Edit Store</button>
+    </div>
+
+    <div class="form-container">
+        <form method="POST" class="profile-form" id="addProductForm" enctype="multipart/form-data" action="">
+            <h1 class="profile-title">Edit Store</h1>
+            {{ form.hidden_tag() }}
+            <div class="profile-form-row">
+                {{ form.name.label(class="form-label") }}
+                {% if form.name.errors %}
+                    {{ form.name(class="form-input is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.name.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.name(class="profile-input") }}
+                {% endif %}
+            </div>
+            <div class="profile-form-row">
+                {{ form.email.label(class="form-label") }}
+                {% if form.email.errors %}
+                    {{ form.email(class="form-input is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.email.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.email(class="profile-input") }}
+                {% endif %}
+            </div>
+            <div class="profile-form-row">
+                {{ form.phone.label(class="form-label") }}
+                {% if form.phone.errors %}
+                    {{ form.phone(class="form-input is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.phone.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.phone(class="profile-input") }}
+                {% endif %}
+            </div>
+            <div class="profile-actions profile-actions-form">
+                <button type="button" class="cancel-btn" onclick="exitEdit()">Cancel</button>
+                {{ form.submit(class="btn-gold", value="Update") }}
+            </div>
+        </form>
+    </div>
+</div>
+<script src="{{ url_for('static', filename='script/edit_store.js') }}"></script>
+{% endblock my_store %}

@@ -1,7 +1,7 @@
 from flask import render_template, url_for, flash, redirect, request, Blueprint, jsonify, abort
 from flask_login import current_user, login_required
 from flask_store import db
-from flask_store.stores.forms import StoreForm
+from flask_store.stores.forms import StoreForm, EditStoreForm
 from flask_store.users.models import User
 from flask_store.stores.models import Store
 from flask_store.products.models import Product
@@ -26,7 +26,7 @@ def add_store():
         
         if not owner:
             flash('Owner not found or the user is not registered as an owner.', 'danger')
-            return render_template('add_store.html', title='New Store', form=form)
+            return render_template('old/add_store.html', title='New Store', form=form)
         
         new_store = Store(
             name=form.store_name.data,
@@ -44,7 +44,7 @@ def add_store():
         flash(f'Store {new_store.name} created!', 'success')
         return redirect(url_for('users.home'))
     
-    return render_template('add_store.html', title='New Store', form=form)
+    return render_template('old/add_store.html', title='New Store', form=form)
 
 @stores.route('/stores')
 def list_stores():
@@ -68,7 +68,7 @@ def list_stores():
             'in_stock_count': in_stock_count
         })
     
-    return render_template('stores_list.html', 
+    return render_template('old/stores_list.html', 
                          stores=store_data,
                          pagination=stores_pagination)
 
@@ -141,7 +141,7 @@ def view_store(store_id):
     
     owners = User.query.filter_by(store_id=store_id, o_flag=True).all()
     
-    return render_template('store.html', 
+    return render_template('old/store.html', 
                          store=store,
                          owners=owners,
                          products=products,
@@ -229,3 +229,27 @@ def global_search():
                          query=query,
                          products=products,
                          stores=stores_found)
+
+@stores.route('/store_info', methods=['GET', 'POST'])
+@login_required
+def store_info():
+    if current_user.c_flag: # is customer
+        flash('You do not have permission to this page', 'danger')
+        return redirect(url_for('users.home'))
+    form = EditStoreForm(obj=current_user.store)
+
+    if form.validate_on_submit():
+        current_user.store.name = form.name.data
+        current_user.store.email = form.email.data
+        current_user.store.phone = form.phone.data
+
+        db.session.commit()
+        flash('Profile updated!', 'success')
+        return redirect(url_for("stores.store_info"))
+    else:
+        print(f"Form validation failed: {form.errors}")
+
+    return render_template(
+        'owner/my_store.html',
+        form=form
+    )

@@ -27,7 +27,7 @@ def My_cart(): # You can rename this to 'view_cart' for standard python naming c
         subtotal += product.sell_price * cart_item.quantity
 
     # 3. Render
-    return render_template('my_cart.html', 
+    return render_template('old/my_cart.html', 
                            title='My Cart', 
                            cart_items=Cart_items, 
                            subtotal=subtotal)
@@ -167,4 +167,4 @@ def checkout():
             flash(f'Error processing order: {str(e)}', 'danger')
             return redirect(url_for('cart.My_cart'))
 
-    return render_template('checkout.html', cart_items=cart_items, grand_total=grand_total, shipping_cost=shipping_cost)
+    return render_template('old/checkout.html', cart_items=cart_items, grand_total=grand_total, shipping_cost=shipping_cost)

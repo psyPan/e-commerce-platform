@@ -56,6 +56,6 @@ def list_products():
             'type': product.type
         })
 
-    return render_template('stores_list.html', 
+    return render_template('old/stores_list.html', 
                          products=product_data,
                          pagination=products_pagination)
