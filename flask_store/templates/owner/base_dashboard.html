@@ -10,7 +10,8 @@
     <div class="profile-sidebar">
         <a class="side-btn {% if request.endpoint == 'stores.store_info' %} active {% endif %}" href="{{ url_for('stores.store_info') }}">My Store</a>
         <a class="side-btn {% if request.endpoint == 'products.add_product' %} active {% endif %}" href="{{ url_for('products.add_product') }}">Products</a>
-        <a class="side-btn {% if request.endpoint == 'users.assign_owner' %} active {% endif %}" href="{{ url_for('users.assign_owner') }}">Assign Owner</a>
+        <a class="side-btn {% if request.endpoint == 'users.assign_owner' %} active {% endif %}" href="{{ url_for('users.assign_owner') }}">Assign Owner</a> <!-- TODO: Move to admin dashboard -->
+        <a class="side-btn {% if request.endpoint == 'discounts.add_discount' %} active {% endif %}" href="{{ url_for('discounts.add_discount') }}">Discount</a> <!-- TODO: Move to admin dashboard -->
         <a class="side-btn">Orders</a>
     </div>
 
@@ -21,6 +22,8 @@
         {% block my_store %}{% endblock my_store %}
     {% elif request.endpoint == 'users.assign_owner' %}
         {% block assign_owner %}{% endblock assign_owner %}
+    {% elif request.endpoint == 'discounts.add_discount' %}
+        {% block add_discount %}{% endblock add_discount %}
     {% endif %}
     </div>
 </div>

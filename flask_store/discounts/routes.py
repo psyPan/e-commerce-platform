@@ -13,6 +13,12 @@ def add_discount():
         flash('You do not have permission to this page', 'danger')
         return redirect(url_for('users.home'))
     form = DiscountForm()
+    page = request.args.get('page', 1, type=int)
+    discounts_pagination = Discount.query.paginate(
+        page=page, 
+        per_page=5, 
+        error_out=False
+    )
     if form.validate_on_submit():
         if form.save.data:
             discount = Discount(
@@ -27,11 +33,11 @@ def add_discount():
                 db.session.add(discount)
                 db.session.commit()
                 flash(f'Discount "{discount.name}" created successfully!', 'success')
-                return redirect(url_for('users.home'))
+                return redirect(url_for('discounts.add_discount'))
             except Exception as e:
                 db.session.rollback()
                 flash('An error occurred while creating the discount.', 'danger')
-                return render_template('add_discount.html', form=form)
+                return render_template('owner/add_discount.html', form=form)
         elif form.cancel.data:
             return redirect(url_for('users.home'))
-    return render_template('add_discount.html', title='Add Discount', form=form)
+    return render_template('owner/add_discount.html', title='Add Discount', form=form, discounts=discounts_pagination.items, pagination=discounts_pagination)

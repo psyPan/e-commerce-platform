@@ -15,8 +15,8 @@ class DiscountForm(FlaskForm):
                             ('special_event', 'Special Event')
                         ],
                         validators=[DataRequired()])
-    discount_percent = FloatField('Discount Percentage (0-1)', 
-                                  validators=[DataRequired(), NumberRange(min=0, max=1)])
+    discount_percent = FloatField('Discount Percentage', 
+                                  validators=[DataRequired(), NumberRange(min=0, max=100)])
     cancel = SubmitField('Cancel')
     save = SubmitField('Save')
 

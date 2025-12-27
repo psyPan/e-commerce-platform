@@ -133,7 +133,7 @@
 .profile-form {
     display: none;
 }
-
+.profile-card,
 .profile-card.editing {
     height: auto;      /* Unset fixed height in edit mode */
     min-height: 480px; /* Keep the minimum size */
