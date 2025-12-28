@@ -1,340 +1,225 @@
-{% extends "/old/index.html" %}
+{% extends "/common/base.html" %}
 
 {% block content %}
 <style>
-    /* Wrapper styling */
-    .store-view-wrapper {
+    /* Minimal custom CSS for things Bootstrap doesn't handle perfectly */
+    .product-img-wrapper {
+        height: 220px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         background-color: #f8f9fa;
-        min-height: 100vh;
-        padding: 20px;
-        max-width: 1400px;
-        margin: 0 auto;
-    }
-
-    /* Store Header */
-    .store-header-card {
-        background: white;
-        border-radius: 12px;
-        padding: 30px;
-        margin-bottom: 30px;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-        border-left: 5px solid #3498db;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        flex-wrap: wrap;
-    }
-    .store-header-info h1 {
-        margin: 0 0 10px 0;
-        color: #2c3e50;
-        font-weight: 700;
-    }
-    .store-header-info p {
-        color: #7f8c8d;
-        margin: 0;
-        font-size: 1rem;
-    }
-
-    /* Filters Section */
-    .filters-card {
-        background: white;
-        padding: 20px;
-        border-radius: 12px;
-        margin-bottom: 30px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-    }
-    .filters-form {
-        display: flex;
-        gap: 15px;
-        flex-wrap: wrap;
-        align-items: center;
-    }
-    /* Customizing form elements to fit nicely */
-    .filter-input {
-        min-width: 200px;
-    }
-
-    /* Products Grid */
-    .products-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-        gap: 25px;
-        margin-bottom: 40px;
-    }
-
-    /* Product Card */
-    .product-card {
-        background: white;
-        border-radius: 10px;
-        overflow: hidden; /* Keeps image inside corners */
-        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-        transition: transform 0.2s, box-shadow 0.2s;
-        border: 1px solid #eee;
-        display: flex;
-        flex-direction: column;
-    }
-    
-    .product-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 8px 16px rgba(0,0,0,0.1);
-    }
-
-    .product-img-container {
-        width: 100%;
-        height: 200px;
-        background-color: #f9f9f9;
-        display: flex;
-        align-items: center;
-        justify-content: center;
         overflow: hidden;
+        border-bottom: 1px solid #eee;
     }
-    
-    .product-img-container img {
-        max-width: 100%;
+    .product-img-wrapper img {
         max-height: 100%;
-        object-fit: cover;
+        max-width: 100%;
+        object-fit: contain; /* Ensures the whole image is seen */
+        transition: transform 0.3s ease;
     }
-
-    .product-body {
-        padding: 15px;
-        display: flex;
-        flex-direction: column;
-        flex-grow: 1;
-        text-align: center;
+    /* Subtle hover zoom effect for images */
+    .product-card-hover:hover .product-img-wrapper img {
+        transform: scale(1.05);
     }
-
-    .product-title {
-        font-size: 1.1em;
-        font-weight: 600;
-        margin-bottom: 5px;
-        color: #333;
-        min-height: 2.5em; /* Ensures alignment */
+    .product-card-hover {
+        transition: box-shadow 0.3s ease, transform 0.3s ease;
     }
-
-    .product-mfr {
-        color: #999;
-        font-size: 0.85em;
-        margin-bottom: 10px;
-    }
-
-    .price-section {
-        margin: 10px 0;
-    }
-
-    .current-price {
-        font-size: 1.3em;
-        font-weight: bold;
-        color: #2c3e50;
-    }
-    .current-price.discounted {
-        color: #e74c3c;
-    }
-    
-    .original-price {
-        text-decoration: line-through;
-        color: #999;
-        font-size: 0.9em;
-        margin-left: 5px;
-    }
-
-    .stock-status {
-        font-size: 0.85em;
-        margin-bottom: 15px;
-        font-weight: 500;
-    }
-    .text-success { color: #27ae60 !important; }
-    .text-danger { color: #e74c3c !important; }
-
-    /* Action Buttons */
-    .card-actions {
-        margin-top: auto; /* Pushes to bottom */
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-    }
-    
-    .view-details-link {
-        font-size: 0.9em;
-        color: #3498db;
-        text-decoration: none;
-        margin-top: 5px;
-    }
-    .view-details-link:hover {
-        text-decoration: underline;
-    }
-
-    /* Pagination */
-    .custom-pagination {
-        display: flex;
-        justify-content: center;
-        gap: 5px;
-        padding-bottom: 40px;
-    }
-    .custom-pagination a, .custom-pagination span {
-        padding: 8px 16px;
-        border: 1px solid #dee2e6;
-        background-color: white;
-        color: #3498db;
-        border-radius: 4px;
-        text-decoration: none;
-    }
-    .custom-pagination .active {
-        background-color: #3498db;
-        color: white;
-        border-color: #3498db;
+    .product-card-hover:hover {
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+        transform: translateY(-5px);
     }
 </style>
 
-<div class="store-view-wrapper">
+<div class="bg-light min-vh-100 py-5">
+    <div class="container" style="max-width: 1400px;">
 
-    <div class="store-header-card">
-        <div class="store-header-info">
-            <h1>{{ store.name }}</h1>
-            <p>
-                {% if store.address %}📍 {{ store.address }} | {% endif %}
-                📞 {{ store.phone }} | ✉️ {{ store.email }}
-            </p>
-        </div>
-        <div>
-            <a href="{{ url_for('stores.list_stores') }}" class="btn btn-outline-secondary btn-sm">← Back to Directory</a>
-        </div>
-    </div>
-
-    <div class="filters-card">
-        <form method="GET" action="{{ url_for('stores.view_store', store_id=store.id) }}" class="filters-form">
-            
-            <input type="text" name="q" class="form-control filter-input" placeholder="Search products..." 
-                   value="{{ current_filters.search or '' }}">
-            
-            <select name="type" class="form-select filter-input" style="width:auto;">
-                <option value="">All Types</option>
-                {% for type in types %}
-                <option value="{{ type }}" {% if current_filters.type == type %}selected{% endif %}>
-                    {{ type }}
-                </option>
-                {% endfor %}
-            </select>
-            
-            <select name="manufacturer" class="form-select filter-input" style="width:auto;">
-                <option value="">All Manufacturers</option>
-                {% for mfr in manufacturers %}
-                <option value="{{ mfr }}" {% if current_filters.manufacturer == mfr %}selected{% endif %}>
-                    {{ mfr }}
-                </option>
-                {% endfor %}
-            </select>
-            
-            <select name="sort" class="form-select filter-input" style="width:auto;">
-                <option value="newest" {% if current_filters.sort == 'newest' %}selected{% endif %}>Newest</option>
-                <option value="price_asc" {% if current_filters.sort == 'price_asc' %}selected{% endif %}>Price: Low to High</option>
-                <option value="price_desc" {% if current_filters.sort == 'price_desc' %}selected{% endif %}>Price: High to Low</option>
-                <option value="name" {% if current_filters.sort == 'name' %}selected{% endif %}>Name A-Z</option>
-                <option value="discount" {% if current_filters.sort == 'discount' %}selected{% endif %}>Best Discount</option>
-            </select>
-            
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="in_stock" value="true" id="inStockCheck"
-                       {% if current_filters.in_stock %}checked{% endif %}>
-                <label class="form-check-label" for="inStockCheck">
-                    In Stock Only
-                </label>
-            </div>
-            
-            <button type="submit" class="btn btn-primary">Apply</button>
-            <a href="{{ url_for('stores.view_store', store_id=store.id) }}" class="btn btn-outline-secondary">Clear</a>
-        </form>
-    </div>
-
-    <div class="products-grid">
-        {% if products %}
-            {% for product in products %}
-            <div class="product-card">
-                <div class="product-img-container">
-                    {% if product.image %}
-                    <img src="{{ product.image }}" alt="{{ product.name }}">
-                    {% else %}
-                    <img src="https://via.placeholder.com/200x200?text=No+Image" alt="{{ product.name }}">
-                    {% endif %}
+        <div class="bg-white shadow rounded p-4 mb-4 border-start border-5 border-primary">
+            <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
+                <div>
+                    <h1 class="fw-bold text-dark mb-2">{{ store.name }}</h1>
+                    <div class="text-muted d-flex flex-wrap gap-3 align-items-center">
+                        {% if store.address %}
+                            <span><i class="fa fa-map-marker-alt text-danger"></i> {{ store.address }}</span>
+                        {% endif %}
+                        <span><i class="fa fa-phone text-success"></i> {{ store.phone }}</span>
+                        <span><i class="fa fa-envelope text-primary"></i> {{ store.email }}</span>
+                    </div>
                 </div>
-                
-                <div class="product-body">
-                    <div class="product-title">{{ product.name }}</div>
-                    
-                    {% if product.manufacturer %}
-                    <div class="product-mfr">{{ product.manufacturer }}</div>
-                    {% endif %}
-                    
-                    <div class="price-section">
-                        {% if product.discount_obj %}
-                            <span class="current-price discounted">${{ "%.2f"|format(product.get_final_price()) }}</span>
-                            <span class="original-price">${{ "%.2f"|format(product.sell_price) }}</span>
-                            <div style="font-size: 0.8em; color: #e74c3c;">
-                                ({{ "%.0f"|format(product.discount_obj.discount_percent) }}% OFF)
-                            </div>
-                        {% else %}
-                            <span class="current-price">${{ "%.2f"|format(product.sell_price) }}</span>
-                        {% endif %}
+                <div>
+                    <a href="{{ url_for('stores.list_stores') }}" class="btn btn-outline-secondary">
+                        <i class="fa fa-arrow-left"></i> Back to Directory
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white shadow rounded p-4 mb-5">
+            <form method="GET" action="{{ url_for('stores.view_store', store_id=store.id) }}">
+                <div class="row g-3 align-items-end">
+                    <div class="col-md-3">
+                        <label class="form-label small text-uppercase fw-bold text-muted">Search</label>
+                        <input type="text" name="q" class="form-control" placeholder="Product name..." 
+                               value="{{ current_filters.search or '' }}">
                     </div>
-  
-                    <div class="stock-status">
-                        {% if product.is_in_stock() %}
-                            <span class="text-success">In Stock ({{ product.stock }})</span>
-                        {% else %}
-                            <span class="text-danger">Out of Stock</span>
-                        {% endif %}
+
+                    <div class="col-md-2">
+                        <label class="form-label small text-uppercase fw-bold text-muted">Category</label>
+                        <select name="type" class="form-select">
+                            <option value="">All Types</option>
+                            {% for type in types %}
+                                <option value="{{ type }}" {% if current_filters.type == type %}selected{% endif %}>{{ type }}</option>
+                            {% endfor %}
+                        </select>
                     </div>
-                    
-                    <div class="card-actions">
-                        <form action="{{ url_for('cart.add_to_cart', product_id=product.id) }}" method="POST">
-                            {% if product.is_in_stock() %}
-                                <div class="input-group mb-2">
-                                    <input type="number" name="quantity" value="1" min="1" max="{{ product.stock }}" 
-                                           class="form-control text-center" style="max-width: 60px;">
-                                    <button type="submit" class="btn btn-success flex-grow-1">Add to Cart</button>
-                                </div>
+
+                    <div class="col-md-2">
+                        <label class="form-label small text-uppercase fw-bold text-muted">Brand</label>
+                        <select name="manufacturer" class="form-select">
+                            <option value="">All Brands</option>
+                            {% for mfr in manufacturers %}
+                                <option value="{{ mfr }}" {% if current_filters.manufacturer == mfr %}selected{% endif %}>{{ mfr }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="col-md-2">
+                        <label class="form-label small text-uppercase fw-bold text-muted">Sort By</label>
+                        <select name="sort" class="form-select">
+                            <option value="newest" {% if current_filters.sort == 'newest' %}selected{% endif %}>Newest</option>
+                            <option value="price_asc" {% if current_filters.sort == 'price_asc' %}selected{% endif %}>Price: Low to High</option>
+                            <option value="price_desc" {% if current_filters.sort == 'price_desc' %}selected{% endif %}>Price: High to Low</option>
+                            <option value="name" {% if current_filters.sort == 'name' %}selected{% endif %}>Name A-Z</option>
+                            <option value="discount" {% if current_filters.sort == 'discount' %}selected{% endif %}>Best Discount</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-3 d-flex gap-2 align-items-center">
+                        <div class="form-check me-2 mb-2">
+                            <input class="form-check-input" type="checkbox" name="in_stock" value="true" id="inStockCheck"
+                                   {% if current_filters.in_stock %}checked{% endif %}>
+                            <label class="form-check-label small" for="inStockCheck">In Stock</label>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100 mb-1">Apply</button>
+                        <a href="{{ url_for('stores.view_store', store_id=store.id) }}" class="btn btn-outline-secondary mb-1">Clear</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+            {% if products %}
+                {% for product in products %}
+                <div class="col">
+                    <div class="card h-100 border-0 shadow-sm product-card-hover">
+                        <div class="product-img-wrapper">
+                            {% if product.image %}
+                                <img src="{{ url_for('static', filename='product_pics/' + product.image)}}" alt="{{ product.name }}">
                             {% else %}
-                                <button disabled class="btn btn-secondary w-100 mb-2">Out of Stock</button>
+                                <img src="https://via.placeholder.com/200x200?text=No+Image" alt="{{ product.name }}">
                             {% endif %}
-                        </form>
+                        </div>
 
-                        <a href="{{ url_for('stores.product_detail', store_id=store.id, product_id=product.id) }}" class="view-details-link">
-                            View Details
-                        </a>
+                        <div class="card-body d-flex flex-column text-center p-3">
+                            <h5 class="card-title fs-6 fw-bold mb-1 text-truncate" title="{{ product.name }}">
+                                {{ product.name }}
+                            </h5>
+                            {% if product.manufacturer %}
+                                <p class="text-muted small mb-2">{{ product.manufacturer }}</p>
+                            {% endif %}
+
+                            <div class="mb-3">
+                                {% if product.discount_obj %}
+                                    <div class="d-flex justify-content-center align-items-center gap-2">
+                                        <span class="text-decoration-line-through text-muted small">${{ "%.2f"|format(product.sell_price) }}</span>
+                                        <span class="fw-bold text-danger fs-5">${{ "%.2f"|format(product.get_final_price()) }}</span>
+                                    </div>
+                                    <span class="badge bg-danger bg-opacity-10 text-danger border border-danger rounded-pill px-2">
+                                        Save {{ "%.0f"|format(product.discount_obj.discount_percent) }}%
+                                    </span>
+                                {% else %}
+                                    <span class="fw-bold text-dark fs-5">${{ "%.2f"|format(product.sell_price) }}</span>
+                                {% endif %}
+                            </div>
+
+                            <div class="mb-3">
+                                {% if product.is_in_stock() %}
+                                    <span class="text-success small fw-bold"><i class="fa fa-check-circle"></i> In Stock ({{ product.stock }})</span>
+                                {% else %}
+                                    <span class="text-danger small fw-bold"><i class="fa fa-times-circle"></i> Out of Stock</span>
+                                {% endif %}
+                            </div>
+
+                            <div class="mt-auto">
+                                <form action="{{ url_for('cart.add_to_cart', product_id=product.id) }}" method="POST">
+                                    {% if product.is_in_stock() %}
+                                        <div class="input-group mb-2">
+                                            <input type="number" name="quantity" value="1" min="1" max="{{ product.stock }}" 
+                                                   class="form-control form-control-sm text-center">
+                                            <button type="submit" class="btn btn-sm btn-success px-3">Add</button>
+                                        </div>
+                                    {% else %}
+                                        <button disabled class="btn btn-sm btn-secondary w-100 mb-2">Unavailable</button>
+                                    {% endif %}
+                                </form>
+                                <a href="{{ url_for('stores.product_detail', store_id=store.id, product_id=product.id) }}" 
+                                   class="btn btn-sm btn-link text-decoration-none">
+                                    View Details
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-            {% endfor %}
-        {% else %}
-            <div class="col-12 text-center py-5">
-                <h3>No products found</h3>
-                <p class="text-muted">Try adjusting your filters.</p>
-            </div>
-        {% endif %}
-    </div>
-
-    {% if pagination.pages > 1 %}
-    <div class="custom-pagination">
-        {% if pagination.has_prev %}
-        <a href="{{ url_for('stores.view_store', store_id=store.id, page=pagination.prev_num) }}">Previous</a>
-        {% endif %}
-        
-        {% for page_num in pagination.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
-            {% if page_num %}
-                <a href="{{ url_for('stores.view_store', store_id=store.id, page=page_num) }}" 
-                   class="{% if page_num == pagination.page %}active{% endif %}">
-                    {{ page_num }}
-                </a>
+                {% endfor %}
             {% else %}
-                <span>...</span>
+                <div class="col-12">
+                    <div class="text-center py-5 bg-white shadow-sm rounded">
+                        <h3 class="text-muted">No products found</h3>
+                        <p class="text-muted">Try adjusting your filters or search terms.</p>
+                        <a href="{{ url_for('stores.view_store', store_id=store.id) }}" class="btn btn-outline-primary">Clear Filters</a>
+                    </div>
+                </div>
             {% endif %}
-        {% endfor %}
-        
-        {% if pagination.has_next %}
-        <a href="{{ url_for('stores.view_store', store_id=store.id, page=pagination.next_num) }}">Next</a>
+        </div>
+
+        {% if pagination.pages > 1 %}
+        <nav aria-label="Page navigation" class="mt-5">
+            <ul class="pagination justify-content-center">
+                {% if pagination.has_prev %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ url_for('stores.view_store', store_id=store.id, page=pagination.prev_num, **request.args) }}">
+                        &laquo; Prev
+                    </a>
+                </li>
+                {% else %}
+                <li class="page-item disabled"><span class="page-link">&laquo; Prev</span></li>
+                {% endif %}
+
+                {% for page_num in pagination.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+                    {% if page_num %}
+                        <li class="page-item {% if page_num == pagination.page %}active{% endif %}">
+                            <a class="page-link" href="{{ url_for('stores.view_store', store_id=store.id, page=page_num, **request.args) }}">
+                                {{ page_num }}
+                            </a>
+                        </li>
+                    {% else %}
+                        <li class="page-item disabled"><span class="page-link">...</span></li>
+                    {% endif %}
+                {% endfor %}
+
+                {% if pagination.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ url_for('stores.view_store', store_id=store.id, page=pagination.next_num, **request.args) }}">
+                        Next &raquo;
+                    </a>
+                </li>
+                {% else %}
+                <li class="page-item disabled"><span class="page-link">Next &raquo;</span></li>
+                {% endif %}
+            </ul>
+        </nav>
         {% endif %}
+
     </div>
-    {% endif %}
-
 </div>
-
 {% endblock content %}
