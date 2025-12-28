@@ -127,11 +127,11 @@ def checkout():
             customer_id=current_user.id,
             total_amount=grand_total,
             shipping_cost=shipping_cost,
-            cust_address=address,      # Fixed: Now passing the mandatory address
-            status='received',         # Fixed: Matches your Enum
+            cust_address=address,     
+            status='received',       
             order_time=datetime.utcnow(), 
             estimated_delivery_date=datetime.utcnow().date() + timedelta(days=5),
-            completion_time=None       # Fixed: Python uses 'None', not 'Null'
+            completion_time=None      
         )
         
         db.session.add(new_order)

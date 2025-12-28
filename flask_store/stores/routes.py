@@ -5,7 +5,8 @@ from flask_store.stores.forms import StoreForm, EditStoreForm
 from flask_store.users.models import User
 from flask_store.stores.models import Store
 from flask_store.products.models import Product
-from flask_store.discounts.models import Discount  # <--- NEW IMPORT NEEDED
+from flask_store.discounts.models import Discount
+from flask_store.reviews.models import Review  # <--- NEW IMPORT NEEDED
 from sqlalchemy import func, or_, and_
 
 stores = Blueprint('stores', __name__)
@@ -158,7 +159,6 @@ def view_store(store_id):
                              'in_stock': in_stock_only
                          })
 
-
 @stores.route('/store/<int:store_id>/product/<int:product_id>')
 def product_detail(store_id, product_id):
     """View detailed information about a specific product"""
@@ -168,7 +168,12 @@ def product_detail(store_id, product_id):
         store_id=store_id
     ).first_or_404()
     
-    # Get related products
+    # 1. NEW: Get Reviews for this product (Newest first)
+    reviews = Review.query.filter_by(product_id=product_id)\
+                          .order_by(Review.review_time.desc())\
+                          .all()
+
+    # 2. Get related products
     related_products = Product.query.filter(
         Product.store_id == store_id,
         Product.id != product_id,
@@ -179,11 +184,11 @@ def product_detail(store_id, product_id):
         Product.stock > 0
     ).limit(4).all()
     
-    return render_template('product_details.html',
-                         store=store,
-                         product=product,
-                         related_products=related_products)
-
+    return render_template('old/product_details.html',
+                           store=store,
+                           product=product,
+                           related_products=related_products,
+                           reviews=reviews) # <--- Pass reviews here
 
 @stores.route('/store/<int:store_id>/deals')
 def store_deals(store_id):
@@ -197,7 +202,7 @@ def store_deals(store_id):
         Product.stock > 0
     ).order_by(Discount.discount_percent.desc()).all()
     
-    return render_template('store_deals.html',
+    return render_template('old/store_deals.html',
                          store=store,
                          products=products)
 
