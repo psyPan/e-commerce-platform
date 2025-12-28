@@ -1,4 +1,4 @@
-{% extends "/old/index.html" %}
+{% extends "/common/base.html" %}
 
 {% block title %}{{ product.name }} - {{ store.name }}{% endblock %}
 
@@ -161,7 +161,7 @@
     <div class="product-main">
         <div class="product-image-col">
             {% if product.image %}
-                <img src="{{ url_for('static', filename='img/' + product.image) }}" alt="{{ product.name }}">
+                <img src="{{ url_for('static', filename='product_pics/' + product.image) }}" alt="{{ product.name }}">
             {% else %}
                 <img src="https://via.placeholder.com/400x400?text=No+Image" alt="No Image">
             {% endif %}

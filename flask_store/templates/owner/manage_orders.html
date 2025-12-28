@@ -1,0 +1,72 @@
+{% extends "/owner/base_dashboard.html" %}
+
+{% block manage_orders %}
+<div class="profile-card">
+    
+    <div class="profile-view" style="width: 100%;">
+        <h1 class="profile-title">Manage Orders</h1>
+        <p class="text-muted" style="margin-top: -10px; margin-bottom: 20px;">Orders containing products from your store.</p>
+
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered align-middle">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Date</th>
+                        <th>Customer</th>
+                        <th>Total</th>
+                        <th>Status</th>
+                        <th style="min-width: 180px;">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in orders %}
+                    <tr>
+                        <td class="fw-bold">#{{ order.id }}</td>
+                        <td>{{ order.order_time.strftime('%Y-%m-%d') }}</td>
+                        <td>
+                            {{ order.customer.username if order.customer else 'Guest' }}
+                        </td>
+                        <td>${{ "%.2f"|format(order.total_amount) }}</td>
+                        
+                        <td>
+                            {% if order.status == 'closed' or order.status == 'delivered' %}
+                                <span class="badge bg-success">{{ order.status.upper() }}</span>
+                            {% elif order.status == 'shipped' %}
+                                <span class="badge bg-primary">{{ order.status.upper() }}</span>
+                            {% elif order.status == 'processed' %}
+                                <span class="badge bg-info text-dark">{{ order.status.upper() }}</span>
+                            {% else %}
+                                <span class="badge bg-warning text-dark">{{ order.status.upper() }}</span>
+                            {% endif %}
+                        </td>
+
+                        <td>
+                            <form action="{{ url_for('users.manage_orders') }}" method="POST" class="d-flex gap-2">
+                                <input type="hidden" name="order_id" value="{{ order.id }}">
+                                
+                                <select name="order_status" class="form-select form-select-sm">
+                                    <option value="received" {% if order.status == 'received' %}selected{% endif %}>Received</option>
+                                    <option value="processed" {% if order.status == 'processed' %}selected{% endif %}>Processed</option>
+                                    <option value="shipped" {% if order.status == 'shipped' %}selected{% endif %}>Shipped</option>
+                                    <option value="delivered" {% if order.status == 'delivered' %}selected{% endif %}>Delivered</option>
+                                    <option value="closed" {% if order.status == 'closed' %}selected{% endif %}>Closed</option>
+                                </select>
+                                
+                                <button type="submit" class="btn btn-sm btn-outline-dark">Update</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="6" class="text-center py-4 text-muted">
+                            No orders found for your store products.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock manage_orders %}
