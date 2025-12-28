@@ -8,6 +8,8 @@ def load_user(user_id):
     return User.query.get(int(user_id))
 
 class User(db.Model, UserMixin): # We need UserMixin for handling user's logged in sessions
+    __tablename__ = 'user'
+    
     id = db.Column(db.Integer, primary_key=True)
     f_name = db.Column(db.String(20), nullable=False)
     l_name = db.Column(db.String(20), nullable=False)

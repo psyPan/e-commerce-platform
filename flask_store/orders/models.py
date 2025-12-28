@@ -3,6 +3,8 @@ from datetime import datetime
 from sqlalchemy import event
 
 class Order(db.Model):
+    __tablename__ = 'order'
+    
     id = db.Column(db.Integer, primary_key=True)
     status = db.Column(db.Enum('received', 'processed', 'shipped', 'closed'), nullable=False)
     total_amount = db.Column(db.Integer, nullable=False)

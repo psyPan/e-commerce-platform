@@ -2,6 +2,8 @@ from flask_store import db
 from flask_store.orders.models import Order
 
 class Discount(db.Model):
+    __tablename__ = 'discount'
+
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100))
     description = db.Column(db.Text)
@@ -30,6 +32,8 @@ class Discount(db.Model):
         return f"Discount('{self.name}', '{self.code}', '{self.type}')"
 
 class Shipping(db.Model):
+    __tablename__ = 'shipping'
+
     discount_id = db.Column(db.Integer, db.ForeignKey('discount.id', onupdate="CASCADE", ondelete="CASCADE"), 
                             primary_key=True, nullable=False)
     min_purchase = db.Column(db.Integer)
@@ -39,6 +43,8 @@ class Shipping(db.Model):
     discount = db.relationship('Discount', back_populates='shipping_details')
 
 class Seasoning(db.Model):
+    __tablename__ = 'seasoning'
+    
     discount_id = db.Column(db.Integer, db.ForeignKey('discount.id', onupdate="CASCADE", ondelete="CASCADE"), 
                             primary_key=True, nullable=False)
     end_date = db.Column(db.Date, nullable=False)
@@ -51,6 +57,7 @@ class Seasoning(db.Model):
 
 class SpecialEvent(db.Model):
     __tablename__ = 'special_event'
+    
     discount_id = db.Column(db.Integer, db.ForeignKey('discount.id', onupdate="CASCADE", ondelete="CASCADE"), 
                             primary_key=True, nullable=False)
     end_date = db.Column(db.Date, nullable=False)
