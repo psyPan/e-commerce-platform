@@ -6,6 +6,7 @@ from flask_store import db
 from flask_store.products.models import Product
 from flask_store.discounts.models import Discount
 from flask_store.products.forms import ProductForm
+from flask_store.products.utils import save_picture
 
 products = Blueprint('products', __name__)
 
@@ -18,11 +19,39 @@ def add_product():
     form = ProductForm()
     discounts = Discount.query.all()
     form.discount_code.choices = [(d.code, d.code) for d in discounts]
+     # Get page number and filters
+    page = request.args.get('page', 1, type=int)
+    search_query = request.args.get('search', '')
+    filter_by = request.args.get('filter_by', 'all')
+    
+    # Build query
+    query = Product.query
+    
+    # Apply search filter
+    if search_query:
+        query = query.filter(Product.name.contains(search_query))
+    
+    # Apply category filter
+    if filter_by == 'in_stock':
+        query = query.filter(Product.stock > 0)
+    elif filter_by == 'out_of_stock':
+        query = query.filter(Product.stock == 0)
+    elif filter_by == 'with_discount':
+        query = query.filter(Product.discount_id != None)
+    elif filter_by == 'no_discount':
+        query = query.filter(Product.discount_id == None)
+    
+    # Paginate
+    products_pagination = query.paginate(page=page, per_page=5, error_out=False)
     if form.validate_on_submit():
         if form.save.data:
             store = current_user.store
-            discount = Discount.query.filter_by(code=form.discount_code.data).first() 
-            product = Product(name=form.name.data, description=form.description.data,
+            discount = Discount.query.filter_by(code=form.discount_code.data).first()
+            if form.image.data:
+                picture_file = save_picture(form.image.data)
+            else:
+                picture_file = 'default.jpg'
+            product = Product(name=form.name.data, description=form.description.data, image=picture_file,
                               buy_price=form.buy_price.data, sell_price=form.sell_price.data,
                               stock=form.stock.data, manufacturer=form.manufacturer.data,
                               type=form.type.data, model=form.model.data, store_id=store.id, discount_id=discount.id)
@@ -37,7 +66,9 @@ def add_product():
                 return render_template('owner/add_product.html', form=form)
         elif form.cancel.data:
             return render_template('owner/add_product.html', title='Add Product', form=form)
-    return render_template('owner/add_product.html', title='Add Product', form=form, discounts=discounts)
+    return render_template('owner/add_product.html', title='Add Product', form=form, discounts=discounts, 
+                           products=products_pagination.items,
+                           pagination=products_pagination)
 
 def list_products():
     page = request.args.get('page', 1, type=int)

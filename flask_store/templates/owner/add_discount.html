@@ -1,0 +1,124 @@
+{% extends "/owner/base_dashboard.html" %}
+{% block add_discount %}
+<link rel="stylesheet" href="{{ url_for('static', filename='style/owner/discount.css') }}">
+<div class="profile-card {% if form.errors %}editing{% endif %}" id="storeBox">
+    <div class="discount-view">
+    <h1 class="profile-title">Discount Management</h1>
+        {% for discount in discounts %}
+        <div class="discount-item">
+            <div class="discount-badge">
+                <div class="discount-notch"></div>
+                <span class="discount-value">{{ "%.0f"|format(discount.discount_percent) }}</span>
+            </div>
+            <div class="discount-details">
+                <h3 class="discount-title">{{ discount.name }}</h3>
+                <p class="discount-description">{{ discount.description }}</p>
+                <p class="discount-validity">Valid from: {{ discount.seasoning_details.start_date }} - Valid to: {{ discount.seasoning_details.end_date }}</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="profile-actions profile-actions-view">
+        <button type="button" class="edit-btn" onclick="enterEdit()">Add New Discount</button>
+    </div>
+    <!-- Pagination Controls -->
+    <div class="pagination-controls">
+        {% if pagination.has_prev %}
+            <a href="{{ url_for('discounts.add_discount', page=pagination.prev_num) }}" class="page-btn">Previous</a>
+        {% endif %}
+        
+        {% for page_num in pagination.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+            {% if page_num %}
+                {% if page_num == pagination.page %}
+                    <span class="page-btn active">{{ page_num }}</span>
+                {% else %}
+                    <a href="{{ url_for('discounts.add_discount', page=page_num) }}" class="page-btn">{{ page_num }}</a>
+                {% endif %}
+            {% else %}
+                <span class="page-ellipsis">...</span>
+            {% endif %}
+        {% endfor %}
+        
+        {% if pagination.has_next %}
+            <a href="{{ url_for('discounts.add_discount', page=pagination.next_num) }}" class="page-btn">Next</a>
+        {% endif %}
+    </div>
+    <div class="form-container">
+        <form method="POST" class="profile-form" id="addProductForm" enctype="multipart/form-data" action="">
+            <h1 class="profile-title">Add New Discount</h1>
+            {{ form.hidden_tag() }}
+            <div class="profile-form-row">
+                {{ form.name.label(class="form-label") }}
+                {% if form.name.errors %}
+                    {{ form.name(class="form-input is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.name.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.name(class="profile-input") }}
+                {% endif %}
+            </div>
+            <div class="profile-form-row">
+                {{ form.code.label(class="form-label") }}
+                {% if form.code.errors %}
+                    {{ form.code(class="form-input is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.code.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.code(class="profile-input") }}
+                {% endif %}
+            </div>
+            <div class="profile-form-row">
+                {{ form.description.label(class="form-label") }}
+                {% if form.description.errors %}
+                    {{ form.description(class="form-input is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.description.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.description(class="profile-input") }}
+                {% endif %}
+            </div>
+            <div class="profile-form-row">
+                {{ form.type.label(class="form-label") }}
+                {% if form.type.errors %}
+                    {{ form.type(class="form-input is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.type.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.type(class="profile-input") }}
+                {% endif %}
+            </div>
+            <div class="profile-form-row">
+                {{ form.discount_percent.label(class="form-label") }}
+                {% if form.discount_percent.errors %}
+                    {{ form.discount_percent(class="form-input is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.discount_percent.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.discount_percent(class="profile-input") }}
+                {% endif %}
+            </div>
+            <div class="profile-actions profile-actions-form">
+                <button type="button" class="cancel-btn" onclick="exitEdit()">Cancel</button>
+                {{ form.save(class="btn-gold") }}
+            </div>
+        </form>
+    </div>
+</div>
+<script src="{{ url_for('static', filename='script/edit_store.js') }}"></script>
+{% endblock add_discount %}

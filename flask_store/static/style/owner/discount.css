@@ -1,0 +1,149 @@
+/* Discount List Styles */
+.discount-view {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+.discount-item {
+    display: flex;
+    align-items: center;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    overflow: hidden;
+    background: white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    transition: box-shadow 0.2s;
+    padding: 0px;
+    gap: 0px; 
+}
+.discount-item:hover {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+.discount-badge {
+    /* 1. Define the Background Image */
+    /* Note: Update the path to match where your image is stored */
+    background-image: url("/static/img/discount-badge.png");
+    background-size: contain;  /* Ensures the whole star fits */
+    background-repeat: no-repeat;
+    background-position: center;
+
+    /* 2. Layout (Centers the text inside the star) */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    
+    /* 3. Size (Must match or be proportional to your image aspect ratio) */
+    width: 100px;
+    height: 100px;
+    flex-shrink: 0;
+    
+    /* 4. Text Styling */
+    color: rgb(254, 64, 64); 
+    font-size: 1.5em; /* Adjusted to fit inside the image */
+    font-weight: bold;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.3); /* Optional: helps text pop */
+    padding: 0; /* Reset padding to ensure centering */
+    padding-right: 10px;
+    padding-bottom: 5px;
+    margin-left: 40px;
+}
+.discount-value {
+    z-index: 1;
+}
+.discount-details {
+    flex: 1;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-left: 40px;
+}
+.discount-title {
+    margin: 0;
+    font-size: 1.1em;
+    font-weight: 600;
+    color: #333;
+}
+.discount-description {
+    margin: 0;
+    color: #666;
+    font-size: 0.75em;
+    line-height: 1.5;
+}
+.discount-validity {
+    margin: 0;
+    color: #888;
+    font-size: 0.85em;
+}
+.invalid-feedback { 
+    color: #dc3545; 
+    font-size: 0.875em; 
+    margin-top: 0.25rem; 
+}
+
+.is-invalid { 
+    border-color: #dc3545 !important; 
+}
+.two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+/* When editing mode is active - works for both profileBox and storeBox */
+.profile-card.editing .discount-view,
+#storeBox.editing .discount-view {
+    display: none;  /* Hide discount list */
+}
+
+.profile-card.editing .profile-form,
+#storeBox.editing .profile-form {
+    display: flex;  /* Show form */
+    flex-direction: column;
+    gap: 18px;
+}
+
+.profile-card.editing .profile-actions-view,
+#storeBox.editing .profile-actions-view {
+    display: none;  /* Hide "Add New Discount" button */
+}
+#storeBox.editing .pagination-controls {
+    display: none;  /* Add this line */
+}
+.profile-card.editing .profile-actions-form,
+#storeBox.editing .profile-actions-form {
+    display: flex;  /* Show Cancel/Save buttons */
+    gap: 14px;
+    justify-content: flex-end;
+}
+.pagination-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+.page-btn {
+    padding: 8px 14px;
+    background: #f3e8dd;
+    color: #43341e;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 14px;
+    transition: 0.2s;
+}
+.page-btn:hover {
+    background: #e2d2c2;
+}
+.page-btn.active {
+    background: #c9a876;
+    color: white;
+    cursor: default;
+}
+.page-ellipsis {
+    padding: 8px;
+    color: #888;
+}

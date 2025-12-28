@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, DateField
+from wtforms import StringField, PasswordField, SubmitField, DateField, SelectField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
 from flask_store.users.models import User
 
@@ -46,3 +46,8 @@ class ChangePasswordForm(FlaskForm):
     new_password = PasswordField('New Password', validators=[DataRequired()])
     confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('new_password')])
     submit = SubmitField('Change Password')
+
+class AssignOwnerForm(FlaskForm):
+    owner_email = StringField('Email', validators=[DataRequired(), Email()])
+    store_id = SelectField('Store Name', validators=[DataRequired()], choices=[])
+    submit = SubmitField('Assign')

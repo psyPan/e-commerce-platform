@@ -34,3 +34,24 @@
     background: #c9a876;
     color: white;
 }
+.form-control-file {
+    padding: 8px 12px;
+    border-radius: 18px;
+    font-size: 14px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    width: 100%;
+}
+.form-control-file::file-selector-button {
+    padding: 6px 14px;
+    background: #c9a876;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 13px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin-right: 8px;
+}
+.form-control-file::file-selector-button:hover {
+    background: #b89763;
+}
