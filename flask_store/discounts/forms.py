@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, TextAreaField, SelectField, FloatField, SubmitField
-from wtforms.validators import DataRequired, Length, NumberRange, ValidationError
+from wtforms import StringField, TextAreaField, SelectField, FloatField, SubmitField, IntegerField, DateField
+from wtforms.validators import DataRequired, Length, NumberRange, ValidationError, Optional
 from flask_store.discounts.models import Discount
 
 class DiscountForm(FlaskForm):
@@ -17,6 +17,9 @@ class DiscountForm(FlaskForm):
                         validators=[DataRequired()])
     discount_percent = FloatField('Discount Percentage', 
                                   validators=[DataRequired(), NumberRange(min=0, max=100)])
+    min_purchase = IntegerField('Minimum Purchase', validators=[Optional()])
+    start_date = DateField('Start Date', validators=[Optional()])
+    end_date = DateField('End Date', validators=[Optional()])
     cancel = SubmitField('Cancel')
     save = SubmitField('Save')
 

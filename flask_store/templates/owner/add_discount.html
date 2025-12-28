@@ -90,15 +90,32 @@
             <div class="profile-form-row">
                 {{ form.type.label(class="form-label") }}
                 {% if form.type.errors %}
-                    {{ form.type(class="form-input is-invalid") }}
+                    {{ form.type(class="form-input is-invalid", onchange="toggleDiscountFields()") }}
                     <div class="invalid-feedback">
                         {% for error in form.type.errors %}
                             <span>{{ error }}</span>
                         {% endfor %}
                     </div>
                 {% else %}
-                    {{ form.type(class="profile-input") }}
+                    {{ form.type(class="profile-input", onchange="toggleDiscountFields()") }}
                 {% endif %}
+            </div>
+            <!-- Shipping fields -->
+            <div class="profile-form-row" id="shipping-fields" style="display: none;">
+                {{ form.min_purchase.label(class="form-label") }}
+                {{ form.min_purchase(class="profile-input") }}
+            </div>
+
+            <!-- Seasoning/Special Event fields -->
+            <div class="profile-form-row two-col" id="date-fields" style="display: none;">
+                <div class="form-group">
+                    {{ form.start_date.label(class="form-label") }}
+                    {{ form.start_date(class="profile-input") }}
+                </div>
+                <div class="form-group">
+                    {{ form.end_date.label(class="form-label") }}
+                    {{ form.end_date(class="profile-input") }}
+                </div>
             </div>
             <div class="profile-form-row">
                 {{ form.discount_percent.label(class="form-label") }}
@@ -121,4 +138,5 @@
     </div>
 </div>
 <script src="{{ url_for('static', filename='script/edit_store.js') }}"></script>
+<script src="{{ url_for('static', filename='script/discount.js') }}"></script>
 {% endblock add_discount %}

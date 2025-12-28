@@ -2,7 +2,7 @@ from flask import render_template, url_for, flash, redirect, request, Blueprint
 from flask_login import current_user, login_required
 from flask_store import db
 from flask_store.discounts.forms import DiscountForm
-from flask_store.discounts.models import Discount
+from flask_store.discounts.models import Discount, Shipping, Seasoning, SpecialEvent
 
 discounts = Blueprint('discounts', __name__)
 
@@ -31,6 +31,29 @@ def add_discount():
             )
             try:
                 db.session.add(discount)
+                db.session.flush()
+                if discount.type == 'shipping':
+                    shipping = Shipping(
+                        discount_id=discount.id,
+                        min_purchase=form.min_purchase.data
+                    )
+                    db.session.add(shipping)
+                    
+                elif discount.type == 'seasoning':
+                    seasoning = Seasoning(
+                        discount_id=discount.id,
+                        start_date=form.start_date.data,
+                        end_date=form.end_date.data
+                    )
+                    db.session.add(seasoning)
+                    
+                elif discount.type == 'special_event':
+                    special_event = SpecialEvent(
+                        discount_id=discount.id,
+                        start_date=form.start_date.data,
+                        end_date=form.end_date.data
+                    )
+                    db.session.add(special_event)
                 db.session.commit()
                 flash(f'Discount "{discount.name}" created successfully!', 'success')
                 return redirect(url_for('discounts.add_discount'))
