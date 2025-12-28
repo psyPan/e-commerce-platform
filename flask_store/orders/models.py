@@ -34,12 +34,3 @@ class Order(db.Model):
     cart = db.relationship('Cart', back_populates='orders')
     items = db.relationship('LineItem', backref='order_details', lazy=True)
 
-# Event listener to automatically update timestamps 
-@event.listens_for(Order, 'before_update') 
-def update_status_timestamp(mapper, connection, target): 
-    if target.status == 'processed' and not target.processed_at: 
-        target.processed_at = datetime.utcnow() 
-    elif target.status == 'shipped' and not target.shipped_at: 
-        target.shipped_at = datetime.utcnow() 
-    elif target.status == 'closed' and not target.closed_at: 
-        target.closed_at = datetime.utcnow()

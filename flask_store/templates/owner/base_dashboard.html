@@ -12,7 +12,7 @@
         <a class="side-btn {% if request.endpoint == 'products.add_product' %} active {% endif %}" href="{{ url_for('products.add_product') }}">Products</a>
         <!-- <a class="side-btn {% if request.endpoint == 'users.assign_owner' %} active {% endif %}" href="{{ url_for('users.assign_owner') }}">Assign Owner</a> TODO: Move to admin dashboard -->
         <a class="side-btn {% if request.endpoint == 'discounts.add_discount' %} active {% endif %}" href="{{ url_for('discounts.add_discount') }}">Discount</a>
-        <a class="side-btn">Orders</a>
+        <a class="side-btn {% if request.endpoint == 'users.manage_orders' %} active {% endif %}" href="{{ url_for('users.manage_orders') }}">Orders</a>
     </div>
 
     <div class="profile-content">
@@ -24,6 +24,9 @@
         {% block assign_owner %}{% endblock assign_owner %}
     {% elif request.endpoint == 'discounts.add_discount' %}
         {% block add_discount %}{% endblock add_discount %}
+    {% elif request.endpoint == 'users.manage_orders' %}
+        {% block manage_orders %}{% endblock manage_orders %}
+    
     {% endif %}
     </div>
 </div>

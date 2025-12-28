@@ -18,7 +18,9 @@ users = Blueprint('users', __name__)
 @users.route('/')
 @users.route('/home')
 def home():
-    return render_template('/customer/home.html', title='Home')
+    page = request.args.get('page', 1, type=int)
+    stores_pagination = Store.query.paginate(page=page, per_page=5, error_out=False)
+    return render_template('/customer/home.html', title='Home', stores=stores_pagination.items, pagination=stores_pagination)
 
 @users.route('/register', methods=['GET', 'POST'])
 def register():
@@ -258,6 +260,47 @@ def assign_owner():
         print(f"Form validation failed: {form.errors}")
     return render_template("owner/assign_owner.html", form=form)
 
+@users.route("/store/manage-orders", methods=["GET", "POST"])
+@login_required
+def manage_orders():
+    # 1. Security: Ensure the user actually owns a store
+    # (Assuming a user can own one store for simplicity)
+    my_store = current_user.store    
+    if not my_store:
+        flash("You need to create a store before you can process orders!", "warning")
+        return redirect(url_for('users.account')) # Or create_store route
+
+    # 2. HANDLE STATUS UPDATES (POST Request)
+    if request.method == "POST":
+        order_id = request.form.get('order_id')
+        new_status = request.form.get('order_status')
+        
+        # specific order lookup
+        order_to_update = Order.query.get_or_404(order_id)
+        
+        # Basic validation
+        valid_statuses = ['received', 'processed', 'shipped', 'delivered', 'closed']
+        if new_status in valid_statuses:
+            order_to_update.status = new_status
+            db.session.commit()
+            flash(f"Order #{order_id} status updated to '{new_status}'", "success")
+        else:
+            flash("Invalid status selected.", "danger")
+            
+        return redirect(url_for('users.manage_orders'))
+
+    # 3. FETCH ORDERS (GET Request)
+    # This query joins tables to find Orders containing Products from My Store
+    # Logic: Order -> LineItems -> Product -> Store (matches my_store.id)
+    orders = db.session.query(Order)\
+        .join(LineItem)\
+        .join(Product)\
+        .filter(Product.store_id == my_store.id)\
+        .order_by(Order.order_time.desc())\
+        .distinct()\
+        .all()
+
+    return render_template('owner/manage_orders.html', orders=orders)
 
 @users.route('/order/<int:order_id>/product/<int:product_id>/review', methods=['POST'])
 @login_required
@@ -271,7 +314,7 @@ def add_review(order_id, product_id):
         
     # 2. Validation: Is the order completed?
     # Note: I removed the redirect to 'order_details' here
-    if order.status not in ['closed','received']: 
+    if order.status not in ['closed']: 
         flash('You can only review products from completed orders.', 'warning')
         return redirect(url_for('users.order_history'))
 
