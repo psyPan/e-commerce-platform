@@ -271,7 +271,7 @@ def add_review(order_id, product_id):
         
     # 2. Validation: Is the order completed?
     # Note: I removed the redirect to 'order_details' here
-    if order.status not in ['closed']: 
+    if order.status not in ['closed','received']: 
         flash('You can only review products from completed orders.', 'warning')
         return redirect(url_for('users.order_history'))
 
