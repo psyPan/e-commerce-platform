@@ -18,7 +18,9 @@ users = Blueprint('users', __name__)
 @users.route('/')
 @users.route('/home')
 def home():
-    return render_template('/customer/home.html', title='Home')
+    page = request.args.get('page', 1, type=int)
+    stores_pagination = Store.query.paginate(page=page, per_page=5, error_out=False)
+    return render_template('/customer/home.html', title='Home', stores=stores_pagination.items, pagination=stores_pagination)
 
 @users.route('/register', methods=['GET', 'POST'])
 def register():
