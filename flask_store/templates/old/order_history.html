@@ -1,8 +1,10 @@
-{% extends "/old/index.html" %}
+{% extends "old/index.html" %}
 
 {% block content %}
 <link rel="stylesheet" href="{{ url_for('static', filename='style/old/home.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='style/old/order_history.css') }}">
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 
 <div class="credit-wrapper">
 
@@ -21,9 +23,6 @@
 
             <div class="order-tabs">
                 <button class="order-tab active">All Orders</button>
-                <button class="order-tab">Received</button>
-                <button class="order-tab">Shipped</button>
-                <button class="order-tab">Closed</button>
             </div>
 
             <div class="order-list">
@@ -46,11 +45,16 @@
                         </div>
                 
                         <div class="order-body">
-                            {% if order.cart and order.cart.cart_items %}
-                                {% for item in order.cart.cart_items %}
+                            {# CRITICAL FIX: Loop through order -> cart -> line_items #}
+                            {% for item in order.items %}
                                 <div class="order-row">
                                     <div class="order-img-wrapper">
-                                        <img src="{{ url_for('static', filename='img/' + item.product.image_file) }}" alt="{{ item.product.name }}">
+                                                    {% if item.product.image %}
+                                                    <img src="{{ url_for('static', filename='img/' + item.product.image) }}" alt="{{ item.product.name }}">
+                                                    {% else %}
+                                                    <img src="https://via.placeholder.com/400x400?text=No+Image" alt="No Image">
+                                                    {% endif %}
+                                       
                                     </div>
                                     <div class="order-details">
                                         <div class="order-name">{{ item.product.name }}</div>
@@ -59,34 +63,60 @@
                                             <span>x ${{ item.product.price }}</span>
                                         </div>
                                     </div>
-                                    <div class="order-item-total">
-                                        ${{ item.quantity * item.product.price }}
-                                    </div>
+                                    
+                                    <div class="order-item-total" style="display: flex; flex-direction: column; align-items: flex-end; gap: 10px;">
+                                        
+                                        <div>${{ item.total_price }}</div>
+
+                                        {% set unique_key = order.id|string + "-" + item.product.id|string %}
+
+                                        {% if unique_key in reviewed_map %}
+                                            <small class="text-success">Reviewed &#10004;</small>
+                                        {% else %}
+                                            <button type="button" class="btn btn-sm btn-outline-primary" 
+                                                    data-bs-toggle="modal" 
+                                                    data-bs-target="#reviewModal-{{ order.id }}-{{ item.product.id }}" 
+                                                    style="font-size: 0.8rem; padding: 2px 8px;">
+                                                Write Review
+                                            </button>
+                                        {% endif %}
+
+                                        <div class="modal fade" id="reviewModal-{{ order.id }}-{{ item.product.id }}" tabindex="-1" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" style="color:black;">Review: {{ item.product.name }}</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <form method="POST" action="{{ url_for('users.add_review', order_id=order.id, product_id=item.product.id) }}">
+                                                        {{ review_form.hidden_tag() }}
+                                                        <div class="modal-body" style="text-align: left;">
+                                                            <div class="mb-3">
+                                                                <label class="form-label" style="color:black;">Rating</label>
+                                                                {{ review_form.stars(class="form-select") }}
+                                                            </div>
+                                                            <div class="mb-3">
+                                                                <label class="form-label" style="color:black;">Comment</label>
+                                                                {{ review_form.description(class="form-control", rows=3) }}
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                            {{ review_form.submit(class="btn btn-primary") }}
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        </div>
                                 </div>
-                                {% endfor %}
-                            {% else %}
-                                <div class="order-row">
-                                    <p style="padding: 15px; color: #777;">Order details are not available.</p>
-                                </div>
-                            {% endif %}
+                            {% endfor %}
                         </div>
                         
                         <div class="order-footer">
-                            
                             <div class="delivery-info">
                                 <p class="label">Shipping to:</p>
                                 <p class="value address-text">{{ order.cust_address }}</p>
-                                
-                                <div style="margin-top: 8px;">
-                                    <p class="label">Est. Delivery:</p>
-                                    <p class="value">
-                                        {% if order.status == 'closed' %}
-                                            <span style="color: green;">Delivered on {{ order.completion_time.strftime('%Y-%m-%d') if order.completion_time else 'N/A' }}</span>
-                                        {% else %}
-                                            {{ order.estimated_delivery_date.strftime('%Y-%m-%d') }}
-                                        {% endif %}
-                                    </p>
-                                </div>
                             </div>
 
                             <div class="order-actions">
@@ -101,13 +131,12 @@
                                     </div>
                                 </div>
 
-                                {% if order.status in ['received', 'processed'] %}
+                                {% if order.status == 'processing' %}
                                     <form action="{{ url_for('users.cancel_order', order_id=order.id) }}" method="POST" onsubmit="return confirm('Are you sure you want to cancel this order?');">
                                         <button type="submit" class="btn-cancel">Cancel Order</button>
                                     </form>
                                 {% endif %}
                             </div>
-
                         </div>
                     </div>
                     {% endfor %}

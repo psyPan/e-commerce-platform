@@ -30,6 +30,7 @@ class Order(db.Model):
     customer = db.relationship('User', foreign_keys=[customer_id])
     # Relationship to cart
     cart = db.relationship('Cart', back_populates='orders')
+    items = db.relationship('LineItem', backref='order_details', lazy=True)
 
 # Event listener to automatically update timestamps 
 @event.listens_for(Order, 'before_update') 

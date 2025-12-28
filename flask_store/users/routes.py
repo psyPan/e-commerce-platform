@@ -8,6 +8,9 @@ from flask_store.orders.models import Order
 from flask_store.stores.models import Store
 from flask_store.line_items.models import LineItem
 from flask_store.products.models import Product
+from flask_store.reviews.models import Review
+from flask_store.reviews.forms import ReviewForm
+from datetime import datetime
 
 
 users = Blueprint('users', __name__)
@@ -148,16 +151,24 @@ def change_password():
         print(f"Form validation failed: {form.errors}")
     return render_template("old/change_password.html", form=form)
 
+# In flask_store/users/routes.py
+
 @users.route("/order_history")
 @login_required
 def order_history():
-    # Fetch orders belonging to the current user, ordered by newest first
+    # 1. Fetch orders
     orders = Order.query.filter_by(customer_id=current_user.id)\
                         .order_by(Order.id.desc())\
                         .all()
     
-    return render_template('old/order_history.html', orders=orders)
+    review_form = ReviewForm()
+    user_reviews = Review.query.filter_by(user_id=current_user.id).all()
+    reviewed_map = {f"{r.order_id}-{r.product_id}" for r in user_reviews}
 
+    return render_template('old/order_history.html', 
+                           orders=orders, 
+                           review_form=review_form,
+                           reviewed_map=reviewed_map)
 
 # admin youssel test
 # @login_required
@@ -207,8 +218,7 @@ def cancel_order(order_id):
         if product:
             product.stock += item.quantity
 
-    # 5. DELETE THE ORDER
-    # We delete the line items first to avoid foreign key errors (unless you have cascading delete set up)
+  
     for item in order_items:
         db.session.delete(item)
         
@@ -247,3 +257,51 @@ def assign_owner():
     else:
         print(f"Form validation failed: {form.errors}")
     return render_template("owner/assign_owner.html", form=form)
+
+
+@users.route('/order/<int:order_id>/product/<int:product_id>/review', methods=['POST'])
+@login_required
+def add_review(order_id, product_id):
+    form = ReviewForm()
+    
+    # 1. Validation: Does the order exist and belong to user?
+    order = Order.query.get_or_404(order_id)
+    if order.customer_id != current_user.id:
+        abort(403)
+        
+    # 2. Validation: Is the order completed?
+    # Note: I removed the redirect to 'order_details' here
+    if order.status not in ['closed','received']: 
+        flash('You can only review products from completed orders.', 'warning')
+        return redirect(url_for('users.order_history'))
+
+    # 3. Check if they already reviewed this item in this specific order
+    existing_review = Review.query.filter_by(
+        order_id=order_id, 
+        product_id=product_id, 
+        user_id=current_user.id
+    ).first()
+
+    if existing_review:
+        flash('You have already reviewed this item.', 'info')
+        return redirect(url_for('users.order_history'))
+
+    # 4. Save the Review
+    if form.validate_on_submit():
+        review = Review(
+            user_id=current_user.id,
+            order_id=order_id,
+            product_id=product_id,
+            stars=int(form.stars.data),
+            description=form.description.data,
+            review_time=datetime.utcnow()
+        )
+        db.session.add(review)
+        db.session.commit()
+        flash('Review added successfully!', 'success')
+    else:
+        # If form errors exist, flash them
+        flash('Error submitting review. Please check the form.', 'danger')
+
+    # CRITICAL CHANGE: Redirect back to Order History, not Order Details
+    return redirect(url_for('users.order_history'))

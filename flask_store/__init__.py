@@ -25,6 +25,9 @@ def create_app():
         from flask_store.discounts.routes import discounts
         from flask_store.products.routes import products
         from flask_store.cart.routes import cart
+        #from flask_store.reviews.models import reviews
+
+        
 
         db.create_all()
         
@@ -32,6 +35,8 @@ def create_app():
         app.register_blueprint(users)
         app.register_blueprint(stores)
         app.register_blueprint(discounts)
+        #app.register_blueprint(reviews)
+
         app.register_blueprint(cart)
         app.register_blueprint(products)
     return app
