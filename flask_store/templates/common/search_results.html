@@ -1,0 +1,79 @@
+{% extends "/common/base.html" %}
+
+{% block content %}
+
+<link rel="stylesheet" href="{{ url_for('static', filename='style/products/search.css') }}">
+
+<div class="search-page-container">
+    
+    <aside class="filters-sidebar">
+        <h3>Filter Results</h3>
+        
+        <form action="{{ url_for('products.search_results') }}" method="GET">
+            
+            <input type="hidden" name="q" value="{{ request.args.get('q', '') }}">
+
+            <div class="filter-group">
+                <label>Sort By:</label>
+                <select name="sort_by" class="filter-select">
+                    <option value="relevance">Relevance</option>
+                    <option value="price_low">Price: Low to High</option>
+                    <option value="price_high">Price: High to Low</option>
+                    <option value="newest">Newest Arrivals</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label>Price Range:</label>
+                <div class="price-inputs">
+                    <input type="number" name="min_price" placeholder="Min" value="{{ request.args.get('min_price', '') }}">
+                    <span>-</span>
+                    <input type="number" name="max_price" placeholder="Max" value="{{ request.args.get('max_price', '') }}">
+                </div>
+            </div>
+
+            <button type="submit" class="apply-btn">Apply Filters</button>
+            <a href="{{ url_for('products.search_results', q=request.args.get('q', '')) }}" class="reset-link">Reset Filters</a>
+        </form>
+    </aside>
+
+    <main class="results-content">
+        <div class="results-header">
+            <h2>Results for "{{ request.args.get('q', '') }}"</h2>
+            <p>{{ products|length }} products found</p>
+        </div>
+
+        {% if products %}
+            <div class="product-grid">
+                {% for product in products %}
+            <div class="product-card">
+                <div class="product-image">
+                    {% if product.image %}
+                        <img src="{{ url_for('static', filename='images/' + product.image) }}" alt="{{ product.name }}">
+                    {% else %}
+                        <div class="no-image-placeholder">
+                            <i class="fa-regular fa-image"></i>
+                            <span>No Image</span>
+                        </div>
+                    {% endif %}
+                </div>
+                
+            </div>
+                    <div class="product-details">
+                        <span class="store-badge">Store: {{ product.store_name }}</span> <h4>{{ product.name }}</h4>
+                        <p class="price">${{ product.price }}</p>
+                        <a href="{{ url_for('stores.product_detail', store_id=product.store_id, product_id=product.id) }}" class="view-btn">View Details</a>                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="no-results">
+                <i class="fa-regular fa-face-frown"></i>
+                <h3>No products found.</h3>
+                <p>Try checking your spelling or using different keywords.</p>
+            </div>
+        {% endif %}
+    </main>
+
+</div>
+
+{% endblock content %}
