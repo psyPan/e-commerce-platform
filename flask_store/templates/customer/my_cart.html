@@ -1,0 +1,132 @@
+{% extends "/customer/base_dashboard.html" %}
+{% block my_cart %}
+<link rel="stylesheet" href="{{ url_for('static', filename='style/old/my_cart.css') }}">
+<div class="dashboard-card">
+    <h1 class="dashboard-title">My cart</h1>
+    <div class="cart-wrapper">
+
+    {% if not cart_items %}
+        <div style="text-align: center; padding: 50px;">
+            <h3>Your cart is empty!</h3>
+            <a href="{{ url_for('stores.list_stores') }}" style="color: blue; text-decoration: underline;">Start Shopping</a>
+        </div>
+    {% else %}
+
+    <div class="cart-header">
+        <div class="col-check">
+            <input type="checkbox" id="select-all" checked>
+        </div>        
+        <div class="col-product">Select All ({{ cart_items|length }} items)</div>
+        <div class="col-price">Unit Price</div>
+        <div class="col-qty">Quantity</div>
+        <div class="col-total">Total</div>
+        <div class="col-action"></div>
+    </div>
+
+    {% for item, product in cart_items %}
+    <div class="cart-item" data-price="{{ product.sell_price }}">
+        <div class="col-check">
+            <input type="checkbox" class="item-checkbox" checked>
+        </div>        
+        
+        <div class="col-product product-info">
+            <div class="product-img">
+                {% if product.image %}
+                <img src="{{ url_for('static', filename='product_pics/' + product.image)}}" alt="{{ product.name }}" style="width:100%; height:100%; object-fit:contain;">
+                {% else %}
+                <div style="background:#ddd; width:100%; height:100%; display:flex; justify-content:center; align-items:center;">No Img</div>
+                {% endif %}
+            </div>
+            <div class="product-name">
+                <strong>{{ product.name }}</strong>
+                <br>
+                <small style="color:gray;">{{ product.manufacturer }}</small>
+            </div>
+        </div>
+
+        <div class="col-price">${{ "%.2f"|format(product.sell_price) }}</div>
+
+        <div class="col-qty qty-box">
+            <form action="{{ url_for('cart.add_to_cart', product_id=product.id) }}" method="POST" style="display:inline;">
+                <input type="hidden" name="quantity" value="-1">
+                <button type="submit" {% if item.quantity <= 1 %}disabled style="opacity:0.5; cursor:not-allowed"{% endif %}>-</button>
+            </form>
+
+            <input type="text" value="{{ item.quantity }}" readonly>
+
+            <form action="{{ url_for('cart.add_to_cart', product_id=product.id) }}" method="POST" style="display:inline;">
+                <input type="hidden" name="quantity" value="1">
+                <button type="submit">+</button>
+            </form>
+        </div>
+
+        <div class="col-total">
+            ${{ "%.2f"|format(product.sell_price * item.quantity) }}
+        </div>
+
+        <div class="col-action">
+            <a href="{{ url_for('cart.remove_from_cart', product_id=product.id) }}" 
+               class="delete-btn" 
+               onclick="return confirm('Remove {{ product.name }} from cart?');"
+               style="text-decoration:none; display:flex; justify-content:center; align-items:center;">
+                ✕
+            </a>
+        </div>
+    </div>
+    {% endfor %}
+
+    <div class="cart-subtotal">
+        <div></div> 
+        <div>Subtotal</div>
+        <div></div> 
+        <div style="text-align:center;" id="subtotal-items">{{ cart_items|length }} items</div>
+        <div style="text-align:center;" id="subtotal-price">${{ "%.2f"|format(subtotal) }}</div>
+        <div></div> 
+    </div>    
+
+    <div class="cart-bottom">
+
+        <div class="receiver-card">
+            <h3>Receiver’s Information</h3>
+            <div class="receiver-row">
+                <span>User</span>
+                <p>{{ current_user.username if current_user.username else 'Guest' }}</p>
+            </div>
+            <div class="receiver-row">
+                <span>Email</span>
+                <p>{{ current_user.email if current_user.email else 'N/A' }}</p>
+            </div>
+        </div>
+        
+        <div class="summary-card">
+            <h3>Summary</h3>
+        
+            <div class="summary-row">
+                <span>Subtotal</span>
+                <span id="summary-subtotal">${{ "%.2f"|format(subtotal) }}</span>
+            </div>
+        
+            <div class="summary-row">
+                <span>Discount</span>
+                <span id="summary-discount">-$0.00</span>
+            </div>
+        
+            <div class="summary-row">
+                <span>Shipping</span>
+                <span id="summary-shipping">$0.00</span>
+            </div>
+        
+            <div class="summary-row total">
+                <span>Total</span>
+                <span id="summary-total">${{ "%.2f"|format(subtotal) }}</span>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="checkout-area">
+        <a href="{{ url_for('cart.checkout') }}" class="save-btn" style="margin-right: 50px;">Proceed</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock my_cart %}
