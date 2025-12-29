@@ -9,6 +9,13 @@
     align-items: center;
 }
 
+.dashboard-form-row {
+    display: grid;
+    grid-template-columns: 15fr 85fr;  /* 30:70 ratio */
+    gap: 20px;
+    padding: 3px 0;
+}
+
 .filter-dropdown {
     padding: 10px 15px;
     border-radius: 18px;
@@ -49,21 +56,29 @@
 }
 
 .search-btn {
-    padding: 10px 24px;
-    background: #c9a876;
-    color: white;
+    padding: 12px 28px;
+    border-radius: 16px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background 0.2s;
+    background: #1a1a1a;;
+    color: #fff;
     border: none;
-    border-radius: 18px;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: 0.2s;
+    outline: none;
+    box-shadow: none;
 }
 
 .search-btn:hover {
-    background: #b89763;
+    background: #2c2c2c;           /* Lighter black on hover */
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
 }
 
+.search-btn,
+.search-btn:visited,
+.search-btn:active {
+  transform: translateY(0);
+}
 /* Product List Styles */
 .product-view {
     display: flex;
@@ -165,7 +180,7 @@
     margin: 0;
     font-size: 1.3em;
     font-weight: 700;
-    color: #c9a876;
+    color: #2b004b;
 }
 
 /* Hide product view when in edit mode */
@@ -205,19 +220,21 @@
     margin-bottom: 20px;
 }
 .page-btn {
-    padding: 8px 14px;
-    background: #f3e8dd;
-    color: #43341e;
-    border-radius: 8px;
+    padding: 12px 28px;
+    border-radius: 16px;
+    font-weight: 500;
     text-decoration: none;
-    font-size: 14px;
-    transition: 0.2s;
+    transition: background 0.2s;
+    background: #1a1a1a;;
+    color: #fff;
+    border: none;
+    outline: none;
+    box-shadow: none;
 }
 .page-btn:hover {
     background: #e2d2c2;
 }
 .page-btn.active {
-    background: #c9a876;
     color: white;
     cursor: default;
 }

@@ -101,16 +101,6 @@ body {
     border-color: #c9a876;
     box-shadow: 0 0 0 3px rgba(201, 168, 118, 0.15);
 }
-.search-btn {
-    background: #c9a876;
-    border: none;
-    border-radius: 20px;
-    padding: 5px 12px;
-    font-size: 18px;
-    cursor: pointer;
-    transition: 0.2s;
-}
-.search-btn:hover { background: #b18d63; }
 /* NAV LINKS */
 .nav-links a {
     margin-left: 22px;

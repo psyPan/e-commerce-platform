@@ -127,19 +127,21 @@
     margin-bottom: 20px;
 }
 .page-btn {
-    padding: 8px 14px;
-    background: #f3e8dd;
-    color: #43341e;
-    border-radius: 8px;
+    padding: 12px 28px;
+    border-radius: 16px;
+    font-weight: 500;
     text-decoration: none;
-    font-size: 14px;
-    transition: 0.2s;
+    transition: background 0.2s;
+    background: #1a1a1a;;
+    color: #fff;
+    border: none;
+    outline: none;
+    box-shadow: none;
 }
 .page-btn:hover {
     background: #e2d2c2;
 }
 .page-btn.active {
-    background: #c9a876;
     color: white;
     cursor: default;
 }
