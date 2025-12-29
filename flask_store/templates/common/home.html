@@ -1,6 +1,6 @@
 {% extends "/common/base.html" %}
 {% block content %}
-<link rel="stylesheet" href="{{ url_for('static', filename='style/customer/home.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='style/common/home.css') }}">
 <div class="container-fluid">
     <div class="slider-viewport">
         <div class="slider-track" id="sliderTrack">
@@ -52,26 +52,28 @@
         {% endfor %}
     </div>
 
-    <div class="pagination">
+    <!-- Pagination Controls -->
+    <div class="pagination-controls">
         {% if pagination.has_prev %}
-            <a href="{{ url_for('main.home', page=pagination.prev_num) }}" class="pg-btn">«</a>
+            <a href="{{ url_for('discounts.add_discount', page=pagination.prev_num) }}" class="page-btn">Previous</a>
         {% endif %}
         
         {% for page_num in pagination.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
             {% if page_num %}
                 {% if page_num == pagination.page %}
-                    <a class="pg-btn active">{{ page_num }}</a>
+                    <span class="page-btn active">{{ page_num }}</span>
                 {% else %}
-                    <a href="{{ url_for('main.home', page=page_num) }}" class="pg-btn">{{ page_num }}</a>
+                    <a href="{{ url_for('discounts.add_discount', page=page_num) }}" class="page-btn">{{ page_num }}</a>
                 {% endif %}
             {% else %}
-                <span>...</span>
+                <span class="page-ellipsis">...</span>
             {% endif %}
         {% endfor %}
         
         {% if pagination.has_next %}
-            <a href="{{ url_for('main.home', page=pagination.next_num) }}" class="pg-btn">»</a>
+            <a href="{{ url_for('discounts.add_discount', page=pagination.next_num) }}" class="page-btn">Next</a>
         {% endif %}
     </div>
+
 <script src="{{ url_for('static', filename='script/home.js') }}"></script>
 {% endblock content %}

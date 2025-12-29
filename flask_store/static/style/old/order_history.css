@@ -1,12 +1,12 @@
 /* ===== LAYOUT ===== */
 
 /* ===== FONT CONSISTENCY ===== */
-.profile-card,
-.profile-card * {
+.dashboard-card,
+.dashboard-card * {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.profile-card,
+.dashboard-card,
 .card-list {
     width: 800px;
     max-width: 800px;
@@ -55,7 +55,7 @@
     justify-content: center;
 }
 
-.profile-card {
+.dashboard-card {
     width: 890px;
     max-width: 890px;
     background: rgba(255, 255, 255, 0.35);
@@ -73,7 +73,7 @@
 }
 
 /* TITLE */
-.profile-title {
+.dashboard-title {
     font-size: 28px;
     font-weight: 700;
     color: #43341e;
@@ -90,14 +90,14 @@
     gap: 22px;
 }
 
-.profile-form-row {
+.dashboard-form-row {
     display: grid;
     grid-template-columns: 170px 1fr;
     align-items: center;
     gap: 18px;
 }
 
-.profile-form-row label {
+.dashboard-form-row label {
     font-weight: 600;
     color: #555;
 }
@@ -110,7 +110,7 @@
 }
 
 /* ===== BUTTONS ===== */
-.profile-actions-form {
+.action-buttons-form {
     position: absolute;
     right: 45px;
     bottom: 35px;
@@ -127,7 +127,7 @@
     cursor: pointer;
 }
 
-.btn-gold {
+.save-btn {
     background: #c9a876;
     color: white;
     padding: 12px 30px;
@@ -136,7 +136,7 @@
     cursor: pointer;
 }
 
-.btn-gold:hover {
+.save-btn:hover {
     background: #b89763;
 }
 
@@ -150,7 +150,7 @@
     margin-bottom: 28px;       /* 🔥 JARAK KE ORDER */
 }
 
-.credit-title {
+.dashboard-title {
     font-size: 28px;
     font-weight: 700;
     color: #43341e;

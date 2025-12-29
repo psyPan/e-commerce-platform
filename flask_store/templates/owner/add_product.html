@@ -2,11 +2,10 @@
 
 {% block product %}
 <link rel="stylesheet" href="{{ url_for('static', filename='style/owner/product.css') }}">
-<div class="profile-card" id="productBox">
-    <h1 class="profile-title">Product Management</h1>
-
+<div class="dashboard-card" id="productBox">
     <!-- Search and Filter Bar -->
     <div class="search-filter-bar">
+        <h1 class="dashboard-title">Product Management</h1>
         <form method="GET" action="{{ url_for('products.add_product') }}" class="search-form">
             <select name="filter_by" class="filter-dropdown">
                 <option value="all">All Products</option>
@@ -72,16 +71,16 @@
         {% endif %}
     </div>
     <!-- ================= ADD PRODUCT BUTTON ================= -->
-    <div class="profile-actions profile-actions-view">
+    <div class="action-buttons action-buttons-view">
         <button class="edit-btn" onclick="enterAdd()">Add a Product</button>
     </div>
     <!-- ================= ADD PRODUCT FORM ================= -->
     <div class="form-container">
-        <form method="POST" class="profile-form" id="addProductForm" enctype="multipart/form-data" action="">
-            <h1 class="profile-title">Add Product</h1>
+        <form method="POST" class="dashboard-form" id="addProductForm" enctype="multipart/form-data" action="">
+            <h1 class="dashboard-title">Add Product</h1>
             {{ form.hidden_tag() }}
             <!-- Product Name -->
-            <div class="profile-form-row">
+            <div class="dashboard-form-row">
                 {{ form.name.label(class="form-label") }}
                 {% if form.name.errors %}
                     {{ form.name(class="form-input is-invalid") }}
@@ -95,7 +94,7 @@
                 {% endif %}
             </div>
             <!-- Product image -->
-            <div class="profile-form-row">
+            <div class="dashboard-form-row">
                 {{ form.image.label() }}
                 {{ form.image(class="form-control-file")}}
                 {% if form.image.errors %}
@@ -105,7 +104,7 @@
                 {% endif%}
             </div>
             <!-- Buying Price -->
-            <div class="profile-form-row">
+            <div class="dashboard-form-row">
                 {{ form.buy_price.label(class="form-label") }}
                 {% if form.buy_price.errors %}
                     {{ form.buy_price(class="form-input is-invalid") }}
@@ -119,7 +118,7 @@
                 {% endif %}
             </div>
             <!-- Selling Price -->
-            <div class="profile-form-row">
+            <div class="dashboard-form-row">
                 {{ form.sell_price.label(class="form-label") }}
                 {% if form.sell_price.errors %}
                     {{ form.sell_price(class="form-input is-invalid") }}
@@ -133,7 +132,7 @@
                 {% endif %}
             </div>
             <!-- Product type -->
-            <div class="profile-form-row">
+            <div class="dashboard-form-row">
                 {{ form.type.label(class="form-label") }}
                 {% if form.type.errors %}
                     {{ form.type(class="form-input is-invalid") }}
@@ -147,7 +146,7 @@
                 {% endif %}
             </div>
             <!-- In stock quantity -->
-            <div class="profile-form-row">
+            <div class="dashboard-form-row">
                 {{ form.stock.label(class="form-label") }}
                 {% if form.stock.errors %}
                     {{ form.stock(class="form-input is-invalid") }}
@@ -161,7 +160,7 @@
                 {% endif %}
             </div>
             <!-- Manufacturer -->
-            <div class="profile-form-row">
+            <div class="dashboard-form-row">
                 {{ form.manufacturer.label(class="form-label") }}
                 {% if form.manufacturer.errors %}
                     {{ form.manufacturer(class="form-input is-invalid") }}
@@ -175,7 +174,7 @@
                 {% endif %}
             </div>
             <!-- Model -->
-            <div class="profile-form-row">
+            <div class="dashboard-form-row">
                 {{ form.model.label(class="form-label") }}
                 {% if form.model.errors %}
                     {{ form.model(class="form-input is-invalid") }}
@@ -189,7 +188,7 @@
                 {% endif %}
             </div>
             <!-- Discount_code -->
-            <div class="profile-form-row">
+            <div class="dashboard-form-row">
                 {{ form.discount_code.label(class="form-label") }}
                 {% if form.discount_code.errors %}
                     {{ form.discount_code(class="form-input is-invalid") }}
@@ -203,7 +202,7 @@
                 {% endif %}
             </div>
             <!-- Description -->
-            <div class="profile-form-row">
+            <div class="dashboard-form-row">
                 {{ form.description.label(class="form-label") }}
                 {% if form.description.errors %}
                     {{ form.description(class="form-input is-invalid") }}
@@ -216,9 +215,9 @@
                     {{ form.description(class="profile-input") }}
                 {% endif %}
             </div>
-            <div class="profile-actions profile-actions-form">
+            <div class="action-buttons action-buttons-form">
                 <button type="button" class="cancel-btn" onclick="exitAdd()">Cancel</button>
-                {{ form.save(class="btn-gold") }}
+                {{ form.save(class="save-btn") }}
             </div>
         </form>
     </div>

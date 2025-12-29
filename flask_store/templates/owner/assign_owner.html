@@ -1,12 +1,12 @@
 {% extends "/owner/base_dashboard.html" %}
 
 {% block assign_owner %}
-<div class="profile-card editing" id="storeBox">
+<div class="dashboard-card editing" id="storeBox">
     <div class="form-container">
-        <form method="POST" class="profile-form" id="addProductForm" enctype="multipart/form-data" action="">
-            <h1 class="profile-title">Edit Store</h1>
+        <form method="POST" class="dashboard-form" id="addProductForm" enctype="multipart/form-data" action="">
+            <h1 class="dashboard-title">Edit Store</h1>
             {{ form.hidden_tag() }}
-            <div class="profile-form-row">
+            <div class="dashboard-form-row">
                 {{ form.owner_email.label(class="form-label") }}
                 {% if form.owner_email.errors %}
                     {{ form.owner_email(class="form-input is-invalid") }}
@@ -19,7 +19,7 @@
                     {{ form.owner_email(class="profile-input") }}
                 {% endif %}
             </div>
-            <div class="profile-form-row">
+            <div class="dashboard-form-row">
                 {{ form.store_id.label(class="form-label") }}
                 {% if form.store_id.errors %}
                     {{ form.store_id(class="form-input is-invalid") }}
@@ -32,9 +32,9 @@
                     {{ form.store_id(class="profile-input") }}
                 {% endif %}
             </div>
-            <div class="profile-actions profile-actions-form">
+            <div class="action-buttons action-buttons-form">
                 <button type="button" class="cancel-btn" onclick="clearForm()">Cancel</button>
-                {{ form.submit(class="btn-gold") }}
+                {{ form.submit(class="save-btn") }}
             </div>
         </form>
     </div>
