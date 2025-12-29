@@ -480,3 +480,65 @@ def delete_card(card_id):
     
     flash('Card removed.', 'info')
     return redirect(url_for('users.credit'))
+
+#admin user management
+@users.route("/user_management")
+@login_required
+def user_management():
+    filter_by = request.args.get('filter_by', 'all')
+    search = request.args.get('search', '').strip()
+
+    query = (
+        db.session.query(User, Store)
+        .outerjoin(Store, User.store_id == Store.id)
+    )
+
+    # ======================
+    # FILTER USER TYPE
+    # ======================
+    if filter_by == 'administrator':
+        query = query.filter(User.a_flag == True)
+    elif filter_by == 'owner':
+        query = query.filter(User.o_flag == True)
+    elif filter_by == 'customer':
+        query = query.filter(User.c_flag == True)
+
+    # ======================
+    # SEARCH
+    # ======================
+    if search:
+        query = query.filter(
+            or_(
+                User.f_name.ilike(f'%{search}%'),
+                User.l_name.ilike(f'%{search}%'),
+                User.email.ilike(f'%{search}%'),
+                Store.name.ilike(f'%{search}%')
+            )
+        )
+
+    users = query.order_by(User.id).all()
+
+    # ======================
+    # FORMAT DATA FOR TEMPLATE
+    # ======================
+    user_list = []
+    for user, store in users:
+        if user.a_flag:
+            user_type = "Administrator"
+        elif user.o_flag:
+            user_type = "Owner"
+        else:
+            user_type = "Customer"
+
+        user_list.append({
+            "id": user.id,
+            "name": f"{user.f_name} {user.l_name}",
+            "email": user.email,
+            "type": user_type,
+            "store_name": store.name if store else " "
+        })
+
+    return render_template(
+        "admin/user_management.html",
+        users=user_list
+    )

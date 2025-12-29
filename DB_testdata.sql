@@ -84,31 +84,37 @@ VALUES (3, '2024-12-01', '2024-12-31');
    ===================================================== */
 INSERT INTO product
 (name, description, image, buy_price, sell_price, stock,
- manufacturer, type, model, store_id, discount_id)
+ manufacturer, type, model, is_active, is_deleted, store_id, discount_id)
 VALUES
 ('iPhone 14', 'Apple smartphone 128GB',
  'iphone14.jpg',
- 20000, 28900, 15, 'Apple', 'Smartphone', 'iPhone14', 1, 3),
+ 20000, 28900, 15, 'Apple', 'Smartphone', 'iPhone14',
+ TRUE, FALSE, 1, 3),
 
 ('Samsung Galaxy S23', 'Android smartphone flagship',
  'samsung_s23.jpg',
- 18000, 25900, 20, 'Samsung', 'Smartphone', 'S23', 1, NULL),
+ 18000, 25900, 20, 'Samsung', 'Smartphone', 'S23',
+ TRUE, FALSE, 1, NULL),
 
 ('MacBook Air M2', 'Apple laptop M2 chip',
  'macbook_air_m2.jpg',
- 30000, 38900, 10, 'Apple', 'Laptop', 'MBA-M2', 2, 3),
+ 30000, 38900, 10, 'Apple', 'Laptop', 'MBA-M2',
+ TRUE, FALSE, 2, 3),
 
 ('Dell XPS 13', 'Ultrabook laptop',
  'dell_xps_13.jpg',
- 28000, 36500, 8, 'Dell', 'Laptop', 'XPS13', 2, NULL),
+ 28000, 36500, 8, 'Dell', 'Laptop', 'XPS13',
+ TRUE, FALSE, 2, NULL),
 
 ('Logitech M185', 'Bluetooth mouse',
  'mouse_logitech_m185.jpg',
- 300, 690, 50, 'Logitech', 'Accessory', 'M185', 1, 2),
+ 300, 690, 50, 'Logitech', 'Accessory', 'M185',
+ TRUE, FALSE, 1, 2),
 
 ('USB-C Charger Anker', '65W fast charger',
  'usb_c_charger_anker.jpg',
- 500, 1200, 40, 'Anker', 'Accessory', 'ANK-65W', 2, 2);
+ 500, 1200, 40, 'Anker', 'Accessory', 'ANK-65W',
+ TRUE, FALSE, 2, 2);
 
 /* =====================================================
    6. CART
