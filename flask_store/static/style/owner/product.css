@@ -242,3 +242,95 @@
     padding: 8px;
     color: #888;
 }
+/* ===== PRODUCT ACTIONS ===== */
+.product-actions {
+    margin-top: 10px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.delete-product-btn {
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: 2px solid #dc3545;
+    background: white;
+    color: #dc3545;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-block;
+    margin: 20px;
+}
+
+.delete-product-btn:hover {
+    background: #dc3545;
+    color: white;
+    transform: translateY(-2px);
+}
+
+.delete-product-btn:active {
+    transform: translateY(0);
+}
+
+/* ===== PRODUCT ACTIONS ===== */
+.product-actions {
+    margin-top: 10px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.delete-product-btn {
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: 2px solid #dc3545;
+    background: white;
+    color: #dc3545;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+.delete-product-btn:hover {
+    background: #dc3545;
+    color: white;
+    transform: translateY(-2px);
+}
+
+.delete-product-btn:active {
+    transform: translateY(0);
+}
+
+/* ===== DELETED PRODUCT STYLING ===== */
+.product-item {
+    position: relative;
+}
+
+.product-item.product-deleted {
+    opacity: 0.6;
+    background: #f8f8f8;
+}
+
+.deleted-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #dc3545;
+    color: white;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 700;
+    z-index: 10;
+    text-transform: uppercase;
+}
+
+.deleted-text {
+    color: #6c757d;
+    font-size: 13px;
+    font-style: italic;
+}

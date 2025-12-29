@@ -31,15 +31,20 @@ def add_product():
     if search_query:
         query = query.filter(Product.name.contains(search_query))
     
-    # Apply category filter
-    if filter_by == 'in_stock':
+    # Apply filters
+    if filter_by == 'active':
+        query = query.filter(Product.is_active)
+    elif filter_by == 'deleted':
+        query = query.filter(Product.is_deleted)
+    elif filter_by == 'in_stock':
         query = query.filter(Product.stock > 0)
     elif filter_by == 'out_of_stock':
         query = query.filter(Product.stock == 0)
     elif filter_by == 'with_discount':
-        query = query.filter(Product.discount_id != None)
+        query = query.filter(Product.discount_obj != None)
     elif filter_by == 'no_discount':
-        query = query.filter(Product.discount_id == None)
+        query = query.filter(Product.discount_obj == None)
+    # 'all' shows both active and deleted
     
     # Paginate
     products_pagination = query.paginate(page=page, per_page=5, error_out=False)
@@ -105,14 +110,14 @@ def delete_product(product_id):
     # Check ownership
     if current_user.store_id != product.store_id:
         flash('Unauthorized', 'danger')
-        return redirect(url_for('products.list'))
+        return redirect(url_for('products.add_product'))
     
     # Soft delete
     product.soft_delete()
     db.session.commit()
     
     flash('Product deleted successfully', 'success')
-    return redirect(url_for('products.list'))
+    return redirect(url_for('products.add_product'))
 
 
 @products.route('/search')

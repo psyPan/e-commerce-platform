@@ -34,17 +34,19 @@
             <div class="display-box">
                 <div class="products-scroll">
                     {% for product in store.products %}
-                    <a href="{{ url_for('products.view_product', product_id=product.id) }}" class="product-card-link">
-                        <div class="product-card">
-                            <div class="product-image">
-                                <img src="{{ url_for('static', filename='product_pics/' + (product.image if product.image else 'default.jpg')) }}" alt="{{ product.name }}">
+                        {% if product.is_active %}
+                        <a href="{{ url_for('products.view_product', product_id=product.id) }}" class="product-card-link">
+                            <div class="product-card">
+                                <div class="product-image">
+                                    <img src="{{ url_for('static', filename='product_pics/' + (product.image if product.image else 'default.jpg')) }}" alt="{{ product.name }}">
+                                </div>
+                                <div class="product-info">
+                                    <div class="product-name">{{ product.name }}</div>
+                                    <div class="product-price">${{ "%.0f"|format(product.sell_price) }}</div>
+                                </div>
                             </div>
-                            <div class="product-info">
-                                <div class="product-name">{{ product.name }}</div>
-                                <div class="product-price">${{ "%.0f"|format(product.sell_price) }}</div>
-                            </div>
-                        </div>
-                    </a>
+                        </a>
+                        {% endif %}
                     {% endfor %}
                 </div>
             </div>

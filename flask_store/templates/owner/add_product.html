@@ -8,11 +8,13 @@
         <h1 class="dashboard-title">Product Management</h1>
         <form method="GET" action="{{ url_for('products.add_product') }}" class="search-form">
             <select name="filter_by" class="filter-dropdown">
-                <option value="all">All Products</option>
-                <option value="in_stock">In Stock</option>
-                <option value="out_of_stock">Out of Stock</option>
-                <option value="with_discount">With Discount</option>
-                <option value="no_discount">No Discount</option>
+                <option value="all" {% if request.args.get('filter_by') == 'all' %}selected{% endif %}>All Products</option>
+                <option value="active" {% if request.args.get('filter_by') == 'active' %}selected{% endif %}>Active Products</option>
+                <option value="deleted" {% if request.args.get('filter_by') == 'deleted' %}selected{% endif %}>Deleted Products</option>
+                <option value="in_stock" {% if request.args.get('filter_by') == 'in_stock' %}selected{% endif %}>In Stock</option>
+                <option value="out_of_stock" {% if request.args.get('filter_by') == 'out_of_stock' %}selected{% endif %}>Out of Stock</option>
+                <option value="with_discount" {% if request.args.get('filter_by') == 'with_discount' %}selected{% endif %}>With Discount</option>
+                <option value="no_discount" {% if request.args.get('filter_by') == 'no_discount' %}selected{% endif %}>No Discount</option>
             </select>
             
             <div class="search-box">
@@ -24,7 +26,10 @@
     <!-- ================= PRODUCT LIST ================= -->
     <div class="product-view">
         {% for product in products %}
-        <div class="product-item">
+        <div class="product-item {% if product.deleted_at %}product-deleted{% endif %}">
+            {% if product.deleted_at %}
+            <div class="deleted-badge">Deleted</div>
+            {% endif %}
             <div class="product-image">
                 {% if product.image %}
                     <img src="{{ url_for('static', filename='product_pics/' + product.image) }}" alt="{{ product.name }}">
@@ -43,6 +48,17 @@
                     {% endif %}
                 </p>
                 <p class="product-price">${{ "%.0f"|format(product.sell_price) }}</p>
+            </div>
+            <div class="product-actions">
+                {% if not product.deleted_at %}
+                <a href="{{ url_for('products.delete_product', product_id=product.id) }}" 
+                   class="delete-product-btn" 
+                   onclick="return confirm('Are you sure you want to delete {{ product.name }}?');">
+                    Delete
+                </a>
+                {% else %}
+                <span class="deleted-text">Deleted on {{ product.deleted_at.strftime('%Y-%m-%d') }}</span>
+                {% endif %}
             </div>
         </div>
         {% endfor %}
