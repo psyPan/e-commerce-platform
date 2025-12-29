@@ -29,18 +29,21 @@
     
 
         <!-- SEARCH only HOME TODO: --> 
-        {% if request.endpoint == 'users.home' %}
+        {% if request.endpoint == 'users.home' or request.endpoint == 'products.search_results' %}
         <div class="search-container">
-            {% if request.endpoint == 'users.home' %}
-            <form action="{{ url_for('users.home') }}" method="GET" class="search-form">
-                <input type="text" name="q" class="search-box" placeholder="Search...">
-                <button type="submit" class="search-btn">🔍</button>
+            <form action="{{ url_for('products.search_results') }}" method="GET" class="search-form">
+                <input 
+                    type="text" 
+                    name="q" 
+                    class="search-box" 
+                    placeholder="Search products..." 
+                    value="{{ request.args.get('q', '') }}">
+                
+                <button type="submit" class="search-btn">
                     <i class="fa-solid fa-magnifying-glass"></i>
                 </button>
             </form>
-            {% endif %}
         </div>
-        
         {% endif %}
 
         <div class="nav-links">

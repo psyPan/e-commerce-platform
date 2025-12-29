@@ -113,3 +113,37 @@ def delete_product(product_id):
     
     flash('Product deleted successfully', 'success')
     return redirect(url_for('products.list'))
+
+
+@products.route('/search')
+def search_results():
+    query = request.args.get('q', '')
+    min_price = request.args.get('min_price')
+    max_price = request.args.get('max_price')
+    sort_by = request.args.get('sort_by')
+
+    # Base query
+    products_query = Product.query
+
+    # 1. Apply Search Term (Filter by name or description)
+    if query:
+        products_query = products_query.filter(Product.name.ilike(f'%{query}%'))
+
+    # 2. Apply Price Filters
+    if min_price:
+        products_query = products_query.filter(Product.price >= float(min_price))
+    if max_price:
+        products_query = products_query.filter(Product.price <= float(max_price))
+
+    # 3. Apply Sorting
+    if sort_by == 'price_low':
+        products_query = products_query.order_by(Product.price.asc())
+    elif sort_by == 'price_high':
+        products_query = products_query.order_by(Product.price.desc())
+    elif sort_by == 'newest':
+        products_query = products_query.order_by(Product.date_added.desc())
+
+    # Execute query
+    results = products_query.all()
+
+    return render_template('common/search_results.html', products=results)

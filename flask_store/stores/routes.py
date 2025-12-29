@@ -207,33 +207,33 @@ def store_deals(store_id):
                          products=products)
 
 
-@stores.route('/search')
-def global_search():
-    """Search across all stores and products"""
-    query = request.args.get('q', '').strip()
+# @stores.route('/search')
+# def global_search():
+#     """Search across all stores and products"""
+#     query = request.args.get('q', '').strip()
     
-    if not query:
-        return redirect(url_for('stores.list_stores'))
+#     if not query:
+#         return redirect(url_for('stores.list_stores'))
     
-    products = Product.query.filter(
-        or_(
-            Product.name.ilike(f'%{query}%'),
-            Product.description.ilike(f'%{query}%'),
-            Product.manufacturer.ilike(f'%{query}%')
-        )
-    ).limit(20).all()
+#     products = Product.query.filter(
+#         or_(
+#             Product.name.ilike(f'%{query}%'),
+#             Product.description.ilike(f'%{query}%'),
+#             Product.manufacturer.ilike(f'%{query}%')
+#         )
+#     ).limit(20).all()
     
-    stores_found = Store.query.filter(
-        or_(
-            Store.name.ilike(f'%{query}%'),
-            Store.address.ilike(f'%{query}%')
-        )
-    ).limit(10).all()
-    
-    return render_template('search_results.html',
-                         query=query,
-                         products=products,
-                         stores=stores_found)
+#     stores_found = Store.query.filter(
+#         or_(
+#             Store.name.ilike(f'%{query}%'),
+#             Store.address.ilike(f'%{query}%')
+# #        )
+# #    ).limit(10).all()
+# #    
+# #    return render_template('search_results.html',
+# #                         query=query,
+# #                         products=products,
+# #                         stores=stores_found)
 
 @stores.route('/store_info', methods=['GET', 'POST'])
 @login_required
