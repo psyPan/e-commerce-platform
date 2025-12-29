@@ -81,12 +81,12 @@
 }
 
 /* Back button */
-.back-btn {
+.cancel-btn {
   background: #f3e8dd;
   color: #43341e;
 }
 
-.back-btn:hover {
+.cancel-btn:hover {
   background: #e2d2c2;
 }
 
@@ -101,18 +101,18 @@
 }
 
 /* ensure link states stay clean */
-.back-btn,
-.back-btn:visited,
-.back-btn:active,
+.cancel-btn,
+.cancel-btn:visited,
+.cancel-btn:active,
 .edit-btn,
 .edit-btn:visited,
 .edit-btn:active {
   text-decoration: none;
 }
 
-.back-btn:visited,
-.back-btn:active,
-.back-btn:focus {
+.cancel-btn:visited,
+.cancel-btn:active,
+.cancel-btn:focus {
   color: #43341e !important;
 }
 

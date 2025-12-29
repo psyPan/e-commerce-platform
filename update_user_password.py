@@ -1,12 +1,9 @@
 from flask_store import create_app, db, bcrypt
 from flask_store.users.models import User
 
-# =========================
-# POSTGRES CONFIG
-# =========================
 POSTGRES = {
     'user': 'postgres',
-    'password': 'Keren_12345',        # sesuaikan
+    'password': 'Keren_12345',
     'db': 'mystore',
     'host': 'localhost',
     'port': '5432',
@@ -14,9 +11,6 @@ POSTGRES = {
 
 app = create_app(POSTGRES)
 
-# =========================
-# PASSWORD MAPPING
-# =========================
 PASSWORD_MAP = {
     'admin@ecommerce.com': 'admin123',
     'owner1@electromart.com': 'ownerone123',
@@ -26,9 +20,6 @@ PASSWORD_MAP = {
     'customer2@gmail.com': 'custtwo123',
 }
 
-# =========================
-# UPDATE PASSWORDS
-# =========================
 with app.app_context():
     for email, plain_password in PASSWORD_MAP.items():
         user = User.query.filter_by(email=email).first()

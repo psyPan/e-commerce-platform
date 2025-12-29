@@ -6,6 +6,7 @@ POSTGRES = {
    'host':'localhost',
    'port':'5432',
 }
+
 # app = create_app()
 app = create_app(POSTGRES)
 

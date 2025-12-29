@@ -1,27 +1,17 @@
 /* =========================
    PROFILE PAGE LAYOUT
 ========================= */
-.dashboard-title,
-.dashboard-title {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    letter-spacing: -0.3px; /* bikin lebih smooth */
-}
-
 
 .dashboard-wrapper {
     max-width: 1100px;
-    margin: 5px auto;      /* 🔥 SAMA PERSIS */
+    margin: 5px auto 50px;
     display: flex;
     gap: 40px;
+    align-items: flex-start;
 }
-
-.dashboard-wrapper {
-    align-items: flex-start;   /* 🔥 INI KUNCI */
-}
-
 
 /* =========================
-   SIDE MENU
+   SIDE MENU LEFT SIDE
 ========================= */
 
 .dashboard-sidebar {
@@ -40,6 +30,7 @@
     text-align: center;
     text-decoration: none;
     transition: 0.2s;
+    font-weight: 500;
 }
 
 .dashboard-sidebar a:hover {
@@ -52,8 +43,19 @@
 }
 
 /* =========================
-   PROFILE CARD
+   DAHSBOARD CONTENT TITLE
 ========================= */
+.dashboard-title{
+    font-size: 28px;
+    font-weight: 700;
+    color: #43341e;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* ==============================
+   DASHBOARD CONTENT RIGHT SIDE
+============================== */
 
 .dashboard-content {
     flex: 1;
@@ -61,17 +63,19 @@
     justify-content: center;
 }
 
+/* ==============================
+   DASHBOARD CONTENT AREA
+============================== */
+
 .dashboard-card {
     width: 890px;
     background: rgba(255, 255, 255, 0.35);
     padding: 40px 45px;
     border-radius: 30px;
-
-    height: 480px;        /* 🔥 SAMAIN DENGAN CREDIT CARD */
-    min-height: 0;        /* 🔥 MATIKAN min-height */
+    height: 480px;
+    min-height: 0;
     position: relative;
-
-    display: flex;        /* 🔥 BIAR DALAMNYA KEKONTROL */
+    display: flex;
     flex-direction: column;
 }
 
@@ -81,25 +85,8 @@
     min-height: 0;
 }
 
-.dashboard-title {
-    margin-bottom: 24px;   /* jangan gede2 */
-}
-
-
 /* =========================
-   TITLE
-========================= */
-
-.dashboard-title {
-    font-size: 28px;
-    font-weight: 700;
-    color: #43341e;
-    text-align: center;
-    margin-bottom: 32px;
-}
-
-/* =========================
-   PROFILE VIEW
+    VIEW
 ========================= */
 
 .dashboard-view {
@@ -110,8 +97,7 @@
     display: grid;
     grid-template-columns: 150px 1fr;
     column-gap: 40px;
-    padding: 14px 0;
-    border-bottom: 1px solid #eee;
+    padding: 12px 0;
 }
 
 .profile-row span {
@@ -122,8 +108,15 @@
 
 .profile-row p {
     margin: 0;
+    font-weight: 500;
     font-size: 15px;
-    color: #333;
+    color: #000;
+}
+
+.owners-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
 }
 
 /* =========================
@@ -150,21 +143,17 @@
 }
 
 .dashboard-form-row {
-    display: grid;
-    grid-template-columns: 140px 1fr;
-    gap: 16px;
     align-items: center;
-}
-
-.dashboard-form-row.two-col {
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
+    display: grid;
+    grid-template-columns: 150px 1fr;
+    column-gap:30px;
+    padding: 3px 0;
 }
 
 .dashboard-form-row label {
     font-weight: 600;
-    font-size: 14px;
     color: #555;
+    font-size: 15px;
 }
 
 .profile-input {
@@ -173,6 +162,7 @@
     border: 1px solid #ddd;
     font-size: 14px;
     width: 100%;
+    box-sizing: border-box;
 }
 
 .profile-input:focus {
@@ -180,60 +170,92 @@
     border-color: #c9a876;
 }
 
+.invalid-feedback {
+    grid-column: 1 / -1;
+    color: #dc2626;
+    font-size: 13px;
+    margin-top: 4px;
+}
+
 /* =========================
    ACTION BUTTONS
 ========================= */
 
 .action-buttons {
-    margin-top: 50px;      /* 🔥 DORONG KE BAWAH TANPA ABSOLUTE */
+    margin-top: auto;
     display: flex;
     justify-content: flex-end;
-    gap: 14px;
+    gap: 16px;
+    padding-top: 30px;
 }
 
 /* Edit button */
 .edit-btn {
-    background: #c9a876;
-    color: white;
-    padding: 12px 26px;
+    padding: 12px 28px;
     border-radius: 16px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background 0.2s;
+    background: #c9a876;
+    color: #ffffff;
     border: none;
-    font-size: 15px;
-    cursor: pointer;
+    outline: none;
+    box-shadow: none;
 }
 
 .edit-btn:hover {
-    background: #b89763;
+  background: #b08d5c;
 }
 
 /* Cancel */
 .cancel-btn {
-    background: #e0e0e0;
-    color: #333;
-    padding: 12px 26px;
+    padding: 12px 28px;
     border-radius: 16px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background 0.2s;
+    background: #d6d6d6;
+    color: #333;
     border: none;
-    font-size: 15px;
-    cursor: pointer;
+    outline: none;
+    box-shadow: none;
+}
+
+.cancel-btn:hover {
+  background: #e2d2c2;
 }
 
 /* Save */
 .save-btn {
-    background: #c9a876;
-    color: white;
-    padding: 12px 30px;
+    padding: 12px 28px;
     border-radius: 16px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background 0.2s;
+    background: #4477b2;
+    color: #fff;
     border: none;
-    font-size: 15px;
-    font-weight: 600;
-    cursor: pointer;
-}
-
-.save-btn:hover {
-    background: #b89763;
+    outline: none;
+    box-shadow: none;
 }
 
 /* Hide Edit button in edit mode */
 .dashboard-card.editing .action-buttons-view {
     display: none;
+}
+
+/* ensure link states stay clean */
+.cancel-btn,
+.cancel-btn:visited,
+.cancel-btn:active,
+.edit-btn,
+.edit-btn:visited,
+.edit-btn:active {
+  text-decoration: none;
+}
+
+.cancel-btn:visited,
+.cancel-btn:active,
+.cancel-btn:focus {
+  color: #43341e;
 }

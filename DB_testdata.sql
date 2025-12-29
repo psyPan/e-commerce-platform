@@ -1,6 +1,3 @@
-/* =====================================================
-   CLEAN START
-   ===================================================== */
 TRUNCATE
 reviews,
 line_item,
@@ -17,7 +14,7 @@ RESTART IDENTITY CASCADE;
 
 
 /* =====================================================
-   1. STORE (Electronics Shops)
+   1. STORE
    ===================================================== */
 INSERT INTO store (name, email, phone, balance) VALUES
 ('ElectroMart', 'support@electromart.com', '0912345678', 150000),
@@ -35,15 +32,13 @@ VALUES
 ('Harrison', 'Mckinney', 'admin@ecommerce.com', 'admin123', '0910000001',
  '1990-01-15', 'Taipei', TRUE, FALSE, FALSE, NULL),
 
--- Store Owners (STORE 1 → ElectroMart)
+-- Store Owners
 ('Hudson', 'Smith', 'owner1@electromart.com', 'ownerone123', '0920000002',
  '1988-05-20', 'Taichung', FALSE, TRUE, FALSE, 1),
 
--- SECOND OWNER FOR SAME STORE (ElectroMart)
 ('Daniel', 'Tan', 'owner2@electromart.com', 'ownertwo123', '0968888888',
  '1992-08-12', 'Taipei', FALSE, TRUE, FALSE, 1),
 
--- Store Owner (STORE 2 → Gadget World)
 ('Sophia', 'Wilson', 'owner3@gadgetworld.com', 'owner12345', '0930000003',
  '1991-05-17', 'Kaohsiung', FALSE, TRUE, FALSE, 2),
 
@@ -85,30 +80,35 @@ VALUES (3, '2024-12-01', '2024-12-31');
 
 
 /* =====================================================
-   5. PRODUCT (Electronics)
+   5. PRODUCT
    ===================================================== */
 INSERT INTO product
-(name, description, buy_price, sell_price, stock,
+(name, description, image, buy_price, sell_price, stock,
  manufacturer, type, model, store_id, discount_id)
 VALUES
 ('iPhone 14', 'Apple smartphone 128GB',
+ 'iphone14.jpg',
  20000, 28900, 15, 'Apple', 'Smartphone', 'iPhone14', 1, 3),
 
 ('Samsung Galaxy S23', 'Android smartphone flagship',
+ 'samsung_s23.jpg',
  18000, 25900, 20, 'Samsung', 'Smartphone', 'S23', 1, NULL),
 
 ('MacBook Air M2', 'Apple laptop M2 chip',
+ 'macbook_air_m2.jpg',
  30000, 38900, 10, 'Apple', 'Laptop', 'MBA-M2', 2, 3),
 
 ('Dell XPS 13', 'Ultrabook laptop',
+ 'dell_xps_13.jpg',
  28000, 36500, 8, 'Dell', 'Laptop', 'XPS13', 2, NULL),
 
-('Wireless Mouse', 'Bluetooth mouse',
+('Logitech M185', 'Bluetooth mouse',
+ 'mouse_logitech_m185.jpg',
  300, 690, 50, 'Logitech', 'Accessory', 'M185', 1, 2),
 
-('USB-C Charger', '65W fast charger',
+('USB-C Charger Anker', '65W fast charger',
+ 'usb_c_charger_anker.jpg',
  500, 1200, 40, 'Anker', 'Accessory', 'ANK-65W', 2, 2);
-
 
 /* =====================================================
    6. CART

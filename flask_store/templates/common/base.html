@@ -20,7 +20,11 @@
         <!-- LOGO (no in login/register/logout) -->
         {% if request.endpoint not in ['users.login', 'users.register', 'users.logout'] %}
             <div class="logo">
-                <a href="{{ url_for('users.home') }}">Our Logo</a>
+                <a href="{{ url_for('users.home') }}">
+                    <img src="{{ url_for('static', filename='img/logo.png') }}"
+                        alt="E-ShopHub"
+                        class="navbar-logo">
+                </a>
             </div>
         {% endif %}
 

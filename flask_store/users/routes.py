@@ -20,7 +20,7 @@ users = Blueprint('users', __name__)
 def home():
     page = request.args.get('page', 1, type=int)
     stores_pagination = Store.query.paginate(page=page, per_page=5, error_out=False)
-    return render_template('/customer/home.html', title='Home', stores=stores_pagination.items, pagination=stores_pagination)
+    return render_template('/common/home.html', title='Home', stores=stores_pagination.items, pagination=stores_pagination)
 
 @users.route('/register', methods=['GET', 'POST'])
 def register():
@@ -34,7 +34,7 @@ def register():
         db.session.commit()
         flash('Your account has been created! You are now able to log in', 'success')
         return redirect(url_for('users.login'))
-    return render_template('old/register.html',title='Register', form=form)
+    return render_template('common/register.html',title='Register', form=form)
 
 @users.route('/register_owner', methods=['GET', 'POST'])
 @login_required
@@ -57,7 +57,7 @@ def register_owner():
             db.session.rollback()
             flash('An error occurred while creating the owner account.', 'danger')
             return render_template('old/test_product.html', form=form)
-    return render_template('old/register.html',title='Register Owner', form=form)
+    return render_template('common/register.html',title='Register Owner', form=form)
 
 @users.route('/login', methods=['GET', 'POST'])
 def login():
@@ -72,7 +72,7 @@ def login():
             return redirect(next_page) if next_page else redirect(url_for('users.home'))
         else:
             flash('Login Unsuccessful. Please check email and password', 'danger')
-    return render_template('old/login.html', title='Login', form=form)
+    return render_template('common/login.html', title='Login', form=form)
 
 @users.route('/logout')
 def logout():

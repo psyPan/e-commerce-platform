@@ -33,6 +33,7 @@ body {
     color: white;
     margin-bottom: 40px;
 }
+
 .logo a {
     font-size: 22px;
     font-weight: 700;
@@ -40,6 +41,13 @@ body {
     text-decoration: none;
     transition: 0.2s;
 }
+
+.navbar-logo {
+    height: 50px;
+    width: auto;
+    display: block;
+}
+
 /* SEARCH BAR */
 .search-container {
     /* --- NEW CENTERING LOGIC --- */

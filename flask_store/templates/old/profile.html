@@ -4,9 +4,9 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='style/old/home.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='style/old/profile.css') }}">
 
-<div class="profile-wrapper">
+<div class="dashboard-wrapper">
 
-    <div class="profile-sidebar">
+    <div class="dashboard-sidebar">
         <a class="side-btn active" href="{{ url_for('users.profile') }}">My Profile</a>
         <a class="side-btn" href="{{ url_for('users.credit') }}">My Credit Card</a>
         <a class="side-btn" href="{{ url_for('users.change_password') }}">Change Password</a>
@@ -14,12 +14,12 @@
         <a class="side-btn" href="{{ url_for('cart.My_cart') }}">My Cart</a>
     </div>
 
-    <div class="profile-content">
+    <div class="dashboard-content">
 
-        <div class="profile-card {% if form.errors %}editing{% endif %}" id="profileBox">
-            <h1 class="profile-title">My Profile</h1>
+        <div class="dashboard-card {% if form.errors %}editing{% endif %}" id="profileBox">
+            <h1 class="dashboard-title">My Profile</h1>
 
-            <div class="profile-view">
+            <div class="dashboard-view">
                 <div class="profile-row">
                     <span>Full Name</span>
                     <p>{{ current_user.f_name }} {{ current_user.l_name }}</p>
@@ -42,14 +42,14 @@
                 </div>
             </div>
 
-            <div class="profile-actions profile-actions-view">
+            <div class="action-buttons action-buttons-view">
                 <button type="button" class="edit-btn" onclick="enterEdit()">Edit Profile</button>
             </div>
 
-            <form method="POST" class="profile-form" action="{{ url_for('users.update_profile') }}">
+            <form method="POST" class="dashboard-form" action="{{ url_for('users.update_profile') }}">
                 {{ form.hidden_tag() }}
 
-                <div class="profile-form-row two-col">
+                <div class="dashboard-form-row two-col">
                     <div class="form-group">
                         {{ form.f_name.label(class="form-label") }}
                         {% if form.f_name.errors %}
@@ -79,7 +79,7 @@
                     </div>
                 </div>
 
-                <div class="profile-form-row two-col">
+                <div class="dashboard-form-row two-col">
                     <div class="form-group">
                         {{ form.email.label(class="form-label") }}
                         {% if form.email.errors %}
@@ -109,7 +109,7 @@
                     </div>
                 </div>
 
-                <div class="profile-form-row two-col">
+                <div class="dashboard-form-row two-col">
                     <div class="form-group">
                         {{ form.birth.label(class="form-label") }}
                         {% if form.birth.errors %}
@@ -139,9 +139,9 @@
                     </div>
                 </div>
 
-                <div class="profile-actions profile-actions-form">
+                <div class="action-buttons action-buttons-form">
                     <button type="button" class="cancel-btn" onclick="exitEdit()">Cancel</button>
-                    <button type="submit" class="btn-gold">Save</button>
+                    <button type="submit" class="save-btn">Save</button>
                 </div>
             </form>
         </div>
@@ -172,16 +172,16 @@ document.addEventListener('DOMContentLoaded', function() {
     /* Styles to toggle between View/Edit.
        You can move these to profile.css eventually.
     */
-    .profile-form { display: none; }
-    .profile-view { display: block; }
-    .profile-actions-view { display: block; }
-    .profile-actions-form { display: none; }
+    .dashboard-form { display: none; }
+    .dashboard-view { display: block; }
+    .action-buttons-view { display: block; }
+    .action-buttons-form { display: none; }
 
     /* When the 'editing' class is applied via JS */
-    .profile-card.editing .profile-form { display: block; }
-    .profile-card.editing .profile-view { display: none; }
-    .profile-card.editing .profile-actions-view { display: none; }
-    .profile-card.editing .profile-actions-form { display: flex; gap: 10px; justify-content: flex-end; }
+    .dashboard-card.editing .dashboard-form { display: block; }
+    .dashboard-card.editing .dashboard-view { display: none; }
+    .dashboard-card.editing .action-buttons-view { display: none; }
+    .dashboard-card.editing .action-buttons-form { display: flex; gap: 10px; justify-content: flex-end; }
     
     .invalid-feedback { color: #dc3545; font-size: 0.875em; margin-top: 0.25rem; }
     .is-invalid { border-color: #dc3545 !important; }

@@ -93,27 +93,27 @@
     gap: 15px;
 }
 /* When editing mode is active - works for both profileBox and storeBox */
-.profile-card.editing .discount-view,
+.dashboard-card.editing .discount-view,
 #storeBox.editing .discount-view {
     display: none;  /* Hide discount list */
 }
 
-.profile-card.editing .profile-form,
-#storeBox.editing .profile-form {
+.dashboard-card.editing .dashboard-form,
+#storeBox.editing .dashboard-form {
     display: flex;  /* Show form */
     flex-direction: column;
     gap: 18px;
 }
 
-.profile-card.editing .profile-actions-view,
-#storeBox.editing .profile-actions-view {
+.dashboard-card.editing .action-buttons-view,
+#storeBox.editing .action-buttons-view {
     display: none;  /* Hide "Add New Discount" button */
 }
 #storeBox.editing .pagination-controls {
     display: none;  /* Add this line */
 }
-.profile-card.editing .profile-actions-form,
-#storeBox.editing .profile-actions-form {
+.dashboard-card.editing .action-buttons-form,
+#storeBox.editing .action-buttons-form {
     display: flex;  /* Show Cancel/Save buttons */
     gap: 14px;
     justify-content: flex-end;
