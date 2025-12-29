@@ -112,6 +112,11 @@ def checkout():
             else:
                 flash('Shipping address is required.', 'danger')
                 return redirect(url_for('cart.checkout'))
+        card_id = request.form.get('card_id') # <--- GET THE SELECTED ID
+
+        if not card_id:
+            flash('Please select a payment method', 'danger')
+            return redirect(url_for('cart.checkout'))
 
         # --- VALIDATION STEP 2: STOCK CHECK (The "Look Before You Leap" Pattern) ---
         # Check ALL items before creating the order. 
@@ -121,6 +126,9 @@ def checkout():
                 flash(f'Sorry, {product.name} is out of stock (Only {product.stock} left).', 'danger')
                 return redirect(url_for('cart.My_cart'))
 
+
+
+    
         # --- PHASE 1: CREATE ORDER HEADER ---
         # Now we know we have the address AND the stock. Safe to create Order.
         new_order = Order(
@@ -128,6 +136,7 @@ def checkout():
             total_amount=grand_total,
             shipping_cost=shipping_cost,
             cust_address=address,     
+            credit_card_id=card_id, # Save the specific card
             status='received',       
             order_time=datetime.utcnow(), 
             estimated_delivery_date=datetime.utcnow().date() + timedelta(days=5),

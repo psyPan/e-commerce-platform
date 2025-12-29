@@ -12,7 +12,15 @@ from datetime import datetime, timedelta
 
 from datetime import date
 
-app = create_app()
+POSTGRES = {
+   'user':'postgres',
+   'password':'Keren_12345',
+   'db':'mystore',
+   'host':'localhost',
+   'port':'5432',
+}
+
+app = create_app(POSTGRES)
 
 with app.app_context():
     # 1. Clear existing data to start fresh

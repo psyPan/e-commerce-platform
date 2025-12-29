@@ -11,6 +11,7 @@ class Order(db.Model):
     shipping_cost = db.Column(db.Integer, nullable=False)
     cust_address = db.Column(db.String, nullable=False)
     estimated_delivery_date = db.Column(db.Date, nullable=False)
+    credit_card_id = db.Column(db.Integer, db.ForeignKey('credit_card.id'), nullable=True)
     order_time = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     completion_time = db.Column(db.DateTime, nullable=True, default=datetime.utcnow)
     # Foreign keys
@@ -33,4 +34,4 @@ class Order(db.Model):
     # Relationship to cart
     cart = db.relationship('Cart', back_populates='orders')
     items = db.relationship('LineItem', backref='order_details', lazy=True)
-
+    card = db.relationship('CreditCard', backref='orders')
