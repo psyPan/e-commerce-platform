@@ -5,7 +5,7 @@ class Cart(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     
     # 1. Quantity of this specific product
-    quantity = db.Column(db.Integer, nullable=False, default=1)
+    quantity = db.Column(db.Integer, default=1)
     
     # 2. Link to the User (Who owns this cart item?)
     # Note: Changed 'customer_id' to 'user_id' to match standard naming, 
@@ -14,7 +14,7 @@ class Cart(db.Model):
     
     # 3. Link to the Product (What is in the cart?)
     # THIS WAS MISSING in your code:
-    product_id = db.Column(db.Integer, db.ForeignKey('product.id'), nullable=False)
+    product_id = db.Column(db.Integer, db.ForeignKey('product.id'))
 
     # Optional: Date added
     date_added = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)

@@ -142,7 +142,7 @@ def view_store(store_id):
     
     owners = User.query.filter_by(store_id=store_id, o_flag=True).all()
     
-    return render_template('old/store.html', 
+    return render_template('common/store_detail.html', 
                          store=store,
                          owners=owners,
                          products=products,

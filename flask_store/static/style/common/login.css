@@ -1,4 +1,4 @@
-/* Registration Page Styling - Compact Wide Layout */
+/* Login Page Styling */
 
 .container {
     display: flex;
@@ -11,75 +11,39 @@
 .right-section {
     background: white;
     border-radius: 12px;
-    padding: 35px 45px;
+    padding: 40px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
     width: 100%;
-    max-width: 950px; /* Very wide container */
+    max-width: 450px;
     border: 1px solid rgba(0, 0, 0, 0.06);
 }
 
 .form-title {
-    font-size: 1.85rem;
+    font-size: 2rem;
     font-weight: 700;
     color: #1a1a1a;
-    margin-bottom: 8px;
+    margin-bottom: 30px;
     text-align: center;
     letter-spacing: -0.5px;
 }
 
-.form-subtitle {
-    text-align: center;
-    color: #6b7280;
-    font-size: 0.95rem;
-    margin-bottom: 30px;
-}
-
-/* Make ALL form fields display in grid - 2 columns by default */
-form {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 18px 20px;
-}
-
-/* Form rows that are already 2 columns - keep them spanning 2 columns */
-.form-row {
-    grid-column: 1 / -1; /* Span full width */
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-}
-
-/* Single full-width fields (Email, Phone, Address, DOB, Submit, Login link) */
-form > .form-group:nth-child(4),  /* Email */
-form > .form-group:nth-child(7),  /* DOB */
-form > .form-group:last-of-type,  /* Submit button */
-form > .login-link {
-    grid-column: 1 / -1; /* Span both columns */
-}
-
-/* Alternative: If you want specific fields to span full width, add this class in HTML */
-.full-width {
-    grid-column: 1 / -1;
-}
-
 .form-group {
-    display: flex;
-    flex-direction: column;
+    margin-bottom: 24px;
 }
 
 .form-label {
     display: block;
-    font-size: 0.85rem;
+    font-size: 0.9rem;
     font-weight: 600;
     color: #2c2c2c;
-    margin-bottom: 6px;
+    margin-bottom: 8px;
     letter-spacing: 0.3px;
 }
 
 .form-input {
     width: 100%;
-    padding: 10px 14px;
-    font-size: 0.9rem;
+    padding: 12px 16px;
+    font-size: 0.95rem;
     border: 1.5px solid #e0e0e0;
     border-radius: 8px;
     transition: all 0.3s ease;
@@ -97,7 +61,7 @@ form > .login-link {
 
 .form-input::placeholder {
     color: #9ca3af;
-    font-size: 0.85rem;
+    font-size: 0.9rem;
 }
 
 /* Invalid Input Styling */
@@ -113,22 +77,22 @@ form > .login-link {
 
 .invalid-feedback {
     display: block;
-    margin-top: 4px;
-    font-size: 0.8rem;
+    margin-top: 6px;
+    font-size: 0.85rem;
     color: #dc2626;
     font-weight: 500;
 }
 
 .invalid-feedback span {
     display: block;
-    margin-bottom: 2px;
+    margin-bottom: 4px;
 }
 
 /* Submit Button */
 .btn-register {
     width: 100%;
-    padding: 12px;
-    font-size: 0.95rem;
+    padding: 14px;
+    font-size: 1rem;
     font-weight: 600;
     color: white;
     background: #1a1a1a;
@@ -138,7 +102,7 @@ form > .login-link {
     transition: all 0.3s ease;
     letter-spacing: 0.5px;
     text-transform: uppercase;
-    margin-top: 8px;
+    margin-top: 10px;
 }
 
 .btn-register:hover {
@@ -155,11 +119,11 @@ form > .login-link {
 /* Login Link */
 .login-link {
     text-align: center;
-    font-size: 0.9rem;
+    margin-top: 28px;
+    font-size: 0.95rem;
     color: #6b7280;
-    padding-top: 20px;
+    padding-top: 24px;
     border-top: 1px solid #f0f0f0;
-    margin-top: 8px;
 }
 
 .login-link a {
@@ -180,36 +144,21 @@ form > .login-link {
     .right-section {
         padding: 30px 24px;
         margin: 20px;
-        max-width: 600px;
-    }
-
-    form {
-        grid-template-columns: 1fr;
-    }
-
-    .form-row {
-        grid-template-columns: 1fr;
-    }
-
-    form > .form-group:nth-child(4),
-    form > .form-group:nth-child(7),
-    form > .form-group:last-of-type,
-    form > .login-link {
-        grid-column: 1;
     }
 
     .form-title {
-        font-size: 1.6rem;
-        margin-bottom: 6px;
-    }
-
-    .form-subtitle {
-        font-size: 0.9rem;
+        font-size: 1.75rem;
         margin-bottom: 24px;
     }
 
     .form-input {
         padding: 11px 14px;
+        font-size: 0.9rem;
+    }
+
+    .btn-register {
+        padding: 12px;
+        font-size: 0.95rem;
     }
 }
 
@@ -219,22 +168,17 @@ form > .login-link {
     }
 
     .form-title {
-        font-size: 1.4rem;
-    }
-
-    .form-subtitle {
-        font-size: 0.85rem;
+        font-size: 1.5rem;
     }
 }
 
-/* Flash Messages */
+/* Flash Messages (if you have them) */
 .alert {
-    padding: 10px 14px;
+    padding: 12px 16px;
     border-radius: 8px;
-    margin-bottom: 18px;
-    font-size: 0.85rem;
+    margin-bottom: 20px;
+    font-size: 0.9rem;
     font-weight: 500;
-    grid-column: 1 / -1;
 }
 
 .alert-success {

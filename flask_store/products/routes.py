@@ -90,3 +90,9 @@ def list_products():
     return render_template('old/stores_list.html', 
                          products=product_data,
                          pagination=products_pagination)
+
+@products.route('/product/<int:product_id>')
+def view_product(product_id):
+    """Display product details"""
+    product = Product.query.get_or_404(product_id)
+    return render_template('common/product_detail.html', product=product)

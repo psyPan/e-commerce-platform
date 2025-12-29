@@ -72,7 +72,7 @@ def login():
             return redirect(next_page) if next_page else redirect(url_for('users.home'))
         else:
             flash('Login Unsuccessful. Please check email and password', 'danger')
-    return render_template('old/login.html', title='Login', form=form)
+    return render_template('common/login.html', title='Login', form=form)
 
 @users.route('/logout')
 def logout():
