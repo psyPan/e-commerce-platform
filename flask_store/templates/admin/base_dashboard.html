@@ -1,0 +1,22 @@
+{% extends "/common/base.html" %}
+
+{% block content %}
+
+<link rel="stylesheet" href="{{ url_for('static', filename='style/common/dashboard.css') }}">
+
+<div class="dashboard-wrapper">
+    <!-- ADMIN SIDEBAR -->
+    <div class="dashboard-sidebar">
+        <a class="side-btn {% if request.endpoint == 'users.user_management' %} active {% endif %}" href="{{ url_for('users.user_management') }}">User Management</a>
+        <a class="side-btn {% if request.endpoint == 'stores.store_management' %} active {% endif %}" href="{{ url_for('stores.store_management') }}">Store Management</a>
+    </div>
+
+    <div class="dashboard-content">
+    {% if request.endpoint == 'users.user_management' %}
+        {% block user_management %}{% endblock user_management %}
+    {% elif request.endpoint == 'stores.store_management' %}
+        {% block store_management %}{% endblock store_management %}
+    {% endif %}
+    </div>
+</div>
+{% endblock content %}

@@ -102,6 +102,10 @@ CREATE TABLE product (
     manufacturer VARCHAR(100),
     type VARCHAR(50),
     model VARCHAR(100),
+
+    is_active BOOLEAN NOT NULL DEFAULT TRUE,
+    is_deleted BOOLEAN NOT NULL DEFAULT FALSE,
+
     store_id INTEGER NOT NULL,
     discount_id INTEGER,
 
@@ -115,6 +119,7 @@ CREATE TABLE product (
         REFERENCES discount(id)
         ON DELETE SET NULL
 );
+
 
 CREATE TABLE cart (
     id SERIAL PRIMARY KEY,

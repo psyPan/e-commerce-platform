@@ -258,3 +258,31 @@ def store_info():
         'owner/my_store.html',
         form=form
     )
+
+#admin store management
+@stores.route('/store_management')
+@login_required
+def store_management():
+    # Security: admin only
+    if not current_user.a_flag:
+        abort(403)
+
+    search = request.args.get('search', '').strip()
+
+    query = Store.query
+
+    if search:
+        query = query.filter(
+            or_(
+                Store.name.ilike(f'%{search}%'),
+                Store.email.ilike(f'%{search}%'),
+                Store.phone.ilike(f'%{search}%')
+            )
+        )
+
+    stores = query.order_by(Store.id).all()
+
+    return render_template(
+        'admin/store_management.html',
+        stores=stores
+    )

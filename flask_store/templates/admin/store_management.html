@@ -1,0 +1,39 @@
+{% extends "/admin/base_dashboard.html" %}
+
+{% block store_management %}
+<link rel="stylesheet" href="{{ url_for('static', filename='style/admin/store_management.css') }}">
+<div class="dashboard-card">
+    <!-- ================= HEADER + FILTER ================= -->
+    <div class="search-filter-bar">
+        <h1 class="dashboard-title">Store Management</h1>
+        <form method="GET" action="{{ url_for('stores.store_management') }}" class="search-form">
+            <div class="search-box">
+                <input type="text" name="search" placeholder="Search stores..." class="search-input" value="{{ request.args.get('search', '') }}">
+                <button type="submit" class="search-btn">Search</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- TABLE HEADER -->
+    <div class="table-header">
+        <span>ID</span>
+        <span>Name</span>
+        <span>Email</span>
+        <span>Phone</span>
+        <span>Balance</span>
+    </div>
+
+    <div class="table-body">
+        {% for store in stores %}
+        <div class="table-row">
+            <span>{{ store.id }}</span>
+            <span>{{ store.name }}</span>
+            <span>{{ store.email }}</span>
+            <span>{{ store.phone }}</span>
+            <span>{{ store.balance }}</span>
+        </div>
+        {% endfor %}
+    </div>
+
+</div>
+{% endblock store_management %}

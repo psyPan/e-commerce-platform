@@ -1,0 +1,48 @@
+{% extends "/admin/base_dashboard.html" %}
+
+{% block user_management %}
+<link rel="stylesheet" href="{{ url_for('static', filename='style/admin/user_management.css') }}">
+<div class="dashboard-card">
+    <!-- ================= HEADER + FILTER ================= -->
+    <div class="search-filter-bar">
+        <h1 class="dashboard-title">User Management</h1>
+        <form method="GET" action="{{ url_for('users.user_management') }}" class="search-form">
+            <select name="filter_by" class="filter-dropdown">
+                <option value="all_user">All Users</option>
+                <option value="administrator">Administrator</option>
+                <option value="owner">Owner</option>
+                <option value="customer">Customer</option>
+            </select>
+            
+            <div class="search-box">
+                <input type="text" name="search" placeholder="Search users..." class="search-input" value="{{ request.args.get('search', '') }}">
+                <button type="submit" class="search-btn">Search</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- TABLE HEADER -->
+    <div class="table-header">
+        <span>ID</span>
+        <span>Name</span>
+        <span>Email</span>
+        <span>User Type</span>
+        <span>Store</span>
+    </div>
+
+    <!-- TABLE BODY -->
+    <div class="table-body">
+        {% for user in users %}
+        <div class="table-row">
+            <span>{{ user.id }}</span>
+            <span>{{ user.name }}</span>
+            <span>{{ user.email }}</span>
+            <span>{{ user.type }}</span>
+            <span>{{ user.store_name }}</span>
+        </div>
+        {% endfor %}
+    </div>
+
+</div>
+
+{% endblock user_management %}

@@ -51,7 +51,7 @@
         {% if request.endpoint not in ['users.login', 'users.register', 'users.logout'] %}
             {% if current_user.is_authenticated %}
                 {% if current_user.a_flag %}
-                    <a href="#">My Dashboard</a>
+                    <a href="{{ url_for('users.user_management') }}">My Dashboard</a>
 
                 {% elif current_user.o_flag %}
                     <a href="{{ url_for('stores.store_info') }}">My Dashboard</a>
