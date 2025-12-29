@@ -168,7 +168,7 @@ def order_history():
     user_reviews = Review.query.filter_by(user_id=current_user.id).all()
     reviewed_map = {f"{r.order_id}-{r.product_id}" for r in user_reviews}
 
-    return render_template('old/order_history.html', 
+    return render_template('customer/my_order.html', 
                            orders=orders, 
                            review_form=review_form,
                            reviewed_map=reviewed_map)
