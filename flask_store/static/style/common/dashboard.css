@@ -147,9 +147,10 @@
 }
 
 .dashboard-form-row {
+    align-items: center;
     display: grid;
-    grid-template-columns: 1fr 1fr;  /* Equal columns */
-    gap: 20px;
+    grid-template-columns: 150px 1fr;
+    column-gap:30px;
     padding: 3px 0;
 }
 

@@ -38,7 +38,7 @@
             <h1 class="dashboard-title">Edit Store</h1>
             <!-- 12/29 new error popup code -->
             {{ form.hidden_tag() }}
-            <div class="dashboard-form-row">
+            <div class="dashboard-form-row" style="grid-template-columns: 15fr 85fr;">
                 {{ form.name.label(class="form-label") }}
                 {{ form.name(class="profile-input is-invalid" if form.name.errors else "profile-input") }}
                 {% if form.name.errors %}
@@ -49,7 +49,7 @@
                     </div>
                 {% endif %}
             </div>
-            <div class="dashboard-form-row">
+            <div class="dashboard-form-row"  style="grid-template-columns: 15fr 85fr;">
                 {{ form.email.label(class="form-label") }}
                 {{ form.email(class="profile-input is-invalid" if form.email.errors else "profile-input") }}
                 {% if form.email.errors %}
@@ -60,7 +60,7 @@
                     </div>
                 {% endif %}
             </div>
-            <div class="dashboard-form-row">
+            <div class="dashboard-form-row"  style="grid-template-columns: 15fr 85fr;">
                 {{ form.phone.label(class="form-label") }}
                 {{ form.phone(class="profile-input is-invalid" if form.phone.errors else "profile-input") }}
                 {% if form.phone.errors %}
