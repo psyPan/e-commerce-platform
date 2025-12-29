@@ -101,7 +101,7 @@ def profile():
         return redirect(url_for("users.profile"))
 
     return render_template(
-        'old/profile.html',
+        'customer/my_profile.html',
         form=form
     )
 
@@ -152,7 +152,7 @@ def change_password():
             return redirect(url_for("users.profile"))
     else:
         print(f"Form validation failed: {form.errors}")
-    return render_template("old/change_password.html", form=form)
+    return render_template("customer/change_password.html", form=form)
 
 # In flask_store/users/routes.py
 
