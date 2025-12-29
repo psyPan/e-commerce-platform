@@ -54,7 +54,7 @@ def add_product():
             product = Product(name=form.name.data, description=form.description.data, image=picture_file,
                               buy_price=form.buy_price.data, sell_price=form.sell_price.data,
                               stock=form.stock.data, manufacturer=form.manufacturer.data,
-                              type=form.type.data, model=form.model.data, store_id=store.id, discount_id=discount.id)
+                              type=form.type.data, model=form.model.data, is_active=True, is_deleted=False, store_id=store.id, discount_id=discount.id)
             try:
                 db.session.add(product)
                 db.session.commit()
@@ -96,3 +96,20 @@ def view_product(product_id):
     """Display product details"""
     product = Product.query.get_or_404(product_id)
     return render_template('common/product_detail.html', product=product)
+
+@products.route('/delete/<int:product_id>')
+@login_required
+def delete_product(product_id):
+    product = Product.query.get_or_404(product_id)
+    
+    # Check ownership
+    if current_user.store_id != product.store_id:
+        flash('Unauthorized', 'danger')
+        return redirect(url_for('products.list'))
+    
+    # Soft delete
+    product.soft_delete()
+    db.session.commit()
+    
+    flash('Product deleted successfully', 'success')
+    return redirect(url_for('products.list'))

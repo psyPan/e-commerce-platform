@@ -1,12 +1,74 @@
 {% extends "/owner/base_dashboard.html" %}
 
 {% block manage_orders %}
-<div class="profile-card">
+<div class="dashboard-card">
     
-    <div class="profile-view" style="width: 100%;">
-        <h1 class="profile-title">Manage Orders</h1>
+    <div class="dashboard-view" style="width: 100%;">
+        <h1 class="dashboard-title">Manage Orders</h1>
         <p class="text-muted" style="margin-top: -10px; margin-bottom: 20px;">Orders containing products from your store.</p>
 
+        <!-- Status Filter Tabs -->
+        <div class="mb-4">
+            <div class="d-flex flex-wrap gap-2 mb-3">
+                <a href="{{ url_for('users.manage_orders', status='all', q=current_filters.search, sort=current_filters.sort) }}" 
+                   class="btn btn-sm status-filter-btn {{ 'btn-dark' if current_filters.status == 'all' else 'btn-outline-dark' }}">
+                    All <span class="badge bg-light text-dark ms-1">{{ status_counts['all'] }}</span>
+                </a>
+                
+                <a href="{{ url_for('users.manage_orders', status='received', q=current_filters.search, sort=current_filters.sort) }}" 
+                   class="btn btn-sm status-filter-btn {{ 'btn-warning' if current_filters.status == 'received' else 'btn-outline-warning' }}">
+                    Received <span class="badge bg-light text-dark ms-1">{{ status_counts['received'] }}</span>
+                </a>
+                
+                <a href="{{ url_for('users.manage_orders', status='processed', q=current_filters.search, sort=current_filters.sort) }}" 
+                   class="btn btn-sm status-filter-btn {{ 'btn-info' if current_filters.status == 'processed' else 'btn-outline-info' }}">
+                    Processed <span class="badge bg-light text-dark ms-1">{{ status_counts['processed'] }}</span>
+                </a>
+                
+                <a href="{{ url_for('users.manage_orders', status='shipped', q=current_filters.search, sort=current_filters.sort) }}" 
+                   class="btn btn-sm status-filter-btn {{ 'btn-primary' if current_filters.status == 'shipped' else 'btn-outline-primary' }}">
+                    Shipped <span class="badge bg-light text-dark ms-1">{{ status_counts['shipped'] }}</span>
+                </a>
+                
+                <a href="{{ url_for('users.manage_orders', status='delivered', q=current_filters.search, sort=current_filters.sort) }}" 
+                   class="btn btn-sm status-filter-btn {{ 'btn-success' if current_filters.status == 'delivered' else 'btn-outline-success' }}">
+                    Delivered <span class="badge bg-light text-dark ms-1">{{ status_counts['delivered'] }}</span>
+                </a>
+                
+                <a href="{{ url_for('users.manage_orders', status='closed', q=current_filters.search, sort=current_filters.sort) }}" 
+                   class="btn btn-sm status-filter-btn {{ 'btn-secondary' if current_filters.status == 'closed' else 'btn-outline-secondary' }}">
+                    Closed <span class="badge bg-light text-dark ms-1">{{ status_counts['closed'] }}</span>
+                </a>
+            </div>
+
+            <!-- Search and Sort Form -->
+            <form method="GET" action="{{ url_for('users.manage_orders') }}" class="row g-2">
+                <input type="hidden" name="status" value="{{ current_filters.status }}">
+                
+                <div class="col-md-5">
+                    <input type="text" 
+                           name="q" 
+                           class="form-control form-control-sm" 
+                           placeholder="Search by Order ID, Customer..." 
+                           value="{{ current_filters.search or '' }}">
+                </div>
+                
+                <div class="col-md-4">
+                    <select name="sort" class="form-select form-select-sm">
+                        <option value="newest" {% if current_filters.sort == 'newest' %}selected{% endif %}>Newest First</option>
+                        <option value="oldest" {% if current_filters.sort == 'oldest' %}selected{% endif %}>Oldest First</option>
+                        <option value="highest" {% if current_filters.sort == 'highest' %}selected{% endif %}>Highest Amount</option>
+                        <option value="lowest" {% if current_filters.sort == 'lowest' %}selected{% endif %}>Lowest Amount</option>
+                    </select>
+                </div>
+                
+                <div class="col-md-3">
+                    <button type="submit" class="btn btn-sm btn-dark w-100">Apply</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Orders Table -->
         <div class="table-responsive">
             <table class="table table-hover table-bordered align-middle">
                 <thead class="table-dark">
@@ -25,7 +87,7 @@
                         <td class="fw-bold">#{{ order.id }}</td>
                         <td>{{ order.order_time.strftime('%Y-%m-%d') }}</td>
                         <td>
-                            {{ order.customer.username if order.customer else 'Guest' }}
+                            {{ order.customer.email if order.customer else 'Guest' }}
                         </td>
                         <td>${{ "%.2f"|format(order.total_amount) }}</td>
                         
@@ -60,13 +122,113 @@
                     {% else %}
                     <tr>
                         <td colspan="6" class="text-center py-4 text-muted">
-                            No orders found for your store products.
+                            {% if current_filters.status != 'all' or current_filters.search %}
+                                No orders found matching your filters.
+                                <br>
+                                <a href="{{ url_for('users.manage_orders') }}" class="btn btn-sm btn-outline-dark mt-2">Clear Filters</a>
+                            {% else %}
+                                No orders found for your store products.
+                            {% endif %}
                         </td>
                     </tr>
                     {% endfor %}
                 </tbody>
             </table>
         </div>
+
+        <!-- Pagination -->
+        {% if pagination.pages > 1 %}
+        <nav aria-label="Orders pagination" class="mt-4">
+            <ul class="pagination justify-content-center">
+                <!-- Previous Button -->
+                {% if pagination.has_prev %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ url_for('users.manage_orders', page=pagination.prev_num, status=current_filters.status, q=current_filters.search, sort=current_filters.sort) }}">
+                        &laquo; Prev
+                    </a>
+                </li>
+                {% else %}
+                <li class="page-item disabled">
+                    <span class="page-link">&laquo; Prev</span>
+                </li>
+                {% endif %}
+
+                <!-- Page Numbers -->
+                {% for page_num in pagination.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+                    {% if page_num %}
+                        <li class="page-item {% if page_num == pagination.page %}active{% endif %}">
+                            <a class="page-link" href="{{ url_for('users.manage_orders', page=page_num, status=current_filters.status, q=current_filters.search, sort=current_filters.sort) }}">
+                                {{ page_num }}
+                            </a>
+                        </li>
+                    {% else %}
+                        <li class="page-item disabled"><span class="page-link">...</span></li>
+                    {% endif %}
+                {% endfor %}
+
+                <!-- Next Button -->
+                {% if pagination.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ url_for('users.manage_orders', page=pagination.next_num, status=current_filters.status, q=current_filters.search, sort=current_filters.sort) }}">
+                        Next &raquo;
+                    </a>
+                </li>
+                {% else %}
+                <li class="page-item disabled">
+                    <span class="page-link">Next &raquo;</span>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+
+        <!-- Pagination Info -->
+        <div class="text-center text-muted small">
+            Showing {{ ((pagination.page - 1) * 10) + 1 }} to {{ pagination.page * 10 if pagination.page * 10 < pagination.total else pagination.total }} of {{ pagination.total }} orders
+        </div>
+        {% endif %}
+
     </div>
 </div>
+
+<style>
+    /* Smaller status filter buttons */
+    .status-filter-btn {
+        font-size: 0.75rem !important;
+        padding: 0.25rem 0.6rem !important;
+    }
+    
+    .status-filter-btn .badge {
+        font-size: 0.65rem !important;
+        padding: 0.2rem 0.4rem !important;
+    }
+    
+    .btn-sm {
+        font-size: 0.85rem;
+        padding: 0.35rem 0.75rem;
+    }
+    
+    .form-control-sm, .form-select-sm {
+        font-size: 0.875rem;
+    }
+    
+    .badge {
+        font-size: 0.75rem;
+        padding: 0.35rem 0.65rem;
+    }
+    
+    .pagination .page-link {
+        color: #1a1a1a;
+        border-color: #dee2e6;
+    }
+    
+    .pagination .page-item.active .page-link {
+        background-color: #1a1a1a;
+        border-color: #1a1a1a;
+    }
+    
+    .pagination .page-link:hover {
+        background-color: #f8f9fa;
+        color: #1a1a1a;
+    }
+</style>
 {% endblock manage_orders %}

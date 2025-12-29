@@ -140,7 +140,7 @@ with app.app_context():
     # db.session.add_all([p1, p2])
     # db.session.commit()
 
-    print("Database seeded successfully!")
+    # print("Database seeded successfully!")
 
     admin = User(f_name='John', l_name='Doe', email='admin@email.com',
                  password=bcrypt.generate_password_hash('admin').decode('utf-8'),
@@ -291,87 +291,102 @@ with app.app_context():
     db.session.add_all([seasoning1, seasoning2, special_event1, special_event2, shipping1, shipping2])
     db.session.flush()
 
-    product1 = Product(name="UltraBook Pro 15", description="High-performance laptop with 16GB RAM and 512GB SSD for professionals.",
-                       buy_price=950, sell_price=1299, stock=25, manufacturer="TechStream",
-                       type='laptop', model="TS-UB15-2024", store_id=store1.id)
-    product2 = Product(name="NoiseCancel X Headphones", description="Wireless over-ear headphones with active noise cancellation and 30-hour battery life.",
-                       buy_price=120, sell_price=299, stock=100, manufacturer="AudioWave",
-                       type='Accessories', model="AW-NCX-01", store_id=store1.id)
-    product3 = Product(name="Galaxy Vision 4K Monitor", description="27-inch IPS monitor with 144Hz refresh rate and 1ms response time.",
-                       buy_price=220, sell_price=399, stock=60, manufacturer="VisualTech",
-                       type='Electronics', model="VT-GV27-4K", store_id=store1.id)
-    product4 = Product(name="UltraView 27-inch 4K Monitor", description="Professional IPS display with 100% sRGB color accuracy and ultra-thin bezels.",
-                       buy_price=280, sell_price=499, stock=45, manufacturer="ViewMaster",
-                       type='Monitor', model="VM-27-Pro4K", store_id=store1.id)
-    product5 = Product(name="GamerEdge 144Hz Curved Monitor", description="32-inch curved gaming monitor with 1ms response time and G-Sync compatibility.",
-                       buy_price=210, sell_price=499, stock=45, manufacturer="ViewMaster",
-                       type='Monitor', model="VM-27-Pro4K", store_id=store1.id)
-    product6 = Product(name="UltraBook Pro 15", description="High-performance laptop with 16GB RAM and 512GB SSD for professionals.",
-                       buy_price=950, sell_price=1299, stock=25, manufacturer="TechStream",
-                       type='laptop', model="TS-UB15-2024", store_id=store2.id)
-    product7 = Product(name="NoiseCancel X Headphones", description="Wireless over-ear headphones with active noise cancellation and 30-hour battery life.",
-                       buy_price=120, sell_price=299, stock=100, manufacturer="AudioWave",
-                       type='Accessories', model="AW-NCX-01", store_id=store2.id)
-    product8 = Product(name="Galaxy Vision 4K Monitor", description="27-inch IPS monitor with 144Hz refresh rate and 1ms response time.",
-                       buy_price=220, sell_price=399, stock=60, manufacturer="VisualTech",
-                       type='Electronics', model="VT-GV27-4K", store_id=store2.id)
-    product9 = Product(name="UltraView 27-inch 4K Monitor", description="Professional IPS display with 100% sRGB color accuracy and ultra-thin bezels.",
-                       buy_price=280, sell_price=499, stock=45, manufacturer="ViewMaster",
-                       type='Monitor', model="VM-27-Pro4K", store_id=store2.id)
-    product10 = Product(name="GamerEdge 144Hz Curved Monitor", description="32-inch curved gaming monitor with 1ms response time and G-Sync compatibility.",
-                       buy_price=210, sell_price=499, stock=45, manufacturer="ViewMaster",
-                       type='Monitor', model="VM-27-Pro4K", store_id=store2.id)
-    product11 = Product(name="UltraBook Pro 15", description="High-performance laptop with 16GB RAM and 512GB SSD for professionals.",
-                       buy_price=950, sell_price=1299, stock=25, manufacturer="TechStream",
-                       type='laptop', model="TS-UB15-2024", store_id=store3.id)
-    product12 = Product(name="NoiseCancel X Headphones", description="Wireless over-ear headphones with active noise cancellation and 30-hour battery life.",
-                       buy_price=120, sell_price=299, stock=100, manufacturer="AudioWave",
-                       type='Accessories', model="AW-NCX-01", store_id=store3.id)
-    product13 = Product(name="Galaxy Vision 4K Monitor", description="27-inch IPS monitor with 144Hz refresh rate and 1ms response time.",
-                       buy_price=220, sell_price=399, stock=60, manufacturer="VisualTech",
-                       type='Electronics', model="VT-GV27-4K", store_id=store3.id)
-    product14 = Product(name="UltraView 27-inch 4K Monitor", description="Professional IPS display with 100% sRGB color accuracy and ultra-thin bezels.",
-                       buy_price=280, sell_price=499, stock=45, manufacturer="ViewMaster",
-                       type='Monitor', model="VM-27-Pro4K", store_id=store3.id)
-    product15 = Product(name="GamerEdge 144Hz Curved Monitor", description="32-inch curved gaming monitor with 1ms response time and G-Sync compatibility.",
-                       buy_price=210, sell_price=499, stock=45, manufacturer="ViewMaster",
-                       type='Monitor', model="VM-27-Pro4K", store_id=store3.id)
-    product16 = Product(name="UltraBook Pro 15", description="High-performance laptop with 16GB RAM and 512GB SSD for professionals.",
-                       buy_price=950, sell_price=1299, stock=25, manufacturer="TechStream",
-                       type='laptop', model="TS-UB15-2024", store_id=store4.id)
-    product17 = Product(name="NoiseCancel X Headphones", description="Wireless over-ear headphones with active noise cancellation and 30-hour battery life.",
-                       buy_price=120, sell_price=299, stock=100, manufacturer="AudioWave",
-                       type='Accessories', model="AW-NCX-01", store_id=store4.id)
-    product18 = Product(name="Galaxy Vision 4K Monitor", description="27-inch IPS monitor with 144Hz refresh rate and 1ms response time.",
-                       buy_price=220, sell_price=399, stock=60, manufacturer="VisualTech",
-                       type='Electronics', model="VT-GV27-4K", store_id=store4.id)
-    product19 = Product(name="UltraView 27-inch 4K Monitor", description="Professional IPS display with 100% sRGB color accuracy and ultra-thin bezels.",
-                       buy_price=280, sell_price=499, stock=45, manufacturer="ViewMaster",
-                       type='Monitor', model="VM-27-Pro4K", store_id=store4.id)
-    product20 = Product(name="GamerEdge 144Hz Curved Monitor", description="32-inch curved gaming monitor with 1ms response time and G-Sync compatibility.",
-                       buy_price=210, sell_price=499, stock=45, manufacturer="ViewMaster",
-                       type='Monitor', model="VM-27-Pro4K", store_id=store4.id)
-    product21 = Product(name="UltraBook Pro 15", description="High-performance laptop with 16GB RAM and 512GB SSD for professionals.",
-                       buy_price=950, sell_price=1299, stock=25, manufacturer="TechStream",
-                       type='laptop', model="TS-UB15-2024", store_id=store5.id)
-    product22 = Product(name="NoiseCancel X Headphones", description="Wireless over-ear headphones with active noise cancellation and 30-hour battery life.",
-                       buy_price=120, sell_price=299, stock=100, manufacturer="AudioWave",
-                       type='Accessories', model="AW-NCX-01", store_id=store5.id)
-    product23 = Product(name="Galaxy Vision 4K Monitor", description="27-inch IPS monitor with 144Hz refresh rate and 1ms response time.",
-                       buy_price=220, sell_price=399, stock=60, manufacturer="VisualTech",
-                       type='Electronics', model="VT-GV27-4K", store_id=store5.id)
-    product24 = Product(name="UltraView 27-inch 4K Monitor", description="Professional IPS display with 100% sRGB color accuracy and ultra-thin bezels.",
-                       buy_price=280, sell_price=499, stock=45, manufacturer="ViewMaster",
-                       type='Monitor', model="VM-27-Pro4K", store_id=store5.id)
-    product25 = Product(name="GamerEdge 144Hz Curved Monitor", description="32-inch curved gaming monitor with 1ms response time and G-Sync compatibility.",
-                       buy_price=210, sell_price=499, stock=45, manufacturer="ViewMaster",
-                       type='Monitor', model="VM-27-Pro4K", store_id=store5.id)
+    # ... [Previous User/Admin/Store logic remains the same] ...
+    # (Assuming admin, stores, owners, customers, and discounts are defined as above)
+
+    # --- UNIQUE PRODUCT GENERATION ---
+
+    # STORE 1: High-End Computing
+    product1 = Product(name="Zenith X1 Carbon", description="Ultralight business laptop with carbon fiber chassis and AI-powered noise cancellation.",
+                       buy_price=1100, sell_price=1450, stock=15, manufacturer="ZenithComp",
+                       type='Laptop', model="ZC-X1-2024", store_id=store1.id)
+    product2 = Product(name="MechMaster Pro Keyboard", description="Wireless mechanical keyboard with hot-swappable switches and PBT keycaps.",
+                       buy_price=80, sell_price=150, stock=50, manufacturer="KeyFlow",
+                       type='Peripherals', model="KF-MM-PRO", store_id=store1.id)
+    product3 = Product(name="ErgoLift Vertical Mouse", description="Ergonomic vertical mouse designed to reduce wrist strain during long sessions.",
+                       buy_price=40, sell_price=89, stock=30, manufacturer="ErgoTech",
+                       type='Peripherals', model="ET-VM-02", store_id=store1.id)
+    product4 = Product(name="ThunderBolt Dock G4", description="12-in-1 docking station supporting dual 4K monitors and 100W PD charging.",
+                       buy_price=150, sell_price=299, stock=20, manufacturer="LinkSys",
+                       type='Accessories', model="LS-TB-G4", store_id=store1.id)
+    product5 = Product(name="Portable SSD 2TB", description="Rugged external SSD with 1050MB/s read speeds, water and dust resistant.",
+                       buy_price=110, sell_price=220, stock=40, manufacturer="DataSwift",
+                       type='Storage', model="DS-Rugged-2T", store_id=store1.id)
+
+    # STORE 2: Audio & Music
+    product6 = Product(name="StudioRef 5 Monitors", description="Pair of near-field studio monitors with flat frequency response for mixing.",
+                       buy_price=300, sell_price=499, stock=10, manufacturer="SoundWave",
+                       type='Audio', model="SW-SR5-Pair", store_id=store2.id)
+    product7 = Product(name="Vinyl Classic Turntable", description="Belt-drive turntable with built-in preamp and USB output for digital archiving.",
+                       buy_price=180, sell_price=279, stock=15, manufacturer="RetroSpin",
+                       type='Audio', model="RS-VC-01", store_id=store2.id)
+    product8 = Product(name="Podcaster USB Mic", description="Cardioid condenser microphone with integrated pop filter and shock mount.",
+                       buy_price=90, sell_price=149, stock=35, manufacturer="VoiceClear",
+                       type='Audio', model="VC-Pod-USB", store_id=store2.id)
+    product9 = Product(name="BassBoom Bluetooth Speaker", description="Waterproof portable speaker with 24-hour battery life and 360-degree sound.",
+                       buy_price=60, sell_price=119, stock=60, manufacturer="UrbanBeat",
+                       type='Audio', model="UB-BB-360", store_id=store2.id)
+    product10 = Product(name="NoiseGuard ANC Headphones", description="Premium over-ear headphones with industry-leading active noise cancellation.",
+                       buy_price=200, sell_price=349, stock=25, manufacturer="SilenceTech",
+                       type='Audio', model="ST-NG-ANC", store_id=store2.id)
+
+    # STORE 3: Smart Home & IoT
+    product11 = Product(name="SmartGuard Doorbell", description="1080p HD video doorbell with two-way talk and AI package detection.",
+                       buy_price=100, sell_price=179, stock=40, manufacturer="SecureHome",
+                       type='SmartHome', model="SH-DB-V2", is_active=True, is_deleted=False, store_id=store3.id)
+    product12 = Product(name="EcoThermostat Premium", description="Smart thermostat that learns your schedule and saves energy automatically.",
+                       buy_price=140, sell_price=249, stock=30, manufacturer="EcoLive",
+                       type='SmartHome', model="EL-TP-01", is_active=True, is_deleted=False, store_id=store3.id)
+    product13 = Product(name="RoboClean S7", description="Robot vacuum and mop hybrid with LiDAR navigation and self-emptying base.",
+                       buy_price=450, sell_price=799, stock=12, manufacturer="CleanBot",
+                       type='Appliance', model="CB-S7-Plus", is_active=True, is_deleted=False, store_id=store3.id)
+    product14 = Product(name="Luma Smart Bulb Kit", description="Pack of 4 color-changing LED bulbs compatible with Alexa and Google Home.",
+                       buy_price=30, sell_price=69, stock=100, manufacturer="LumaLight",
+                       type='SmartHome', model="LL-RGB-4PK", is_active=True, is_deleted=False, store_id=store3.id)
+    product15 = Product(name="Smart Lock Touch", description="Fingerprint and keypad entry door lock with remote access via Wi-Fi bridge.",
+                       buy_price=130, sell_price=229, stock=20, manufacturer="SecureHome",
+                       type='SmartHome', model="SH-SL-Touch", is_active=True, is_deleted=False, store_id=store3.id)
+
+    # STORE 4: Photography & Drones
+    product16 = Product(name="SkyMaster Mini Drone", description="Sub-250g camera drone with 4K video, 30-min flight time, and obstacle avoidance.",
+                       buy_price=350, sell_price=549, stock=18, manufacturer="SkyTech",
+                       type='Drone', model="ST-Mini-3", is_active=True, is_deleted=False, store_id=store4.id)
+    product17 = Product(name="ProLens 50mm f/1.8", description="Prime portrait lens with fast aperture and silent autofocus motor.",
+                       buy_price=150, sell_price=299, stock=22, manufacturer="OpticGlass",
+                       type='CameraLens', model="OG-50-18", is_active=True, is_deleted=False, store_id=store4.id)
+    product18 = Product(name="ActionCam Hero 5", description="Rugged waterproof action camera with HyperSmooth stabilization and 5.3K video.",
+                       buy_price=280, sell_price=399, stock=30, manufacturer="AdventureCam",
+                       type='Camera', model="AC-H5-Black", is_active=True, is_deleted=False, store_id=store4.id)
+    product19 = Product(name="TravelTripod Carbon", description="Lightweight carbon fiber tripod with ball head, folds down to 15 inches.",
+                       buy_price=90, sell_price=189, stock=25, manufacturer="SteadyShot",
+                       type='Accessory', model="SS-TT-Carbon", is_active=True, is_deleted=False, store_id=store4.id)
+    product20 = Product(name="Ring Light Studio 18", description="18-inch dimmable LED ring light with phone holder and tall stand for streaming.",
+                       buy_price=45, sell_price=99, stock=45, manufacturer="GlowStream",
+                       type='Lighting', model="GS-RL-18", is_active=True, is_deleted=False, store_id=store4.id)
+
+    # STORE 5: Gaming & Streaming
+    product21 = Product(name="Console X Series", description="Next-gen gaming console capable of 4K 120FPS gaming with 1TB SSD.",
+                       buy_price=450, sell_price=499, stock=5, manufacturer="GameBox",
+                       type='Console', model="GB-XS-1TB", is_active=True, is_deleted=False, store_id=store5.id)
+    product22 = Product(name="Handheld Deck 512", description="Portable PC gaming handheld with 7-inch touchscreen and custom APU.",
+                       buy_price=550, sell_price=649, stock=8, manufacturer="ValveStream",
+                       type='Console', model="VS-HD-512", is_active=True, is_deleted=False, store_id=store5.id)
+    product23 = Product(name="StreamDeck Controller", description="15 LCD keys to trigger actions in apps and tools like OBS and Twitch.",
+                       buy_price=90, sell_price=149, stock=25, manufacturer="StreamLive",
+                       type='Accessory', model="SL-SD-MK2", is_active=True, is_deleted=False, store_id=store5.id)
+    product24 = Product(name="Racer Pro Gaming Chair", description="Ergonomic racing-style chair with lumbar support and 4D armrests.",
+                       buy_price=180, sell_price=329, stock=15, manufacturer="SitZone",
+                       type='Furniture', model="SZ-RP-Chair", is_active=True, is_deleted=False, store_id=store5.id)
+    product25 = Product(name="Curved Ultrawide 34", description="34-inch UWQHD gaming monitor with 165Hz refresh rate and 1ms response.",
+                       buy_price=320, sell_price=599, stock=10, manufacturer="ViewMaster",
+                       type='Monitor', model="VM-34-UW", is_active=True, is_deleted=False, store_id=store5.id)
+
     db.session.add_all([product1, product2, product3, product4, product5,
                         product6, product7, product8, product9, product10,
                         product11, product12, product13, product14, product15,
                         product16, product17, product18, product19, product20,
                         product21, product22, product23, product24, product25])
-    
+
     cart1 = Cart(user_id=cust1.id)
     cart2 = Cart(user_id=cust2.id)
     cart3 = Cart(user_id=cust3.id)

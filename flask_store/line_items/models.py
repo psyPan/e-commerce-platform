@@ -1,6 +1,8 @@
 from flask_store import db
 
 class LineItem(db.Model):
+    __tablename__ = 'line_item'
+    
     id = db.Column(db.Integer, primary_key=True)
     quantity = db.Column(db.Integer, nullable=False)
     type =db.Column(db.Enum('cart', 'order'), nullable=False)

@@ -1,26 +1,17 @@
 /* =========================
    PROFILE PAGE LAYOUT
 ========================= */
-.dashboard-title,
-.dashboard-title {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    letter-spacing: -0.3px;
-}
-
 
 .dashboard-wrapper {
     max-width: 1100px;
-    margin: 5px auto;
+    margin: 5px auto 50px;
     display: flex;
     gap: 40px;
-}
-
-.dashboard-wrapper {
-    align-items: flex-start;   /* 🔥 INI KUNCI */
+    align-items: flex-start;
 }
 
 /* =========================
-   SIDE MENU - BLACK & WHITE
+   SIDE MENU LEFT SIDE
 ========================= */
 
 .dashboard-sidebar {
@@ -32,28 +23,44 @@
 
 .dashboard-sidebar a {
     padding: 12px 20px;
-    background: #1a1a1a;           /* Black background */
+    background: #1a1a1a;
     border-radius: 20px;
-    color: white;                  /* White text */
+    color: white;
     font-size: 14px;
     text-align: center;
     text-decoration: none;
-    transition: all 0.3s ease;
+    transition: 0.2s;
+    font-weight: 500;
     border: 2px solid transparent;
 }
 
 .dashboard-sidebar a:hover {
-    background: #e2d2c2;
+    background: #2c2c2c;           /* Lighter black on hover */
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .dashboard-sidebar a.active {
-    background: #c9a876;
-    color: white;
+    background: white; 
+    color: #1a1a1a;
+    border: 2px solid #1a1a1a;
+    font-weight: 600;
 }
 
 /* =========================
-   PROFILE CARD
+   DAHSBOARD CONTENT TITLE
 ========================= */
+.dashboard-title{
+    font-size: 28px;
+    font-weight: 700;
+    color: #1a1a1a;
+    text-align: center;
+    margin-bottom: 32px;
+}
+
+/* ==============================
+   DASHBOARD CONTENT RIGHT SIDE
+============================== */
 
 .dashboard-content {
     flex: 1;
@@ -61,16 +68,18 @@
     justify-content: center;
 }
 
+/* ==============================
+   DASHBOARD CONTENT AREA
+============================== */
+
 .dashboard-card {
     width: 890px;
     background: rgba(255, 255, 255, 0.35);
     padding: 40px 45px;
     border-radius: 30px;
-
     height: 480px;
     min-height: 0;
     position: relative;
-
     display: flex;
     flex-direction: column;
 }
@@ -81,24 +90,8 @@
     min-height: 0;
 }
 
-.dashboard-title {
-    margin-bottom: 24px;   /* jangan gede2 */
-}
-
 /* =========================
-   TITLE
-========================= */
-
-.dashboard-title {
-    font-size: 28px;
-    font-weight: 700;
-    color: #1a1a1a;               /* Black title */
-    text-align: center;
-    margin-bottom: 32px;
-}
-
-/* =========================
-   PROFILE VIEW
+    VIEW
 ========================= */
 
 .dashboard-view {
@@ -109,8 +102,7 @@
     display: grid;
     grid-template-columns: 150px 1fr;
     column-gap: 40px;
-    padding: 14px 0;
-    border-bottom: 1px solid #e0e0e0;
+    padding: 12px 0;
 }
 
 .profile-row span {
@@ -123,6 +115,12 @@
     margin: 0;
     font-size: 15px;
     color: #1a1a1a;
+}
+
+.owners-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
 }
 
 /* =========================
@@ -150,30 +148,24 @@
 
 .dashboard-form-row {
     display: grid;
-    grid-template-columns: 140px 1fr;
-    gap: 16px;
-    align-items: center;
-}
-
-.dashboard-form-row.two-col {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 1fr;  /* Equal columns */
     gap: 20px;
+    padding: 3px 0;
 }
 
 .dashboard-form-row label {
     font-weight: 600;
-    font-size: 14px;
-    color: #2c2c2c;
+    color: #555;
+    font-size: 15px;
 }
 
 .profile-input {
     padding: 8px 12px;
     border-radius: 18px;
-    border: 1.5px solid #ddd;
+    border: 1px solid #ddd;
     font-size: 14px;
     width: 100%;
-    transition: all 0.3s ease;
-    background-color: #fafafa;
+    box-sizing: border-box;
 }
 
 .profile-input:focus {
@@ -183,18 +175,26 @@
     box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.05);
 }
 
+.invalid-feedback {
+    grid-column: 1 / -1;
+    color: #dc2626;
+    font-size: 13px;
+    margin-top: 4px;
+}
+
 /* =========================
-   ACTION BUTTONS - BLACK & WHITE
+   ACTION BUTTONS
 ========================= */
 
 .action-buttons {
-    margin-top: 50px;      /* 🔥 DORONG KE BAWAH TANPA ABSOLUTE */
+    margin-top: auto;
     display: flex;
     justify-content: flex-end;
-    gap: 14px;
+    gap: 16px;
+    padding-top: 30px;
 }
 
-/* Edit button - Black */
+/* Edit button */
 .edit-btn {
     background: #1a1a1a;           /* Black background */
     color: white;
@@ -213,10 +213,6 @@
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
 }
 
-.edit-btn:active {
-    transform: translateY(0);
-}
-
 /* Cancel button - White with black border */
 .cancel-btn {
     background: white;
@@ -230,9 +226,60 @@
     font-weight: 600;
 }
 
+.cancel-btn:hover {
+    background: #f5f5f5;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.cancel-btn:active {
+    transform: translateY(0);
+}
+
 /* Save */
 .save-btn {
-    background: #c9a876;
+    padding: 12px 28px;
+    border-radius: 16px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background 0.2s;
+    background: #1a1a1a;;
+    color: #fff;
+    border: none;
+    outline: none;
+    box-shadow: none;
+}
+
+/* Hide Edit button in edit mode */
+.dashboard-card.editing .action-buttons-view {
+    display: none;
+}
+
+/* ensure link states stay clean */
+.cancel-btn,
+.cancel-btn:visited,
+.cancel-btn:active,
+.edit-btn,
+.edit-btn:visited,
+.edit-btn:active {
+  transform: translateY(0);
+}
+
+.cancel-btn:visited,
+.cancel-btn:active,
+.cancel-btn:focus {
+  color: #43341e;
+}
+
+.profile-actions {
+    margin-top: 50px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 14px;
+}
+/* Save button - Black */
+.btn-gold {
+    background: #1a1a1a;           /* Black background */
     color: white;
     padding: 12px 30px;
     border-radius: 16px;
@@ -243,11 +290,20 @@
     transition: all 0.3s ease;
 }
 
-.save-btn:hover {
-    background: #b89763;
+.btn-gold:hover {
+    background: #2c2c2c;           /* Lighter black on hover */
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
 }
 
-/* Hide Edit button in edit mode */
-.dashboard-card.editing .action-buttons-view {
-    display: none;
+.btn-gold:active {
+    transform: translateY(0);
+}
+.password-form {
+    max-width: 520px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin: 40px auto 0;
 }

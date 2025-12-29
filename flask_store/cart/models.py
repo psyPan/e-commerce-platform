@@ -2,6 +2,8 @@ from flask_store import db
 from datetime import datetime
 
 class Cart(db.Model):
+    __tablename__ = 'cart'
+
     id = db.Column(db.Integer, primary_key=True)
     
     # 1. Quantity of this specific product

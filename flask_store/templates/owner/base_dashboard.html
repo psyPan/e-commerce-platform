@@ -2,12 +2,11 @@
 
 {% block content %}
 
-<link rel="stylesheet" href="{{ url_for('static', filename='style/old/profile.css') }}">
-<link rel="stylesheet" href="{{ url_for('static', filename='style/old/test_product.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='style/common/dashboard.css') }}">
 
-<div class="profile-wrapper">
+<div class="dashboard-wrapper">
     <!-- OWNER SIDEBAR -->
-    <div class="profile-sidebar">
+    <div class="dashboard-sidebar">
         <a class="side-btn {% if request.endpoint == 'stores.store_info' %} active {% endif %}" href="{{ url_for('stores.store_info') }}">My Store</a>
         <a class="side-btn {% if request.endpoint == 'products.add_product' %} active {% endif %}" href="{{ url_for('products.add_product') }}">Products</a>
         <!-- <a class="side-btn {% if request.endpoint == 'users.assign_owner' %} active {% endif %}" href="{{ url_for('users.assign_owner') }}">Assign Owner</a> TODO: Move to admin dashboard -->
@@ -15,7 +14,7 @@
         <a class="side-btn {% if request.endpoint == 'users.manage_orders' %} active {% endif %}" href="{{ url_for('users.manage_orders') }}">Orders</a>
     </div>
 
-    <div class="profile-content">
+    <div class="dashboard-content">
     {% if request.endpoint == 'products.add_product' %}
         {% block product %}{% endblock product %}
     {% elif request.endpoint == 'stores.store_info' %}
