@@ -13,6 +13,10 @@ class Product(db.Model):
     type = db.Column(db.String(50))
     model = db.Column(db.String(100))
 
+    # Soft delete fields
+    is_active = db.Column(db.Boolean, default=True, nullable=False)
+    is_deleted = db.Column(db.Boolean, default=False, nullable=False)
+
     # Foreign keys
     store_id = db.Column(db.Integer, db.ForeignKey('store.id'), nullable=False)
     discount_id = db.Column(db.Integer, db.ForeignKey('discount.id'))
@@ -48,6 +52,10 @@ class Product(db.Model):
         """Check if product is available"""
         return self.stock > 0
     
+    def is_available(self):
+        """Check if product is available for purchase"""
+        return self.is_active and not self.is_deleted and self.stock > 0
+    
     def get_product_discount(self):
         """Get discount only if it's NOT a shipping discount"""
         if self.discount_obj and self.discount_obj.is_active:
@@ -61,6 +69,14 @@ class Product(db.Model):
         if discount:
             return discount.discount_percent
         return 0
+    
+    def soft_delete(self):
+        """Soft delete the product"""
+        from datetime import datetime
+        self.is_deleted = True
+        self.is_active = False
+        self.deleted_at = datetime.utcnow()
+        self.stock = 0
 
     def __repr__(self):
         return f"Product('{self.name}', ${self.sell_price})"

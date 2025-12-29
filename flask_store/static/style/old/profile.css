@@ -4,24 +4,22 @@
 .profile-title,
 .credit-title {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    letter-spacing: -0.3px; /* bikin lebih smooth */
+    letter-spacing: -0.3px;
 }
-
 
 .profile-wrapper {
     max-width: 1100px;
-    margin: 5px auto;      /* 🔥 SAMA PERSIS */
+    margin: 5px auto;
     display: flex;
     gap: 40px;
 }
 
 .profile-wrapper {
-    align-items: flex-start;   /* 🔥 INI KUNCI */
+    align-items: flex-start;
 }
 
-
 /* =========================
-   SIDE MENU
+   SIDE MENU - BLACK & WHITE
 ========================= */
 
 .profile-sidebar {
@@ -33,22 +31,27 @@
 
 .profile-sidebar a {
     padding: 12px 20px;
-    background: #f3e8dd;
+    background: #1a1a1a;           /* Black background */
     border-radius: 20px;
-    color: #43341e;
+    color: white;                  /* White text */
     font-size: 14px;
     text-align: center;
     text-decoration: none;
-    transition: 0.2s;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
 }
 
 .profile-sidebar a:hover {
-    background: #e2d2c2;
+    background: #2c2c2c;           /* Lighter black on hover */
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .profile-sidebar a.active {
-    background: #c9a876;
-    color: white;
+    background: white;             /* White background when active */
+    color: #1a1a1a;               /* Black text when active */
+    border: 2px solid #1a1a1a;
+    font-weight: 600;
 }
 
 /* =========================
@@ -67,11 +70,11 @@
     padding: 40px 45px;
     border-radius: 30px;
 
-    height: 480px;        /* 🔥 SAMAIN DENGAN CREDIT CARD */
-    min-height: 0;        /* 🔥 MATIKAN min-height */
+    height: 480px;
+    min-height: 0;
     position: relative;
 
-    display: flex;        /* 🔥 BIAR DALAMNYA KEKONTROL */
+    display: flex;
     flex-direction: column;
 }
 
@@ -82,9 +85,8 @@
 }
 
 .profile-title {
-    margin-bottom: 24px;   /* jangan gede2 */
+    margin-bottom: 24px;
 }
-
 
 /* =========================
    TITLE
@@ -93,7 +95,7 @@
 .profile-title {
     font-size: 28px;
     font-weight: 700;
-    color: #43341e;
+    color: #1a1a1a;               /* Black title */
     text-align: center;
     margin-bottom: 32px;
 }
@@ -111,19 +113,19 @@
     grid-template-columns: 150px 1fr;
     column-gap: 40px;
     padding: 14px 0;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid #e0e0e0;
 }
 
 .profile-row span {
     font-weight: 600;
-    color: #555;
+    color: #2c2c2c;
     font-size: 15px;
 }
 
 .profile-row p {
     margin: 0;
     font-size: 15px;
-    color: #333;
+    color: #1a1a1a;
 }
 
 /* =========================
@@ -133,10 +135,11 @@
 .profile-form {
     display: none;
 }
+
 .profile-card,
 .profile-card.editing {
-    height: auto;      /* Unset fixed height in edit mode */
-    min-height: 480px; /* Keep the minimum size */
+    height: auto;
+    min-height: 480px;
 }
 
 .profile-card.editing .profile-view {
@@ -164,62 +167,86 @@
 .profile-form-row label {
     font-weight: 600;
     font-size: 14px;
-    color: #555;
+    color: #2c2c2c;
 }
 
 .profile-input {
     padding: 8px 12px;
     border-radius: 18px;
-    border: 1px solid #ddd;
+    border: 1.5px solid #ddd;
     font-size: 14px;
     width: 100%;
+    transition: all 0.3s ease;
+    background-color: #fafafa;
 }
 
 .profile-input:focus {
     outline: none;
-    border-color: #c9a876;
+    border-color: #1a1a1a;         /* Black border on focus */
+    background-color: white;
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.05);
 }
 
 /* =========================
-   ACTION BUTTONS
+   ACTION BUTTONS - BLACK & WHITE
 ========================= */
 
 .profile-actions {
-    margin-top: 50px;      /* 🔥 DORONG KE BAWAH TANPA ABSOLUTE */
+    margin-top: 50px;
     display: flex;
     justify-content: flex-end;
     gap: 14px;
 }
 
-/* Edit button */
+/* Edit button - Black */
 .edit-btn {
-    background: #c9a876;
+    background: #1a1a1a;           /* Black background */
     color: white;
     padding: 12px 26px;
     border-radius: 16px;
     border: none;
     font-size: 15px;
     cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 600;
 }
 
 .edit-btn:hover {
-    background: #b89763;
+    background: #2c2c2c;           /* Lighter black on hover */
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
 }
 
-/* Cancel */
+.edit-btn:active {
+    transform: translateY(0);
+}
+
+/* Cancel button - White with black border */
 .cancel-btn {
-    background: #e0e0e0;
-    color: #333;
+    background: white;
+    color: #1a1a1a;
     padding: 12px 26px;
     border-radius: 16px;
-    border: none;
+    border: 2px solid #1a1a1a;
     font-size: 15px;
     cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 600;
 }
 
-/* Save */
+.cancel-btn:hover {
+    background: #f5f5f5;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.cancel-btn:active {
+    transform: translateY(0);
+}
+
+/* Save button - Black */
 .btn-gold {
-    background: #c9a876;
+    background: #1a1a1a;           /* Black background */
     color: white;
     padding: 12px 30px;
     border-radius: 16px;
@@ -227,10 +254,17 @@
     font-size: 15px;
     font-weight: 600;
     cursor: pointer;
+    transition: all 0.3s ease;
 }
 
 .btn-gold:hover {
-    background: #b89763;
+    background: #2c2c2c;           /* Lighter black on hover */
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.btn-gold:active {
+    transform: translateY(0);
 }
 
 /* Hide Edit button in edit mode */

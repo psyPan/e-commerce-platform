@@ -1,4 +1,4 @@
-from flask import render_template, url_for, flash, redirect, request, Blueprint
+from flask import render_template, url_for, flash, redirect, request, Blueprint, abort
 from flask_login import login_user, current_user, logout_user, login_required
 from flask_store import db, bcrypt
 from flask_store.products.forms import ProductForm
@@ -11,6 +11,7 @@ from flask_store.products.models import Product
 from flask_store.reviews.models import Review
 from flask_store.reviews.forms import ReviewForm
 from datetime import datetime
+from sqlalchemy import or_
 
 
 users = Blueprint('users', __name__)
@@ -264,24 +265,29 @@ def assign_owner():
 @login_required
 def manage_orders():
     # 1. Security: Ensure the user actually owns a store
-    # (Assuming a user can own one store for simplicity)
     my_store = current_user.store    
     if not my_store:
         flash("You need to create a store before you can process orders!", "warning")
-        return redirect(url_for('users.account')) # Or create_store route
+        return redirect(url_for('users.account'))
 
     # 2. HANDLE STATUS UPDATES (POST Request)
     if request.method == "POST":
         order_id = request.form.get('order_id')
         new_status = request.form.get('order_status')
         
-        # specific order lookup
+        # Specific order lookup
         order_to_update = Order.query.get_or_404(order_id)
         
         # Basic validation
         valid_statuses = ['received', 'processed', 'shipped', 'delivered', 'closed']
         if new_status in valid_statuses:
             order_to_update.status = new_status
+            
+            # Update completion time if order is closed
+            if new_status == 'closed':
+                from datetime import datetime
+                order_to_update.completion_time = datetime.utcnow()
+            
             db.session.commit()
             flash(f"Order #{order_id} status updated to '{new_status}'", "success")
         else:
@@ -289,18 +295,80 @@ def manage_orders():
             
         return redirect(url_for('users.manage_orders'))
 
-    # 3. FETCH ORDERS (GET Request)
-    # This query joins tables to find Orders containing Products from My Store
-    # Logic: Order -> LineItems -> Product -> Store (matches my_store.id)
-    orders = db.session.query(Order)\
+    # 3. GET FILTER PARAMETERS
+    status_filter = request.args.get('status', 'all')  # Default: show all
+    search_query = request.args.get('q', '').strip()    # Search by order ID or customer
+    sort_by = request.args.get('sort', 'newest')        # Sort option
+    page = request.args.get('page', 1, type=int)        # Current page
+    per_page = 10                                        # Orders per page
+
+    # 4. BASE QUERY - Orders containing products from my store
+    orders_query = db.session.query(Order)\
+        .join(LineItem)\
+        .join(Product)\
+        .filter(Product.store_id == my_store.id)
+
+    # 5. APPLY STATUS FILTER
+    if status_filter != 'all':
+        orders_query = orders_query.filter(Order.status == status_filter)
+
+    # 6. APPLY SEARCH FILTER (by order ID or customer name/email)
+    if search_query:
+        from flask_store.users.models import User
+        orders_query = orders_query.join(User, Order.customer_id == User.id)\
+            .filter(
+                or_(
+                    Order.id.like(f'%{search_query}%'),
+                    User.f_name.ilike(f'%{search_query}%'),
+                    User.l_name.ilike(f'%{search_query}%'),
+                    User.email.ilike(f'%{search_query}%')
+                )
+            )
+
+    # 7. APPLY SORTING
+    if sort_by == 'oldest':
+        orders_query = orders_query.order_by(Order.order_time.asc())
+    elif sort_by == 'highest':
+        orders_query = orders_query.order_by(Order.total_amount.desc())
+    elif sort_by == 'lowest':
+        orders_query = orders_query.order_by(Order.total_amount.asc())
+    else:  # 'newest' (default)
+        orders_query = orders_query.order_by(Order.order_time.desc())
+
+    # 8. REMOVE DUPLICATES
+    orders_query = orders_query.distinct()
+
+    # 9. PAGINATE
+    orders_pagination = orders_query.paginate(
+        page=page, 
+        per_page=per_page, 
+        error_out=False
+    )
+    orders = orders_pagination.items
+
+    # 10. GET STATUS COUNTS FOR FILTER BADGES
+    status_counts = {}
+    base_count_query = db.session.query(Order)\
         .join(LineItem)\
         .join(Product)\
         .filter(Product.store_id == my_store.id)\
-        .order_by(Order.order_time.desc())\
-        .distinct()\
-        .all()
+        .distinct()
+    
+    status_counts['all'] = base_count_query.count()
+    for status in ['received', 'processed', 'shipped', 'delivered', 'closed']:
+        status_counts[status] = base_count_query.filter(Order.status == status).count()
 
-    return render_template('owner/manage_orders.html', orders=orders)
+    return render_template(
+        'owner/manage_orders.html', 
+        orders=orders,
+        pagination=orders_pagination,
+        status_counts=status_counts,
+        current_filters={
+            'status': status_filter,
+            'search': search_query,
+            'sort': sort_by
+        }
+    )
 
 @users.route('/order/<int:order_id>/product/<int:product_id>/review', methods=['POST'])
 @login_required
