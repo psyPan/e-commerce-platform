@@ -13,7 +13,12 @@
             <div class="discount-details">
                 <h3 class="discount-title">{{ discount.name }}</h3>
                 <p class="discount-description">{{ discount.description }}</p>
-                <p class="discount-validity">Valid from: {{ discount.seasoning_details.start_date }} - Valid to: {{ discount.seasoning_details.end_date }}</p>
+                {% if discount.seasoning_details %}
+                    <p class="discount-validity">Valid from: {{ discount.seasoning_details.start_date }} - Valid to: {{ discount.seasoning_details.end_date }}</p>
+                {% endif %}
+                {% if discount.special_event_details %}
+                    <p class="discount-validity">Valid from: {{ discount.special_event_details.start_date }} - Valid to: {{ discount.special_event_details.end_date }}</p>
+                {% endif %}
             </div>
         </div>
         {% endfor %}
