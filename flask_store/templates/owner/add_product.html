@@ -9,8 +9,6 @@
         <form method="GET" action="{{ url_for('products.add_product') }}" class="search-form">
             <select name="filter_by" class="filter-dropdown">
                 <option value="all" {% if request.args.get('filter_by') == 'all' %}selected{% endif %}>All Products</option>
-                <option value="active" {% if request.args.get('filter_by') == 'active' %}selected{% endif %}>Active Products</option>
-                <option value="deleted" {% if request.args.get('filter_by') == 'deleted' %}selected{% endif %}>Deleted Products</option>
                 <option value="in_stock" {% if request.args.get('filter_by') == 'in_stock' %}selected{% endif %}>In Stock</option>
                 <option value="out_of_stock" {% if request.args.get('filter_by') == 'out_of_stock' %}selected{% endif %}>Out of Stock</option>
                 <option value="with_discount" {% if request.args.get('filter_by') == 'with_discount' %}selected{% endif %}>With Discount</option>

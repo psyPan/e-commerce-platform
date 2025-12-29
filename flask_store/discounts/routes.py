@@ -12,13 +12,28 @@ def add_discount():
     if current_user.c_flag:
         flash('You do not have permission to this page', 'danger')
         return redirect(url_for('users.home'))
+    if not current_user.store_id:
+        flash('You need to create a store first', 'danger')
+        return redirect(url_for('stores.store_info'))
     form = DiscountForm()
     page = request.args.get('page', 1, type=int)
-    discounts_pagination = Discount.query.paginate(
-        page=page, 
-        per_page=5, 
-        error_out=False
-    )
+
+    search_query = request.args.get('search', '')
+    filter_by = request.args.get('filter_by', 'all')
+    # Filter by current user's store only
+    query = Discount.query.filter_by(store_id=current_user.store_id)
+    # Apply search filter
+    if search_query:
+        query = query.filter(Discount.name.contains(search_query))
+    
+    # Apply filters
+    if filter_by == 'active':
+        query = query.filter(Discount.is_active == True)
+    elif filter_by == 'inactive':
+        query = query.filter(Discount.is_active == False)
+
+    discounts_pagination = query.paginate(page=page, per_page=5, error_out=False)
+    discounts = discounts_pagination.items
     if form.validate_on_submit():
         if form.save.data:
             discount = Discount(
@@ -63,4 +78,19 @@ def add_discount():
                 return render_template('owner/add_discount.html', form=form)
         elif form.cancel.data:
             return redirect(url_for('users.home'))
-    return render_template('owner/add_discount.html', title='Add Discount', form=form, discounts=discounts_pagination.items, pagination=discounts_pagination)
+    return render_template('owner/add_discount.html', title='Add Discount', form=form, discounts=discounts, pagination=discounts_pagination)
+
+@discounts.route('/delete/<int:discount_id>')
+@login_required
+def delete_discount(discount_id):
+    discount = Discount.query.get_or_404(discount_id)
+    
+    # Check ownership
+    if current_user.store_id != discount.store_id:
+        flash('Unauthorized', 'danger')
+        return redirect(url_for('discounts.add_discount'))
+    discount.is_active = False
+    db.session.commit()
+    
+    flash('Discount deleted successfully', 'success')
+    return redirect(url_for('discounts.add_discount'))

@@ -14,7 +14,7 @@ class Discount(db.Model):
 
     # Foreign Keys
     # admin/owner who creates the discount
-    creator_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    store_id = db.Column(db.Integer, db.ForeignKey('store.id'))
 
     # Relationships
     # Relationship to products

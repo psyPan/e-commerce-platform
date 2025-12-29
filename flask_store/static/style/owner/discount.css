@@ -149,3 +149,129 @@
     padding: 8px;
     color: #888;
 }
+
+/* ===== DISCOUNT ACTIONS ===== */
+.discount-item {
+    position: relative;
+}
+
+.discount-actions {
+    margin-top: 10px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.delete-discount-btn {
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: 2px solid #dc3545;
+    background: white;
+    color: #dc3545;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-block;
+    margin: 20px;
+}
+
+.delete-discount-btn:hover {
+    background: #dc3545;
+    color: white;
+    transform: translateY(-2px);
+}
+
+.delete-discount-btn:active {
+    transform: translateY(0);
+}
+
+/* ===== DELETED DISCOUNT STYLING ===== */
+.discount-item.discount-deleted {
+    opacity: 0.6;
+    background: #f8f8f8;
+}
+
+.deleted-text {
+    color: #6c757d;
+    font-size: 13px;
+    font-style: italic;
+}
+
+.search-filter-bar {
+    margin-bottom: 20px;
+}
+
+#storeBox.editing .search-filter-bar {
+    display: none;
+}
+
+.search-form {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.filter-dropdown {
+    padding: 10px 15px;
+    border-radius: 18px;
+    border: 1px solid #ddd;
+    font-size: 14px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: white;
+    color: #43341e;
+    cursor: pointer;
+    min-width: 150px;
+}
+
+.filter-dropdown:focus {
+    outline: none;
+    border-color: #c9a876;
+}
+
+.search-box {
+    display: flex;
+    flex: 1;
+    gap: 10px;
+    background: transparent;
+    border: none;
+}
+
+.search-input {
+    flex: 1;
+    padding: 10px 15px;
+    border-radius: 18px;
+    border: 1px solid #ddd;
+    font-size: 14px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: #c9a876;
+}
+
+.search-btn {
+    padding: 12px 28px;
+    border-radius: 16px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background 0.2s;
+    background: #1a1a1a;;
+    color: #fff;
+    border: none;
+    outline: none;
+    box-shadow: none;
+}
+
+.search-btn:hover {
+    background: #2c2c2c;           /* Lighter black on hover */
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.search-btn,
+.search-btn:visited,
+.search-btn:active {
+  transform: translateY(0);
+}

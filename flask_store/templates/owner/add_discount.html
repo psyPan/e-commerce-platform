@@ -2,10 +2,27 @@
 {% block add_discount %}
 <link rel="stylesheet" href="{{ url_for('static', filename='style/owner/discount.css') }}">
 <div class="dashboard-card {% if form.errors %}editing{% endif %}" id="storeBox">
+    <div class="search-filter-bar">
+        <h1 class="dashboard-title">Discount Management</h1>
+        <form method="GET" action="{{ url_for('discounts.add_discount') }}" class="search-form">
+        <select name="filter_by" class="filter-dropdown">
+            <option value="all" {% if request.args.get('filter_by', 'all') == 'all' %}selected{% endif %}>All</option>
+            <option value="active" {% if request.args.get('filter_by') == 'active' %}selected{% endif %}>Active</option>
+            <option value="inactive" {% if request.args.get('filter_by') == 'inactive' %}selected{% endif %}>Inactive</option>
+        </select>
+        
+        <div class="search-box">
+            <input type="text" name="search" placeholder="Search discounts..." class="search-input" value="{{ request.args.get('search', '') }}">
+            <button type="submit" class="search-btn">Search</button>
+        </div>
+    </form>
+    </div>
     <div class="discount-view">
-    <h1 class="dashboard-title">Discount Management</h1>
         {% for discount in discounts %}
-        <div class="discount-item">
+        <div class="discount-item {% if discount.deleted_at %}discount-deleted{% endif %}">
+            {% if not discount.is_active %}
+            <div class="deleted-badge">Deleted</div>
+            {% endif %}
             <div class="discount-badge">
                 <div class="discount-notch"></div>
                 <span class="discount-value">{{ "%.0f"|format(discount.discount_percent) }}</span>
@@ -18,6 +35,15 @@
                 {% endif %}
                 {% if discount.special_event_details %}
                     <p class="discount-validity">Valid from: {{ discount.special_event_details.start_date }} - Valid to: {{ discount.special_event_details.end_date }}</p>
+                {% endif %}
+            </div>
+            <div class="discount-actions">
+                {% if discount.is_active %}
+                <a href="{{ url_for('discounts.delete_discount', discount_id=discount.id) }}" 
+                   class="delete-discount-btn" 
+                   onclick="return confirm('Are you sure you want to delete {{ discount.name }}?');">
+                    Delete
+                </a>
                 {% endif %}
             </div>
         </div>

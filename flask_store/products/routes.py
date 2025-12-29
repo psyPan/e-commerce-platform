@@ -16,6 +16,9 @@ def add_product():
     if current_user.c_flag: # is customer
         flash('You do not have permission to this page', 'danger')
         return redirect(url_for('users.home'))
+    if not current_user.store_id:
+        flash('You need to create a store first', 'danger')
+        return redirect(url_for('stores.store_info'))
     form = ProductForm()
     discounts = Discount.query.all()
     form.discount_code.choices = [(d.code, d.code) for d in discounts]
@@ -24,19 +27,15 @@ def add_product():
     search_query = request.args.get('search', '')
     filter_by = request.args.get('filter_by', 'all')
     
-    # Build query
-    query = Product.query
+    # Filter by current user's store only
+    query = Product.query.filter_by(store_id=current_user.store_id)
     
     # Apply search filter
     if search_query:
         query = query.filter(Product.name.contains(search_query))
     
     # Apply filters
-    if filter_by == 'active':
-        query = query.filter(Product.is_active)
-    elif filter_by == 'deleted':
-        query = query.filter(Product.is_deleted)
-    elif filter_by == 'in_stock':
+    if filter_by == 'in_stock':
         query = query.filter(Product.stock > 0)
     elif filter_by == 'out_of_stock':
         query = query.filter(Product.stock == 0)
