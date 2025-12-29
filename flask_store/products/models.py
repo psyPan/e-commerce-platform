@@ -40,7 +40,7 @@ class Product(db.Model):
             discount_percent = self.discount_obj.discount_percent
             
             # 3. Calculate final price
-            discount_amount = self.sell_price * discount_percent
+            discount_amount = self.sell_price * (discount_percent/100)
             return self.sell_price - discount_amount
 
         # If no discount, return normal price
@@ -50,11 +50,18 @@ class Product(db.Model):
         """Check if product is available"""
         return self.stock > 0
     
-    
-    def get_discount_percent(self):
-        """Get the discount percentage if any"""
+    def get_product_discount(self):
+        """Get discount only if it's NOT a shipping discount"""
         if self.discount_obj and self.discount_obj.is_active:
-            return self.discount_obj.discount_percent * 100  # Convert to percentage
+            if self.discount_obj.type != 'shipping':
+                return self.discount_obj
+        return None
+
+    def get_discount_percent(self):
+        """Get the discount percentage if any (excluding shipping)"""
+        discount = self.get_product_discount()
+        if discount:
+            return discount.discount_percent
         return 0
 
     def __repr__(self):

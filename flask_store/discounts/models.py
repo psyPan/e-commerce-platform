@@ -8,7 +8,7 @@ class Discount(db.Model):
     name = db.Column(db.String(100))
     description = db.Column(db.Text)
     discount_percent = db.Column(db.Float)
-    is_active = db.Column(db.Boolean, default=False)
+    is_active = db.Column(db.Boolean, default=True)
     code = db.Column(db.String(50), unique=True)
     type = db.Column(db.Enum('shipping', 'seasoning', 'special_event'), nullable=False)
 

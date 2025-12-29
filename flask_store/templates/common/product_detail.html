@@ -1,0 +1,263 @@
+{% extends "/common/base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <!-- Product Image -->
+        <div class="col-md-6">
+            <div class="product-image-container">
+                {% if product.image %}
+                    <img src="{{ url_for('static', filename='product_pics/' + (product.image if product.image else 'default.jpg')) }}" alt="{{ product.name }}" class="img-fluid rounded">
+                {% else %}
+                    <img src="{{ url_for('static', filename='images/no-image.png') }}" alt="No image" class="img-fluid rounded">
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Product Details -->
+        <div class="col-md-6">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{{ url_for('stores.view_store', store_id=product.store_id) }}">{{ product.store.name }}</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">{{ product.name }}</li>
+                </ol>
+            </nav>
+
+            <h1 class="product-title">{{ product.name }}</h1>
+            
+            <!-- Product Meta Info -->
+            <div class="product-meta mb-3">
+                {% if product.manufacturer %}
+                    <p class="mb-1"><strong>Manufacturer:</strong> {{ product.manufacturer }}</p>
+                {% endif %}
+                {% if product.model %}
+                    <p class="mb-1"><strong>Model:</strong> {{ product.model }}</p>
+                {% endif %}
+                {% if product.type %}
+                    <p class="mb-1"><strong>Type:</strong> {{ product.type }}</p>
+                {% endif %}
+            </div>
+
+            <!-- Price and Discount -->
+            <div class="price-section mb-4">
+                {% set product_discount = product.get_product_discount() %}
+    
+                {% if product_discount %}
+                    <!-- Product has discount (seasoning or special_event) -->
+                    <div class="discount-badge mb-2">
+                        <span class="badge bg-danger">
+                            {{ product_discount.discount_percent }}% OFF
+                            {% if product_discount.type == 'seasoning' %}
+                                - Seasonal Sale
+                            {% elif product_discount.type == 'special_event' %}
+                                - Special Event
+                            {% endif %}
+                        </span>
+                    </div>
+                    <h3 class="discounted-price text-success">
+                        ${{ "%.2f"|format(product.get_final_price()) }}
+                    </h3>
+                    <p class="original-price text-muted">
+                        <del>${{ "%.2f"|format(product.sell_price) }}</del>
+                        <span class="text-danger ms-2">
+                            Save ${{ "%.2f"|format(product.sell_price - product.get_final_price()) }}
+                        </span>
+                    </p>
+                {% else %}
+                    <!-- No product discount -->
+                        <h3 class="current-price text-success">
+                            ${{ "%.2f"|format(product.sell_price) }}
+                        </h3>
+                {% endif %}
+
+                {% if current_user.is_authenticated and current_user.o_flag and current_user.store_id == product.store_id %}
+                    <p class="buy-price"><strong>Buy Price:</strong> ${{ "%.0f"|format(product.buy_price) }}</p>
+                    <p class="profit-margin"><strong>Profit Margin:</strong> 
+                        {% if product.discount_obj %}
+                            ${{ "%.0f"|format((product.sell_price * (100 - product.discount_obj.discount_percent) / 100) - product.buy_price) }}
+                        {% else %}
+                            ${{ "%.0f"|format(product.sell_price - product.buy_price) }}
+                        {% endif %}
+                    </p>
+                {% endif %}
+            </div>
+
+            <!-- Stock Status -->
+            <div class="stock-status mb-4">
+                {% if product.stock > 0 %}
+                    <span class="badge bg-success">In Stock ({{ product.stock }} available)</span>
+                {% else %}
+                    <span class="badge bg-danger">Out of Stock</span>
+                {% endif %}
+            </div>
+
+            <!-- Description -->
+            {% if product.description %}
+            <div class="product-description mb-4">
+                <h5>Description</h5>
+                <p>{{ product.description }}</p>
+            </div>
+            {% endif %}
+
+            <!-- Add to Cart / Action Buttons -->
+            <div class="product-actions">
+                {% if product.stock > 0 %}
+                    <form method="POST" action="{{ url_for('cart.add_to_cart', product_id=product.id) }}" class="d-inline">
+                        <div class="input-group mb-3" style="max-width: 300px;">
+                            <input type="number" name="quantity" class="form-control" value="1" min="1" max="{{ product.stock }}" required>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-shopping-cart"></i> Add to Cart
+                            </button>
+                        </div>
+                    </form>
+                {% else %}
+                    <button class="btn btn-secondary" disabled>Out of Stock</button>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Additional Information Tabs (Optional) -->
+    <div class="row mt-5">
+        <div class="col-12">
+            <ul class="nav nav-tabs" id="productTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="details-tab" data-bs-toggle="tab" data-bs-target="#details" type="button" role="tab">
+                        Details
+                    </button>
+                </li>
+                {% if current_user.is_authenticated and current_user.o_flag and current_user.store_id == product.store_id %}
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="inventory-tab" data-bs-toggle="tab" data-bs-target="#inventory" type="button" role="tab">
+                        Inventory
+                    </button>
+                </li>
+                {% endif %}
+            </ul>
+            <div class="tab-content p-3 border border-top-0" id="productTabsContent">
+                <div class="tab-pane fade show active" id="details" role="tabpanel">
+                    <table class="table table-borderless">
+                        <tbody>
+                            {% if product.manufacturer %}
+                            <tr>
+                                <th width="200">Manufacturer:</th>
+                                <td>{{ product.manufacturer }}</td>
+                            </tr>
+                            {% endif %}
+                            {% if product.model %}
+                            <tr>
+                                <th>Model:</th>
+                                <td>{{ product.model }}</td>
+                            </tr>
+                            {% endif %}
+                            {% if product.type %}
+                            <tr>
+                                <th>Type:</th>
+                                <td>{{ product.type }}</td>
+                            </tr>
+                            {% endif %}
+                            <tr>
+                                <th>Store:</th>
+                                <td><a href="{{ url_for('stores.view_store', store_id=product.store_id) }}">{{ product.store.name }}</a></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                {% if current_user.is_authenticated and current_user.o_flag and current_user.store_id == product.store_id %}
+                <div class="tab-pane fade" id="inventory" role="tabpanel">
+                    <table class="table table-borderless">
+                        <tbody>
+                            <tr>
+                                <th width="200">Current Stock:</th>
+                                <td>{{ product.stock }} units</td>
+                            </tr>
+                            <tr>
+                                <th>Buy Price:</th>
+                                <td>${{ "%.0f"|format(product.buy_price) }}</td>
+                            </tr>
+                            <tr>
+                                <th>Sell Price:</th>
+                                <td>${{ "%.0f"|format(product.sell_price) }}</td>
+                            </tr>
+                            <tr>
+                                <th>Profit per Unit:</th>
+                                <td>${{ "%.0f"|format(product.sell_price - product.buy_price) }}</td>
+                            </tr>
+                            <tr>
+                                <th>Total Inventory Value:</th>
+                                <td>${{ "%.0f"|format(product.buy_price * product.stock) }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .product-image-container {
+        background: #f8f9fa;
+        border: 0.5px black solid;
+        padding: 20px;
+        border-radius: 8px;
+        text-align: center;
+    }
+
+    .product-image-container img {
+        max-height: 500px;
+        object-fit: contain;
+    }
+
+    .product-title {
+        font-size: 2rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+    }
+
+    .product-meta {
+        color: #666;
+        font-size: 0.95rem;
+    }
+
+    .price-section {
+        border-top: 1px solid #dee2e6;
+        border-bottom: 1px solid #dee2e6;
+        padding: 1.5rem 0;
+    }
+
+    .discounted-price {
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+    }
+
+    .current-price {
+        font-size: 2rem;
+        font-weight: 700;
+    }
+
+    .original-price {
+        font-size: 1.2rem;
+    }
+
+    .discount-badge .badge {
+        font-size: 1rem;
+        padding: 0.5rem 1rem;
+    }
+
+    .stock-status {
+        font-size: 1.1rem;
+    }
+
+    .product-description {
+        line-height: 1.8;
+    }
+
+    .product-actions .input-group {
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        border-radius: 4px;
+    }
+</style>
+{% endblock %}

@@ -111,7 +111,7 @@
 }
 
 .display-box {
-    background: linear-gradient(135deg, #fef3c7, #fde68a);
+    background: #c9efff3a;
     border-radius: 20px;
     padding: 20px;              /* Reduced from 25px */
     position: relative;
@@ -136,6 +136,7 @@
     overflow-x: auto;
     padding: 25px 10px 10px;    /* Reduced top padding from 30px */
     scroll-behavior: smooth;
+    flex-wrap: nowrap;
 }
 
 /* Hide scrollbar but keep functionality */
@@ -158,6 +159,7 @@
     min-width: 200px;           /* Increased from 180px */
     max-width: 200px;           /* Increased from 180px */
     background: white;
+    border: black 0.5px solid;
     border-radius: 15px;
     padding: 20px;
     text-align: center;
@@ -242,4 +244,38 @@
 .page-ellipsis {
     padding: 8px;
     color: #888;
+}
+
+.pagination span {
+    color: #999;
+}
+
+.store-link {
+    text-decoration: none;
+    color: inherit;
+}
+
+.store-link:hover .store-name {
+    text-decoration: underline;
+    /* or any other hover effect you want */
+}
+.product-card-link {
+    flex-shrink: 0;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+.product-card-link:hover {
+    text-decoration: none;
+    color: inherit;
+}
+
+.product-card {
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.product-card-link:hover .product-card {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }

@@ -27,23 +27,24 @@
     <div class="stores-container">
         {% for store in stores %}
         <div class="store-section">
-            <div class="store-header">
+            <a href="{{ url_for('stores.view_store', store_id=store.id) }}" class="store-link">
                 <h2 class="store-name">{{ store.name }}</h2>
-            </div>
+            </a>
             
             <div class="display-box">
                 <div class="products-scroll">
-                    {% for product in store.products[:5] %}
-                    <div class="product-card">
-                        <div class="product-image">
-                            <img src="{{ url_for('static', filename='product_pics/' + (product.image if product.image else 'default.jpg')) }}" alt="{{ product.name }}">
+                    {% for product in store.products %}
+                    <a href="{{ url_for('products.view_product', product_id=product.id) }}" class="product-card-link">
+                        <div class="product-card">
+                            <div class="product-image">
+                                <img src="{{ url_for('static', filename='product_pics/' + (product.image if product.image else 'default.jpg')) }}" alt="{{ product.name }}">
+                            </div>
+                            <div class="product-info">
+                                <div class="product-name">{{ product.name }}</div>
+                                <div class="product-price">${{ "%.0f"|format(product.sell_price) }}</div>
+                            </div>
                         </div>
-                        <div class="product-info">
-                            <div class="product-name">{{ product.name }}</div>
-                            <!-- <div class="product-price">${{ "%.2f"|format(product.sell_price) }}</div> -->
-                            <div class="product-price"> ${{ "%.0f"|format(product.sell_price) }}</div>
-                        </div>
-                    </div>
+                    </a>
                     {% endfor %}
                 </div>
             </div>
@@ -73,6 +74,6 @@
             <a href="{{ url_for('discounts.add_discount', page=pagination.next_num) }}" class="page-btn">Next</a>
         {% endif %}
     </div>
-    
+
 <script src="{{ url_for('static', filename='script/home.js') }}"></script>
 {% endblock content %}

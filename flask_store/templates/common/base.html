@@ -15,10 +15,10 @@
 
     <!-- NAVBAR BLOCK -->
     {% block navbar %}
+    {% if request.endpoint not in ['users.login', 'users.register', 'users.logout'] %}
     <div class="navbar">
 
         <!-- LOGO (no in login/register/logout) -->
-        {% if request.endpoint not in ['users.login', 'users.register', 'users.logout'] %}
             <div class="logo">
                 <a href="{{ url_for('users.home') }}">
                     <img src="{{ url_for('static', filename='img/logo.png') }}"
@@ -26,7 +26,7 @@
                         class="navbar-logo">
                 </a>
             </div>
-        {% endif %}
+    
 
         <!-- SEARCH only HOME TODO: --> 
         {% if request.endpoint == 'users.home' %}
@@ -69,9 +69,9 @@
             {% endif %}
             
         {% endif %}
-</div>
-
+        </div>
     </div>
+    {% endif %}
     {% endblock navbar %}
 
     <div class="container-fluid">
