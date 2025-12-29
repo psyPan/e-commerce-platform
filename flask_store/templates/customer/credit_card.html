@@ -1,18 +1,9 @@
-{% extends "old/index.html" %}
+{% extends "/customer/base_dashboard.html" %}
 
-{% block content %}
-<link rel="stylesheet" href="{{ url_for('static', filename='style/old/home.css') }}">
+{% block credit_card %}
 <link rel="stylesheet" href="{{ url_for('static', filename='style/old/credit_card.css') }}">
 
 <div class="credit-wrapper">
-
-    <div class="side-menu">
-        <a class="side-btn" href="{{ url_for('users.profile') }}">My Profile</a>
-        <a class="side-btn active" href="{{ url_for('users.credit') }}">My Credit Card</a>
-        <a class="side-btn" href="{{ url_for('users.change_password') }}">Change Password</a>
-        <a class="side-btn" href="{{ url_for('users.order_history') }}">Order History</a>
-        <a class="side-btn" href="{{ url_for('cart.My_cart') }}">My Cart</a>
-    </div>
 
     <div class="credit-container">
         
@@ -126,4 +117,4 @@
     }
 </script>
 
-{% endblock %}
+{% endblock credit_card %}

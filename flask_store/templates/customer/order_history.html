@@ -1,7 +1,6 @@
-{% extends "old/index.html" %}
+{% extends "customer/base_dashboard.html" %}
 
-{% block content %}
-<link rel="stylesheet" href="{{ url_for('static', filename='style/old/home.css') }}">
+{% block order_history %}
 <link rel="stylesheet" href="{{ url_for('static', filename='style/old/order_history.css') }}">
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
@@ -230,4 +229,4 @@
 
     </div>
 </div>
-{% endblock %}
+{% endblock order_history %}

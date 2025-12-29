@@ -83,7 +83,7 @@ def logout():
 
 @users.route('/credit')
 def credit():
-    return render_template('old/credit_card.html')
+    return render_template('customer/credit_card.html')
 
 @users.route('/profile', methods=['GET', 'POST'])
 @login_required
