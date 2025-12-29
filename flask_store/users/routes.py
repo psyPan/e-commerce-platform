@@ -11,6 +11,7 @@ from flask_store.products.models import Product
 from flask_store.reviews.models import Review
 from flask_store.reviews.forms import ReviewForm
 from datetime import datetime
+from flask_store.credit_card.models import CreditCard # Import your new model
 
 
 users = Blueprint('users', __name__)
@@ -348,3 +349,66 @@ def add_review(order_id, product_id):
 
     # CRITICAL CHANGE: Redirect back to Order History, not Order Details
     return redirect(url_for('users.order_history'))
+
+
+users.route("/credit", methods=['GET'])
+@login_required
+def credit():
+    return render_template('credit.html')
+
+
+@users.route("/credit/add", methods=['POST'])
+@login_required
+def add_card():
+    # 1. Get data from form
+    name = request.form.get('name')
+    card_number = request.form.get('card_number')
+    expiry_str = request.form.get('expiry') # Format "MM/YY"
+    cvv = request.form.get('cvv')
+
+    # 2. Basic Validation
+    if not card_number or len(card_number) < 13:
+        flash('Invalid card number', 'danger')
+        return redirect(url_for('users.credit'))
+
+    # 3. Convert MM/YY to Python Date object
+    try:
+        # We set day to 1st of the month arbitrarily
+        expiry_date = datetime.strptime(expiry_str, '%m/%y').date()
+    except ValueError:
+        flash('Invalid date format. Use MM/YY', 'danger')
+        return redirect(url_for('users.credit'))
+
+    # 4. Save to DB
+    new_card = CreditCard(
+        user_id=current_user.id,
+        name=name,
+        Card_Number=card_number,
+        Expiration_Date=expiry_date,
+        CVV=cvv,
+        is_active=True
+    )
+    
+    db.session.add(new_card)
+    db.session.commit()
+    
+    flash('Card added successfully!', 'success')
+    return redirect(url_for('users.credit'))
+
+
+@users.route("/credit/delete/<int:card_id>", methods=['POST'])
+@login_required
+def delete_card(card_id):
+    card = CreditCard.query.get_or_404(card_id)
+    
+    # Security: Ensure user owns this card
+    if card.user_id != current_user.id:
+        flash('Unauthorized action.', 'danger')
+        return redirect(url_for('users.credit'))
+    
+    # Soft Delete (Set is_active to False)
+    card.is_active = False
+    db.session.commit()
+    
+    flash('Card removed.', 'info')
+    return redirect(url_for('users.credit'))
