@@ -20,7 +20,7 @@ class Product(db.Model):
     is_deleted = db.Column(db.Boolean, default=False, nullable=False)
 
     # Foreign keys
-    store_id = db.Column(db.Integer, db.ForeignKey('store.id'), nullable=False)
+    store_id = db.Column(db.Integer, db.ForeignKey('store.id', ondelete='CASCADE'), nullable=False)
     discount_id = db.Column(db.Integer, db.ForeignKey('discount.id'))
 
     # Relationships

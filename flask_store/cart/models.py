@@ -12,7 +12,7 @@ class Cart(db.Model):
     # 2. Link to the User (Who owns this cart item?)
     # Note: Changed 'customer_id' to 'user_id' to match standard naming, 
     # but 'customer_id' is fine if you update your route query to match.
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='CASCADE'), nullable=False)
     
     # 3. Link to the Product (What is in the cart?)
     # THIS WAS MISSING in your code:
@@ -22,7 +22,7 @@ class Cart(db.Model):
     date_added = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
 
     # Relationships (Optional but helpful)
-    user = db.relationship('User', backref=db.backref('cart_items', lazy=True))
+    user = db.relationship('User', backref=db.backref('carts', cascade='all, delete-orphan', lazy=True))
     product = db.relationship('Product', backref=db.backref('in_carts', lazy=True))
     orders = db.relationship('Order', back_populates='cart')
     line_items = db.relationship('LineItem', backref='cart', lazy=True)

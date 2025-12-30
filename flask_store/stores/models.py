@@ -14,9 +14,8 @@ class Store(db.Model):
     
     # Relationships
     # Relation ship to store owners
-    owners = db.relationship('User', back_populates='store')
+    owners = db.relationship('User', back_populates='store', cascade='all, delete-orphan')
     # Relation ship to store products
-    products = db.relationship('Product', back_populates='store')
-
+    products = db.relationship('Product', back_populates='store', cascade='all, delete-orphan')
     def __repr__(self):
         return f"Store('{self.name}')"

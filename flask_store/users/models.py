@@ -24,7 +24,7 @@ class User(db.Model, UserMixin): # We need UserMixin for handling user's logged 
     c_flag = db.Column(db.Boolean, nullable=False)
 
     # Foreign keys
-    store_id = db.Column(db.Integer, db.ForeignKey('store.id'), nullable=True)
+    store_id = db.Column(db.Integer, db.ForeignKey('store.id', ondelete='CASCADE'), nullable=True)
 
     # Relationships
     # Relationship with store
