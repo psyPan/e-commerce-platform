@@ -334,3 +334,22 @@
     font-size: 13px;
     font-style: italic;
 }
+
+.product-item {
+    transition: all 0.3s ease;
+}
+
+.product-item:hover {
+    background: #f8f9fa;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+}
+
+.product-item.product-deleted {
+    cursor: not-allowed;
+}
+
+.product-item.product-deleted:hover {
+    transform: none;
+    box-shadow: none;
+}

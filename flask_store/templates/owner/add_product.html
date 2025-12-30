@@ -23,43 +23,45 @@
     </div>
     <!-- ================= PRODUCT LIST ================= -->
     <div class="product-view">
-        {% for product in products %}
-        <div class="product-item {% if product.deleted_at %}product-deleted{% endif %}">
-            {% if product.deleted_at %}
-            <div class="deleted-badge">Deleted</div>
+    {% for product in products %}
+    <div class="product-item {% if product.deleted_at %}product-deleted{% endif %}" 
+         onclick="window.location.href='{{ url_for('products.view_product', product_id=product.id) }}';"
+         style="cursor: pointer;">
+        {% if product.deleted_at %}
+        <div class="deleted-badge">Deleted</div>
+        {% endif %}
+        <div class="product-image">
+            {% if product.image %}
+                <img src="{{ url_for('static', filename='product_pics/' + product.image) }}" alt="{{ product.name }}">
+            {% else %}
+                <img src="{{ url_for('static', filename='product_pics/default.jpg') }}" alt="{{ product.name }}">
             {% endif %}
-            <div class="product-image">
-                {% if product.image %}
-                    <img src="{{ url_for('static', filename='product_pics/' + product.image) }}" alt="{{ product.name }}">
-                {% else %}
-                    <img src="{{ url_for('static', filename='product_pics/default.jpg') }}" alt="{{ product.name }}">
-                {% endif %}
-            </div>
-            <div class="product-details">
-                <h3 class="product-title">{{ product.name }}</h3>
-                <p class="product-stock">Stock: <span class="{% if product.stock > 0 %}stock-available{% else %}stock-out{% endif %}">{{ product.stock }} units</span></p>
-                <p class="product-discount">
-                    {% if product.discount_obj.code %}
-                        Discount: <span class="discount-applied">{{ product.discount_obj.code }}</span>
-                    {% else %}
-                        Discount: <span class="no-discount">No discount applied</span>
-                    {% endif %}
-                </p>
-                <p class="product-price">${{ "%.0f"|format(product.sell_price) }}</p>
-            </div>
-            <div class="product-actions">
-                {% if not product.deleted_at %}
-                <a href="{{ url_for('products.delete_product', product_id=product.id) }}" 
-                   class="delete-product-btn" 
-                   onclick="return confirm('Are you sure you want to delete {{ product.name }}?');">
-                    Delete
-                </a>
-                {% else %}
-                <span class="deleted-text">Deleted on {{ product.deleted_at.strftime('%Y-%m-%d') }}</span>
-                {% endif %}
-            </div>
         </div>
-        {% endfor %}
+        <div class="product-details">
+            <h3 class="product-title">{{ product.name }}</h3>
+            <p class="product-stock">Stock: <span class="{% if product.stock > 0 %}stock-available{% else %}stock-out{% endif %}">{{ product.stock }} units</span></p>
+            <p class="product-discount">
+                {% if product.discount_obj and product.discount_obj.code %}
+                    Discount: <span class="discount-applied">{{ product.discount_obj.code }}</span>
+                {% else %}
+                    Discount: <span class="no-discount">No discount applied</span>
+                {% endif %}
+            </p>
+            <p class="product-price">${{ "%.0f"|format(product.sell_price) }}</p>
+        </div>
+        <div class="product-actions">
+            {% if not product.deleted_at %}
+            <a href="{{ url_for('products.delete_product', product_id=product.id) }}" 
+               class="delete-product-btn" 
+               onclick="event.stopPropagation(); return confirm('Are you sure you want to delete {{ product.name }}?');">
+                Delete
+            </a>
+            {% else %}
+            <span class="deleted-text">Deleted on {{ product.deleted_at.strftime('%Y-%m-%d') }}</span>
+            {% endif %}
+        </div>
+    </div>
+    {% endfor %}
     </div>
 
     <!-- Pagination Controls -->
