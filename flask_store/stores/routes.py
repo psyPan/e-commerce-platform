@@ -272,6 +272,19 @@ def store_management():
     form = EditStoreForm()
 
     # ===============================
+    # DELETE STORE
+    # ===============================
+    if request.method == "POST" and "delete_store_id" in request.form:
+        store_id = request.form.get("delete_store_id")
+        store = Store.query.get_or_404(store_id)
+
+        db.session.delete(store)
+        db.session.commit()
+
+        flash(f'Store "{store.name}" deleted!', 'success')
+        return redirect(url_for('stores.store_management'))
+    
+    # ===============================
     # HANDLE ADD STORE (POST)
     # ===============================
     if form.validate_on_submit():

@@ -232,7 +232,7 @@
     box-shadow: none;
 }
 .page-btn:hover {
-    background: #e2d2c2;
+    background: #88847f;
 }
 .page-btn.active {
     color: white;
@@ -241,6 +241,15 @@
 .page-ellipsis {
     padding: 8px;
     color: #888;
+}
+.page-btn,
+.page-btn:visited,
+.page-btn:hover,
+.page-btn:active,
+.page-btn:focus {
+    color: #fff;
+    text-decoration: none;
+    outline: none;
 }
 
 /* ===============================

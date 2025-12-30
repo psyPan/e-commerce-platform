@@ -6,14 +6,12 @@ function exitAdd() {
     document.querySelector(".dashboard-card").classList.remove("editing");
 }
 
-function openDeleteModal(storeId) {
-    const modal = document.getElementById("deleteModal");
-    const form = document.getElementById("deleteForm");
-
-    form.action = `/store/${storeId}/delete`;
-    modal.style.display = "flex";
+function openDelete(id) {
+    document.getElementById("delete_store_id").value = id;
+    document.getElementById("deleteModal").style.display = "flex";
 }
 
-function closeDeleteModal() {
+function closeDelete() {
     document.getElementById("deleteModal").style.display = "none";
 }
+
