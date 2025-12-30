@@ -37,12 +37,30 @@
                         {% if product.is_active %}
                         <a href="{{ url_for('products.view_product', product_id=product.id) }}" class="product-card-link">
                             <div class="product-card">
+                                {% set product_discount = product.get_product_discount() %}
+                                
+                                {% if product_discount %}
+                                    <div class="discount-badge">
+                                        <span class="badge bg-danger">
+                                            {{ product_discount.discount_percent }}% OFF
+                                        </span>
+                                    </div>
+                                {% endif %}
+                                
                                 <div class="product-image">
                                     <img src="{{ url_for('static', filename='product_pics/' + (product.image if product.image else 'default.jpg')) }}" alt="{{ product.name }}">
                                 </div>
                                 <div class="product-info">
                                     <div class="product-name">{{ product.name }}</div>
-                                    <div class="product-price">${{ "%.0f"|format(product.sell_price) }}</div>
+                                    
+                                    {% if product_discount %}
+                                        <div class="product-price-container">
+                                            <div class="product-price discounted">${{ "%.2f"|format(product.get_final_price()) }}</div>
+                                            <div class="product-price-original">${{ "%.2f"|format(product.sell_price) }}</div>
+                                        </div>
+                                    {% else %}
+                                        <div class="product-price">${{ "%.2f"|format(product.sell_price) }}</div>
+                                    {% endif %}
                                 </div>
                             </div>
                         </a>
@@ -76,6 +94,50 @@
             <a href="{{ url_for('discounts.add_discount', page=pagination.next_num) }}" class="page-btn">Next</a>
         {% endif %}
     </div>
+</div>
+
+<style>
+    .product-card {
+        position: relative;
+        height: 100%;
+    }
+    
+    .discount-badge {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        z-index: 10;
+    }
+    
+    .discount-badge .badge {
+        font-size: 0.75rem;
+        padding: 0.4rem 0.6rem;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+    
+    .product-price-container {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        margin-top: auto;
+    }
+    
+    .product-price.discounted {
+        color: #28a745;
+        font-weight: bold;
+        font-size: 1.3em;
+    }
+    
+    .product-price-original {
+        color: #6c757d;
+        text-decoration: line-through;
+        font-size: 0.85em;
+    }
+
+    .product-image {
+        position: relative; /* Make sure image container maintains its space */
+    }
+</style>
 
 <script src="{{ url_for('static', filename='script/home.js') }}"></script>
 {% endblock content %}

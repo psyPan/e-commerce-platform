@@ -80,7 +80,7 @@ def add_discount():
             return redirect(url_for('users.home'))
     return render_template('owner/add_discount.html', title='Add Discount', form=form, discounts=discounts, pagination=discounts_pagination)
 
-@discounts.route('/delete/<int:discount_id>')
+@discounts.route('/discount/delete/<int:discount_id>')
 @login_required
 def delete_discount(discount_id):
     discount = Discount.query.get_or_404(discount_id)

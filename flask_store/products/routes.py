@@ -101,7 +101,7 @@ def view_product(product_id):
     product = Product.query.get_or_404(product_id)
     return render_template('common/product_detail.html', product=product)
 
-@products.route('/delete/<int:product_id>')
+@products.route('/product/delete/<int:product_id>')
 @login_required
 def delete_product(product_id):
     product = Product.query.get_or_404(product_id)
