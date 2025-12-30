@@ -19,9 +19,11 @@
     </div>
     <div class="discount-view">
         {% for discount in discounts %}
-        <div class="discount-item {% if discount.deleted_at %}discount-deleted{% endif %}">
+        <div class="discount-item {% if not discount.is_active %}discount-deleted{% endif %}"
+             onclick="openEditModal({{ discount.id }})"
+             style="cursor: pointer;">
             {% if not discount.is_active %}
-            <div class="deleted-badge">Deleted</div>
+            <div class="deleted-badge">Inactive</div>
             {% endif %}
             <div class="discount-badge">
                 <div class="discount-notch"></div>
@@ -30,18 +32,23 @@
             <div class="discount-details">
                 <h3 class="discount-title">{{ discount.name }}</h3>
                 <p class="discount-description">{{ discount.description }}</p>
+                <p class="discount-code"><strong>Code:</strong> {{ discount.code }}</p>
+                <p class="discount-type"><strong>Type:</strong> {{ discount.type }}</p>
                 {% if discount.seasoning_details %}
                     <p class="discount-validity">Valid from: {{ discount.seasoning_details.start_date }} - Valid to: {{ discount.seasoning_details.end_date }}</p>
                 {% endif %}
                 {% if discount.special_event_details %}
                     <p class="discount-validity">Valid from: {{ discount.special_event_details.start_date }} - Valid to: {{ discount.special_event_details.end_date }}</p>
                 {% endif %}
+                {% if discount.shipping_details %}
+                    <p class="discount-validity">Min Purchase: ${{ discount.shipping_details.min_purchase }}</p>
+                {% endif %}
             </div>
             <div class="discount-actions">
                 {% if discount.is_active %}
                 <a href="{{ url_for('discounts.delete_discount', discount_id=discount.id) }}" 
                    class="delete-discount-btn" 
-                   onclick="return confirm('Are you sure you want to delete {{ discount.name }}?');">
+                   onclick="event.stopPropagation(); return confirm('Are you sure you want to delete {{ discount.name }}?');">
                     Delete
                 </a>
                 {% endif %}
@@ -56,7 +63,7 @@
     <!-- Pagination Controls -->
     <div class="pagination-controls">
         {% if pagination.has_prev %}
-            <a href="{{ url_for('discounts.add_discount', page=pagination.prev_num) }}" class="page-btn">Previous</a>
+            <a href="{{ url_for('discounts.add_discount', page=pagination.prev_num, search=request.args.get('search', ''), filter_by=request.args.get('filter_by', 'all')) }}" class="page-btn">Previous</a>
         {% endif %}
         
         {% for page_num in pagination.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
@@ -64,7 +71,7 @@
                 {% if page_num == pagination.page %}
                     <span class="page-btn active">{{ page_num }}</span>
                 {% else %}
-                    <a href="{{ url_for('discounts.add_discount', page=page_num) }}" class="page-btn">{{ page_num }}</a>
+                    <a href="{{ url_for('discounts.add_discount', page=page_num, search=request.args.get('search', ''), filter_by=request.args.get('filter_by', 'all')) }}" class="page-btn">{{ page_num }}</a>
                 {% endif %}
             {% else %}
                 <span class="page-ellipsis">...</span>
@@ -72,10 +79,11 @@
         {% endfor %}
         
         {% if pagination.has_next %}
-            <a href="{{ url_for('discounts.add_discount', page=pagination.next_num) }}" class="page-btn">Next</a>
+            <a href="{{ url_for('discounts.add_discount', page=pagination.next_num, search=request.args.get('search', ''), filter_by=request.args.get('filter_by', 'all')) }}" class="page-btn">Next</a>
         {% endif %}
     </div>
     
+    <!-- Add New Discount Form -->
     <div class="form-container">
         <form method="POST" class="dashboard-form" id="addProductForm" enctype="multipart/form-data" action="">
             <h1 class="dashboard-title">Add New Discount</h1>
@@ -169,6 +177,433 @@
         </form>
     </div>
 </div>
+
+<!-- Edit Discount Modal -->
+<div id="editDiscountModal" class="edit-modal">
+    <div class="edit-modal-inner">
+        <div class="modal-header-custom">
+            <h2 class="modal-title">Edit Discount</h2>
+            <button type="button" class="btn-close-custom" onclick="closeEditModal()">×</button>
+        </div>
+
+        <form method="POST" action="" id="editDiscountForm">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() if csrf_token else '' }}">
+            <input type="hidden" name="discount_id" id="edit_discount_id">
+
+            <div class="form-group">
+                <label class="form-label">Discount Name</label>
+                <input type="text" name="name" id="edit_name" class="form-input" required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Discount Code</label>
+                <input type="text" name="code" id="edit_code" class="form-input" required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Description</label>
+                <textarea name="description" id="edit_description" class="form-input" rows="3"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Discount Type</label>
+                <select name="type" id="edit_type" class="form-input" onchange="toggleEditDiscountFields()" required>
+                    <option value="">Select Type</option>
+                    <option value="shipping">Shipping</option>
+                    <option value="seasoning">Seasoning</option>
+                    <option value="special_event">Special Event</option>
+                </select>
+            </div>
+
+            <!-- Shipping fields -->
+            <div class="form-group" id="edit-shipping-fields" style="display: none;">
+                <label class="form-label">Minimum Purchase Amount ($)</label>
+                <input type="number" step="0.01" name="min_purchase" id="edit_min_purchase" class="form-input">
+            </div>
+
+            <!-- Seasoning/Special Event fields -->
+            <div class="form-row-edit" id="edit-date-fields" style="display: none;">
+                <div class="form-group">
+                    <label class="form-label">Start Date</label>
+                    <input type="date" name="start_date" id="edit_start_date" class="form-input">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">End Date</label>
+                    <input type="date" name="end_date" id="edit_end_date" class="form-input">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Discount Percentage (%)</label>
+                <input type="number" step="0.01" name="discount_percent" id="edit_discount_percent" class="form-input" min="0" max="100" required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Status</label>
+                <div class="status-toggle">
+                    <label class="switch">
+                        <input type="checkbox" name="is_active" id="edit_is_active" value="1">
+                        <span class="slider-switch"></span>
+                    </label>
+                    <span class="status-label" id="status_label">Active</span>
+                </div>
+            </div>
+
+            <div class="modal-buttons">
+                <button type="button" class="btn-cancel" onclick="closeEditModal()">Cancel</button>
+                <button type="submit" class="btn-save">Update Discount</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+    .discount-item {
+        transition: all 0.3s ease;
+    }
+
+    .discount-item:hover {
+        background: #f8f9fa;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        transform: translateY(-2px);
+    }
+
+    .discount-item.discount-deleted {
+        opacity: 0.7;
+    }
+
+    .discount-code, .discount-type {
+        font-size: 0.9rem;
+        color: #666;
+        margin: 5px 0;
+    }
+
+    /* Edit Modal Styles */
+    .edit-modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.6);
+        z-index: 10000;
+        justify-content: center;
+        align-items: center;
+        backdrop-filter: blur(5px);
+        overflow-y: auto;
+        padding: 20px;
+    }
+
+    .edit-modal.active {
+        display: flex;
+    }
+
+    .edit-modal-inner {
+        background: white;
+        border-radius: 20px;
+        padding: 35px;
+        width: 100%;
+        max-width: 700px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        animation: slideIn 0.3s ease;
+        max-height: 90vh;
+        overflow-y: auto;
+    }
+
+    @keyframes slideIn {
+        from {
+            transform: translateY(-50px);
+            opacity: 0;
+        }
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
+    .modal-header-custom {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 25px;
+        padding-bottom: 20px;
+        border-bottom: 2px solid #eee;
+    }
+
+    .modal-title {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: #333;
+        margin: 0;
+    }
+
+    .btn-close-custom {
+        background: none;
+        border: none;
+        font-size: 32px;
+        color: #999;
+        cursor: pointer;
+        transition: all 0.3s;
+        line-height: 1;
+        padding: 0;
+        width: 30px;
+        height: 30px;
+    }
+
+    .btn-close-custom:hover {
+        color: #333;
+        transform: rotate(90deg);
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: #333;
+        font-size: 0.95rem;
+    }
+
+    .form-input {
+        width: 100%;
+        padding: 12px 16px;
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        font-size: 1rem;
+        transition: all 0.3s;
+    }
+
+    .form-input:focus {
+        outline: none;
+        border-color: #007bff;
+        box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+    }
+
+    .form-row-edit {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+    }
+
+    .modal-buttons {
+        display: flex;
+        gap: 12px;
+        justify-content: flex-end;
+        margin-top: 30px;
+        padding-top: 20px;
+        border-top: 2px solid #eee;
+    }
+
+    .btn-cancel,
+    .btn-save {
+        padding: 12px 28px;
+        border-radius: 8px;
+        border: none;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .btn-cancel {
+        background: #6c757d;
+        color: white;
+    }
+
+    .btn-cancel:hover {
+        background: #545b62;
+    }
+
+    .btn-save {
+        background: #007bff;
+        color: white;
+    }
+
+    .btn-save:hover {
+        background: #0056b3;
+    }
+
+    /* Status Toggle Switch */
+    .status-toggle {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: 60px;
+        height: 34px;
+    }
+
+    .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+
+    .slider-switch {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        transition: 0.4s;
+        border-radius: 34px;
+    }
+
+    .slider-switch:before {
+        position: absolute;
+        content: "";
+        height: 26px;
+        width: 26px;
+        left: 4px;
+        bottom: 4px;
+        background-color: white;
+        transition: 0.4s;
+        border-radius: 50%;
+    }
+
+    input:checked + .slider-switch {
+        background-color: #28a745;
+    }
+
+    input:checked + .slider-switch:before {
+        transform: translateX(26px);
+    }
+
+    .status-label {
+        font-weight: 600;
+        color: #333;
+        font-size: 1rem;
+    }
+
+    @media (max-width: 768px) {
+        .form-row-edit {
+            grid-template-columns: 1fr;
+        }
+
+        .edit-modal-inner {
+            padding: 25px;
+        }
+    }
+</style>
+
+<script>
+    // Store discount data for modal
+    const discountData = {
+        {% for discount in discounts %}
+        {{ discount.id }}: {
+            name: "{{ discount.name }}",
+            code: "{{ discount.code }}",
+            description: "{{ discount.description }}",
+            type: "{{ discount.type }}",
+            discount_percent: {{ discount.discount_percent }},
+            is_active: {{ 'true' if discount.is_active else 'false' }},
+            {% if discount.shipping_details %}
+            min_purchase: {{ discount.shipping_details.min_purchase }},
+            {% endif %}
+            {% if discount.seasoning_details %}
+            start_date: "{{ discount.seasoning_details.start_date }}",
+            end_date: "{{ discount.seasoning_details.end_date }}",
+            {% endif %}
+            {% if discount.special_event_details %}
+            start_date: "{{ discount.special_event_details.start_date }}",
+            end_date: "{{ discount.special_event_details.end_date }}",
+            {% endif %}
+        },
+        {% endfor %}
+    };
+
+    function openEditModal(discountId) {
+        const discount = discountData[discountId];
+        if (!discount) return;
+
+        // Populate form fields
+        document.getElementById('edit_discount_id').value = discountId;
+        document.getElementById('edit_name').value = discount.name;
+        document.getElementById('edit_code').value = discount.code;
+        document.getElementById('edit_description').value = discount.description || '';
+        document.getElementById('edit_type').value = discount.type;
+        document.getElementById('edit_discount_percent').value = discount.discount_percent;
+        document.getElementById('edit_is_active').checked = discount.is_active;
+        
+        // Update status label
+        updateStatusLabel();
+
+        // Handle type-specific fields
+        if (discount.type === 'shipping') {
+            document.getElementById('edit_min_purchase').value = discount.min_purchase || '';
+        } else if (discount.type === 'seasoning' || discount.type === 'special_event') {
+            document.getElementById('edit_start_date').value = discount.start_date || '';
+            document.getElementById('edit_end_date').value = discount.end_date || '';
+        }
+
+        // Update form action
+        document.getElementById('editDiscountForm').action = "{{ url_for('discounts.edit_discount', discount_id=0) }}".replace('/0', '/' + discountId);
+
+        // Show appropriate fields
+        toggleEditDiscountFields();
+
+        // Show modal
+        document.getElementById('editDiscountModal').classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeEditModal() {
+        document.getElementById('editDiscountModal').classList.remove('active');
+        document.body.style.overflow = 'auto';
+    }
+
+    function toggleEditDiscountFields() {
+        const type = document.getElementById('edit_type').value;
+        const shippingFields = document.getElementById('edit-shipping-fields');
+        const dateFields = document.getElementById('edit-date-fields');
+
+        // Hide all fields first
+        shippingFields.style.display = 'none';
+        dateFields.style.display = 'none';
+
+        // Show relevant fields
+        if (type === 'shipping') {
+            shippingFields.style.display = 'block';
+        } else if (type === 'seasoning' || type === 'special_event') {
+            dateFields.style.display = 'grid';
+        }
+    }
+
+    function updateStatusLabel() {
+        const checkbox = document.getElementById('edit_is_active');
+        const label = document.getElementById('status_label');
+        label.textContent = checkbox.checked ? 'Active' : 'Inactive';
+        label.style.color = checkbox.checked ? '#28a745' : '#dc3545';
+    }
+
+    // Close modal when clicking outside
+    document.getElementById('editDiscountModal')?.addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeEditModal();
+        }
+    });
+
+    // Close modal with ESC key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeEditModal();
+        }
+    });
+
+    // Update status label when toggle changes
+    document.getElementById('edit_is_active')?.addEventListener('change', updateStatusLabel);
+</script>
+
 <script src="{{ url_for('static', filename='script/edit_store.js') }}"></script>
 <script src="{{ url_for('static', filename='script/discount.js') }}"></script>
 {% endblock add_discount %}

@@ -5,6 +5,8 @@ from flask_login import current_user, login_required
 from flask_store import db
 from flask_store.products.models import Product
 from flask_store.discounts.models import Discount
+from flask_store.stores.models import Store
+from flask_store.reviews.models import Review
 from flask_store.products.forms import ProductForm
 from flask_store.products.utils import save_picture
 
@@ -99,9 +101,15 @@ def list_products():
 def view_product(product_id):
     """Display product details"""
     product = Product.query.get_or_404(product_id)
-    return render_template('common/product_detail.html', product=product)
+    store = Store.query.get_or_404(product.store_id)
+    
+    # Get Reviews for this product (Newest first)
+    reviews = Review.query.filter_by(product_id=product_id)\
+                          .order_by(Review.review_time.desc())\
+                          .all()
+    return render_template('common/product_detail.html', product=product, store=store, reviews=reviews)
 
-@products.route('/delete/<int:product_id>')
+@products.route('/product/delete/<int:product_id>')
 @login_required
 def delete_product(product_id):
     product = Product.query.get_or_404(product_id)
@@ -151,3 +159,35 @@ def search_results():
     results = products_query.all()
 
     return render_template('common/search_results.html', products=results)
+
+@products.route('/edit/<int:product_id>', methods=['POST'])
+@login_required
+def edit_product(product_id):
+    product = Product.query.get_or_404(product_id)
+    
+    # Check ownership
+    if not current_user.o_flag or current_user.store_id != product.store_id:
+        flash('Unauthorized', 'danger')
+        return redirect(url_for('users.home'))
+    
+    # Update fields
+    product.name = request.form.get('name')
+    product.type = request.form.get('type')
+    product.description = request.form.get('description')
+    product.buy_price = request.form.get('buy_price')
+    product.sell_price = request.form.get('sell_price')
+    product.stock = request.form.get('stock')
+    product.manufacturer = request.form.get('manufacturer')
+    product.model = request.form.get('model')
+    
+    # Handle image upload
+    if 'image' in request.files:
+        file = request.files['image']
+        if file and file.filename:
+            # Save image logic here
+            filename = save_picture(file)  # Your image saving function
+            product.image = filename
+    
+    db.session.commit()
+    flash('Product updated successfully!', 'success')
+    return redirect(url_for('products.view_product', product_id=product.id))

@@ -3,6 +3,7 @@ from flask_login import current_user, login_required
 from flask_store import db
 from flask_store.discounts.forms import DiscountForm
 from flask_store.discounts.models import Discount, Shipping, Seasoning, SpecialEvent
+from datetime import datetime
 
 discounts = Blueprint('discounts', __name__)
 
@@ -80,7 +81,7 @@ def add_discount():
             return redirect(url_for('users.home'))
     return render_template('owner/add_discount.html', title='Add Discount', form=form, discounts=discounts, pagination=discounts_pagination)
 
-@discounts.route('/delete/<int:discount_id>')
+@discounts.route('/discount/delete/<int:discount_id>')
 @login_required
 def delete_discount(discount_id):
     discount = Discount.query.get_or_404(discount_id)
@@ -93,4 +94,104 @@ def delete_discount(discount_id):
     db.session.commit()
     
     flash('Discount deleted successfully', 'success')
+    return redirect(url_for('discounts.add_discount'))
+
+@discounts.route('/discount/edit/<int:discount_id>', methods=['POST'])
+@login_required
+def edit_discount(discount_id):
+    """Edit discount details (Owner only)"""
+    discount = Discount.query.get_or_404(discount_id)
+    
+    # Check if user is owner of this discount's store
+    if not current_user.o_flag or current_user.store_id != discount.store_id:
+        flash('You do not have permission to edit this discount', 'danger')
+        return redirect(url_for('discounts.add_discount'))
+    
+    try:
+        # Update basic discount fields
+        discount.name = request.form.get('name')
+        discount.code = request.form.get('code')
+        discount.description = request.form.get('description')
+        discount.discount_percent = float(request.form.get('discount_percent'))
+        
+        # Update active status
+        discount.is_active = request.form.get('is_active') == '1'
+        
+        old_type = discount.type
+        new_type = request.form.get('type')
+        
+        # If type changed, delete old type-specific details
+        if old_type != new_type:
+            if old_type == 'shipping' and discount.shipping_details:
+                db.session.delete(discount.shipping_details)
+            elif old_type == 'seasoning' and discount.seasoning_details:
+                db.session.delete(discount.seasoning_details)
+            elif old_type == 'special_event' and discount.special_event_details:
+                db.session.delete(discount.special_event_details)
+            
+            discount.type = new_type
+            db.session.flush()
+        
+        # Handle type-specific fields
+        if new_type == 'shipping':
+            min_purchase = request.form.get('min_purchase')
+            if min_purchase:
+                if discount.shipping_details:
+                    discount.shipping_details.min_purchase = float(min_purchase)
+                else:
+                    shipping = Shipping(
+                        discount_id=discount.id,
+                        min_purchase=float(min_purchase)
+                    )
+                    db.session.add(shipping)
+                
+        elif new_type == 'seasoning':
+            start_date_str = request.form.get('start_date')
+            end_date_str = request.form.get('end_date')
+            if start_date_str and end_date_str:
+                # Convert strings to date objects
+                start_date = datetime.strptime(start_date_str, '%Y-%m-%d').date()
+                end_date = datetime.strptime(end_date_str, '%Y-%m-%d').date()
+                
+                if discount.seasoning_details:
+                    discount.seasoning_details.start_date = start_date
+                    discount.seasoning_details.end_date = end_date
+                else:
+                    seasoning = Seasoning(
+                        discount_id=discount.id,
+                        start_date=start_date,
+                        end_date=end_date
+                    )
+                    db.session.add(seasoning)
+                
+        elif new_type == 'special_event':
+            start_date_str = request.form.get('start_date')
+            end_date_str = request.form.get('end_date')
+            if start_date_str and end_date_str:
+                # Convert strings to date objects
+                start_date = datetime.strptime(start_date_str, '%Y-%m-%d').date()
+                end_date = datetime.strptime(end_date_str, '%Y-%m-%d').date()
+                
+                if discount.special_event_details:
+                    discount.special_event_details.start_date = start_date
+                    discount.special_event_details.end_date = end_date
+                else:
+                    special_event = SpecialEvent(
+                        discount_id=discount.id,
+                        start_date=start_date,
+                        end_date=end_date
+                    )
+                    db.session.add(special_event)
+        
+        db.session.commit()
+        
+        status_msg = "activated" if discount.is_active else "deactivated"
+        flash(f'Discount updated and {status_msg} successfully!', 'success')
+    except ValueError as e:
+        db.session.rollback()
+        flash(f'Invalid date format. Please use YYYY-MM-DD format.', 'danger')
+    except Exception as e:
+        db.session.rollback()
+        flash(f'Error updating discount: {str(e)}', 'danger')
+    
     return redirect(url_for('discounts.add_discount'))

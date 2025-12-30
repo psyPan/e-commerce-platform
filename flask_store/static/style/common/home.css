@@ -198,6 +198,7 @@
     display: flex;
     flex-direction: column;
     gap: 6px;
+    min-height: 60px;
 }
 
 .product-name {
@@ -212,15 +213,15 @@
 .product-price {
     font-size: 1.1rem;
     font-weight: 700;
-    color: #667eea;
+    color: #370263;
 }
 
-/* Pagination Styles */
 .pagination-controls {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 8px;
+    gap: 20px;
+    padding: 20px 0;
     margin-top: 20px;
     margin-bottom: 20px;
 }
@@ -257,8 +258,35 @@
     outline: none;
 }
 
-.pagination span {
-    color: #999;
+.pagination-btn {
+    padding: 10px 20px;
+    border-radius: 10px;
+    border: 2px solid #1a1a1a;
+    background: white;
+    color: #1a1a1a;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.pagination-btn:hover:not(:disabled) {
+    background: #1a1a1a;
+    color: white;
+    transform: translateY(-2px);
+}
+
+.pagination-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+.pagination-info {
+    font-size: 15px;
+    font-weight: 600;
+    color: #1a1a1a;
+    min-width: 120px;
+    text-align: center;
 }
 
 .store-link {

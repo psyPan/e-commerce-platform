@@ -440,53 +440,53 @@ with app.app_context():
 
     # STORE 1: High-End Computing
     product1 = Product(name="Zenith X1 Carbon", description="Ultralight business laptop with carbon fiber chassis and AI-powered noise cancellation.",
-                       buy_price=1100, sell_price=1450, stock=15, manufacturer="ZenithComp",
+                       buy_price=1100, sell_price=1450, stock=15, manufacturer="ZenithComp", image='1.png',
                        type='Laptop', model="ZC-X1-2024", store_id=store1.id, discount_id=s1_d2.id) # Tech Summer Sale
     product2 = Product(name="MechMaster Pro Keyboard", description="Wireless mechanical keyboard with hot-swappable switches and PBT keycaps.",
-                       buy_price=80, sell_price=150, stock=50, manufacturer="KeyFlow",
+                       buy_price=80, sell_price=150, stock=50, manufacturer="KeyFlow", image='2.png',
                        type='Peripherals', model="KF-MM-PRO", store_id=store1.id, discount_id=s1_d1.id) # Welcome Discount
     product3 = Product(name="ErgoLift Vertical Mouse", description="Ergonomic vertical mouse designed to reduce wrist strain during long sessions.",
-                       buy_price=40, sell_price=89, stock=30, manufacturer="ErgoTech",
+                       buy_price=40, sell_price=89, stock=30, manufacturer="ErgoTech", image='3.png',
                        type='Peripherals', model="ET-VM-02", store_id=store1.id, discount_id=s1_d10.id) # Member Exclusive
     product4 = Product(name="ThunderBolt Dock G4", description="12-in-1 docking station supporting dual 4K monitors and 100W PD charging.",
-                       buy_price=150, sell_price=299, stock=20, manufacturer="LinkSys",
+                       buy_price=150, sell_price=299, stock=20, manufacturer="LinkSys", image='4.png',
                        type='Accessories', model="LS-TB-G4", store_id=store1.id) # NO DISCOUNT
     product5 = Product(name="Portable SSD 2TB", description="Rugged external SSD with 1050MB/s read speeds, water and dust resistant.",
-                       buy_price=110, sell_price=220, stock=40, manufacturer="DataSwift",
+                       buy_price=110, sell_price=220, stock=40, manufacturer="DataSwift", image='5.png',
                        type='Storage', model="DS-Rugged-2T", store_id=store1.id, discount_id=s1_d8.id) # Free Shipping
 
     # STORE 2: Audio & Music
     product6 = Product(name="StudioRef 5 Monitors", description="Pair of near-field studio monitors with flat frequency response for mixing.",
-                       buy_price=300, sell_price=499, stock=10, manufacturer="SoundWave",
+                       buy_price=300, sell_price=499, stock=10, manufacturer="SoundWave", image='6.png',
                        type='Audio', model="SW-SR5-Pair", store_id=store2.id, discount_id=s2_d5.id) # Audiophile Week
     product7 = Product(name="Vinyl Classic Turntable", description="Belt-drive turntable with built-in preamp and USB output for digital archiving.",
-                       buy_price=180, sell_price=279, stock=15, manufacturer="RetroSpin",
+                       buy_price=180, sell_price=279, stock=15, manufacturer="RetroSpin", image='7.png',
                        type='Audio', model="RS-VC-01", store_id=store2.id, discount_id=s2_d2.id) # Fall Sound Event
     product8 = Product(name="Podcaster USB Mic", description="Cardioid condenser microphone with integrated pop filter and shock mount.",
-                       buy_price=90, sell_price=149, stock=35, manufacturer="VoiceClear",
+                       buy_price=90, sell_price=149, stock=35, manufacturer="VoiceClear", image='8.png',
                        type='Audio', model="VC-Pod-USB", store_id=store2.id, discount_id=s2_d4.id) # Music Day Special
     product9 = Product(name="BassBoom Bluetooth Speaker", description="Waterproof portable speaker with 24-hour battery life and 360-degree sound.",
-                       buy_price=60, sell_price=119, stock=60, manufacturer="UrbanBeat",
+                       buy_price=60, sell_price=119, stock=60, manufacturer="UrbanBeat", image='9.png',
                        type='Audio', model="UB-BB-360", store_id=store2.id, discount_id=s2_d8.id) # Free Shipping
     product10 = Product(name="NoiseGuard ANC Headphones", description="Premium over-ear headphones with industry-leading active noise cancellation.",
-                       buy_price=200, sell_price=349, stock=25, manufacturer="SilenceTech",
+                       buy_price=200, sell_price=349, stock=25, manufacturer="SilenceTech", image='10.png',
                        type='Audio', model="ST-NG-ANC", store_id=store2.id) # NO DISCOUNT
 
     # STORE 3: Smart Home & IoT
     product11 = Product(name="SmartGuard Doorbell", description="1080p HD video doorbell with two-way talk and AI package detection.",
-                       buy_price=100, sell_price=179, stock=40, manufacturer="SecureHome",
+                       buy_price=100, sell_price=179, stock=40, manufacturer="SecureHome", image='11.png',
                        type='SmartHome', model="SH-DB-V2", store_id=store3.id, discount_id=s3_d5.id) # Black Friday Home
     product12 = Product(name="EcoThermostat Premium", description="Smart thermostat that learns your schedule and saves energy automatically.",
-                       buy_price=140, sell_price=249, stock=30, manufacturer="EcoLive",
+                       buy_price=140, sell_price=249, stock=30, manufacturer="EcoLive", image='12.png',
                        type='SmartHome', model="EL-TP-01", store_id=store3.id, discount_id=s3_d4.id) # Earth Day Sale
     product13 = Product(name="RoboClean S7", description="Robot vacuum and mop hybrid with LiDAR navigation and self-emptying base.",
-                       buy_price=450, sell_price=799, stock=12, manufacturer="CleanBot",
+                       buy_price=450, sell_price=799, stock=12, manufacturer="CleanBot", image='13.png',
                        type='Appliance', model="CB-S7-Plus", store_id=store3.id, discount_id=s3_d3.id) # Spring Cleaning
     product14 = Product(name="Luma Smart Bulb Kit", description="Pack of 4 color-changing LED bulbs compatible with Alexa and Google Home.",
-                       buy_price=30, sell_price=69, stock=100, manufacturer="LumaLight",
+                       buy_price=30, sell_price=69, stock=100, manufacturer="LumaLight", image='14.png',
                        type='SmartHome', model="LL-RGB-4PK", store_id=store3.id, discount_id=s3_d8.id) # Free Shipping
     product15 = Product(name="Smart Lock Touch", description="Fingerprint and keypad entry door lock with remote access via Wi-Fi bridge.",
-                       buy_price=130, sell_price=229, stock=20, manufacturer="SecureHome",
+                       buy_price=130, sell_price=229, stock=20, manufacturer="SecureHome", image='15.png',
                        type='SmartHome', model="SH-SL-Touch", store_id=store3.id) # NO DISCOUNT
 
     # STORE 4: Photography & Drones
