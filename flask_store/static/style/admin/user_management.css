@@ -302,3 +302,38 @@
     display: none;
   }
 }
+
+.form-container {
+    display: none;
+}
+
+/* ===============================
+   USER MANAGEMENT – EDIT MODE
+================================ */
+
+/* Hide forms by default */
+#userBox .form-container {
+    display: none;
+}
+
+/* Show CUSTOMER form */
+#userBox.editing-customer .customer-form {
+    display: block;
+}
+
+/* Show OWNER form */
+#userBox.editing-owner .owner-form {
+    display: block;
+}
+
+/* Hide list view while editing */
+#userBox.editing-customer .dashboard-view,
+#userBox.editing-owner .dashboard-view {
+    display: none;
+}
+
+/* Hide pagination while editing */
+#userBox.editing-customer .pagination-controls,
+#userBox.editing-owner .pagination-controls {
+    display: none;
+}
