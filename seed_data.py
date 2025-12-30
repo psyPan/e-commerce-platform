@@ -151,7 +151,7 @@ with app.app_context():
     # print("Database seeded successfully!")
 
     admin = User(f_name='John', l_name='Doe', email='admin@email.com',
-                 password=bcrypt.generate_password_hash('admin').decode('utf-8'),
+                 password=bcrypt.generate_password_hash('passwordadmin').decode('utf-8'),
                  phone='0911223344', birth=date(2000, 1, 1), address='taipei',
                  a_flag=True, o_flag=False, c_flag=False)
     db.session.add(admin)
@@ -165,77 +165,77 @@ with app.app_context():
     db.session.flush()
 
     owner1 = User(f_name='Barry', l_name='Allen', email='owner1@email.com',
-                 password=bcrypt.generate_password_hash('owner1').decode('utf-8'),
+                 password=bcrypt.generate_password_hash('passwordowner1').decode('utf-8'),
                  phone='0911223345', birth=date(2000, 1, 1), address='taipei',
                  a_flag=False, o_flag=True, c_flag=False, store_id=store1.id)
     owner2 = User(f_name='Bruce', l_name='Wayne', email='owner2@email.com',
-                 password=bcrypt.generate_password_hash('owner2').decode('utf-8'),
+                 password=bcrypt.generate_password_hash('passwordowner2').decode('utf-8'),
                  phone='0911223346', birth=date(2000, 1, 1), address='taipei',
                  a_flag=False, o_flag=True, c_flag=False, store_id=store1.id)
     owner3 = User(f_name='Bruce', l_name='Banner', email='owner3@email.com',
-                 password=bcrypt.generate_password_hash('owner3').decode('utf-8'),
+                 password=bcrypt.generate_password_hash('passwordowner3').decode('utf-8'),
                  phone='0911223347', birth=date(2000, 1, 1), address='taipei',
                  a_flag=False, o_flag=True, c_flag=False, store_id=store2.id)
     owner4 = User(f_name='Tony', l_name='Stark', email='owner4@email.com',
-                 password=bcrypt.generate_password_hash('owner4').decode('utf-8'),
+                 password=bcrypt.generate_password_hash('passwordowner4').decode('utf-8'),
                  phone='0911223348', birth=date(2000, 1, 1), address='taipei',
                  a_flag=False, o_flag=True, c_flag=False, store_id=store2.id)
     owner5 = User(f_name='Harry', l_name='Potter', email='owner5@email.com',
-                 password=bcrypt.generate_password_hash('owner5').decode('utf-8'),
+                 password=bcrypt.generate_password_hash('passwordowner5').decode('utf-8'),
                  phone='0911223349', birth=date(2000, 1, 1), address='taipei',
                  a_flag=False, o_flag=True, c_flag=False, store_id=store3.id)
     owner6 = User(f_name='Ronald', l_name='Wesley', email='owner6@email.com',
-                 password=bcrypt.generate_password_hash('owner6').decode('utf-8'),
+                 password=bcrypt.generate_password_hash('passwordowner6').decode('utf-8'),
                  phone='0911223350', birth=date(2000, 1, 1), address='taipei',
                  a_flag=False, o_flag=True, c_flag=False, store_id=store3.id)
     owner7 = User(f_name='Johnny', l_name='Depp', email='owner7@email.com',
-                 password=bcrypt.generate_password_hash('owner7').decode('utf-8'),
+                 password=bcrypt.generate_password_hash('passwordowner7').decode('utf-8'),
                  phone='0911223351', birth=date(2000, 1, 1), address='taipei',
                  a_flag=False, o_flag=True, c_flag=False, store_id=store4.id)
     owner8 = User(f_name='Justin', l_name='Bieber', email='owner8@email.com',
-                 password=bcrypt.generate_password_hash('owner8').decode('utf-8'),
+                 password=bcrypt.generate_password_hash('passwordowner8').decode('utf-8'),
                  phone='0911223352', birth=date(2000, 1, 1), address='taipei',
                  a_flag=False, o_flag=True, c_flag=False, store_id=store4.id)
     owner9 = User(f_name='John', l_name='Cena', email='owner9@email.com',
-                 password=bcrypt.generate_password_hash('owner9').decode('utf-8'),
+                 password=bcrypt.generate_password_hash('passwordowner9').decode('utf-8'),
                  phone='0911223353', birth=date(2000, 1, 1), address='taipei',
                  a_flag=False, o_flag=True, c_flag=False, store_id=store5.id)
     owner10 = User(f_name='Justin', l_name='Timberlake', email='owner10@email.com',
-                 password=bcrypt.generate_password_hash('owner10').decode('utf-8'),
+                 password=bcrypt.generate_password_hash('passwordowner10').decode('utf-8'),
                  phone='0911223354', birth=date(2000, 1, 1), address='taipei',
                  a_flag=False, o_flag=True, c_flag=False, store_id=store5.id)
     db.session.add_all([owner1, owner2, owner3, owner4, owner5, owner6, owner7, owner8, owner9, owner10])
 
     cust1 = User(f_name='Liam', l_name='Allen', email='cust1@email.com',
-                 password=bcrypt.generate_password_hash('cust1').decode('utf-8'),
+                 password=bcrypt.generate_password_hash('passwordcust1').decode('utf-8'),
                  phone='0933445566', birth=date(2000, 1, 1), address='taipei',
                  a_flag=False, o_flag=False, c_flag=True)
     cust2 = User(f_name='Sophia', l_name='Rossi', email='cust2@email.com',
-                 password=bcrypt.generate_password_hash('cust2').decode('utf-8'),
+                 password=bcrypt.generate_password_hash('passwordcust2').decode('utf-8'),
                  phone='0933445567', birth=date(2000, 1, 1), address='taipei',
                  a_flag=False, o_flag=False, c_flag=True)
-    cust3 = User(f_name='Noah', l_name='Sato', email='cust4@email.com',
-                 password=bcrypt.generate_password_hash('cust4').decode('utf-8'),
+    cust3 = User(f_name='Noah', l_name='Sato', email='cust3@email.com',
+                 password=bcrypt.generate_password_hash('passwordcust4').decode('utf-8'),
                  phone='0933445568', birth=date(2000, 1, 1), address='taipei',
                  a_flag=False, o_flag=False, c_flag=True)
-    cust4 = User(f_name='Ava', l_name='Patel', email='cust5@email.com',
-                 password=bcrypt.generate_password_hash('cust5').decode('utf-8'),
+    cust4 = User(f_name='Ava', l_name='Patel', email='cust4@email.com',
+                 password=bcrypt.generate_password_hash('passwordcust5').decode('utf-8'),
                  phone='0933445569', birth=date(2000, 1, 1), address='taipei',
                  a_flag=False, o_flag=False, c_flag=True)
-    cust5 = User(f_name='Elijah', l_name='Bennett', email='cust6@email.com',
-                 password=bcrypt.generate_password_hash('cust6').decode('utf-8'),
+    cust5 = User(f_name='Elijah', l_name='Bennett', email='cust5@email.com',
+                 password=bcrypt.generate_password_hash('passwordcust6').decode('utf-8'),
                  phone='0933445570', birth=date(2000, 1, 1), address='taipei',
                  a_flag=False, o_flag=False, c_flag=True)
-    cust6 = User(f_name='Isabella', l_name='Morales', email='cust7@email.com',
-                 password=bcrypt.generate_password_hash('cust7').decode('utf-8'),
+    cust6 = User(f_name='Isabella', l_name='Morales', email='cust6@email.com',
+                 password=bcrypt.generate_password_hash('passwordcust7').decode('utf-8'),
                  phone='0933445571', birth=date(2000, 1, 1), address='taipei',
                  a_flag=False, o_flag=False, c_flag=True)
-    cust7 = User(f_name='Jameson', l_name='Hughes', email='cust8@email.com',
-                 password=bcrypt.generate_password_hash('cust8').decode('utf-8'),
+    cust7 = User(f_name='Jameson', l_name='Hughes', email='cust7@email.com',
+                 password=bcrypt.generate_password_hash('passwordcust8').decode('utf-8'),
                  phone='0933445572', birth=date(2000, 1, 1), address='taipei',
                  a_flag=False, o_flag=False, c_flag=True)
-    cust8 = User(f_name='Mia', l_name='Chen', email='cust9@email.com',
-                 password=bcrypt.generate_password_hash('cust9').decode('utf-8'),
+    cust8 = User(f_name='Mia', l_name='Chen', email='cust8@email.com',
+                 password=bcrypt.generate_password_hash('passwordcust9').decode('utf-8'),
                  phone='0933445573', birth=date(2000, 1, 1), address='taipei',
                  a_flag=False, o_flag=False, c_flag=True)
     db.session.add_all([cust1, cust2, cust3, cust4, cust5, cust6, cust7, cust8])

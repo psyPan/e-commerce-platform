@@ -10,8 +10,8 @@ from flask_store.line_items.models import LineItem
 from flask_store.products.models import Product
 from flask_store.reviews.models import Review
 from flask_store.reviews.forms import ReviewForm
-from datetime import datetime
-from sqlalchemy import or_
+from datetime import datetime, timedelta
+from sqlalchemy import or_, func, case
 from flask_store.credit_card.models import CreditCard # Import your new model
 
 
@@ -578,4 +578,226 @@ def user_management():
         users=users_data,
         pagination=pagination,
         owner_form=form
+    )
+
+@users.route('/financial_report')
+@login_required
+def financial_report():
+    # Admin only
+    if not current_user.a_flag:
+        abort(403)
+    
+    # Get all stores with their financial data
+    stores = Store.query.all()
+    
+    financial_data = []
+    
+    for store in stores:
+        # Get all products for this store
+        product_ids = [p.id for p in store.products]
+        
+        if not product_ids:
+            # Store has no products
+            financial_data.append({
+                'store_id': store.id,
+                'store_name': store.name,
+                'total_revenue': 0,
+                'total_orders': 0,
+                'total_products_sold': 0,
+                'average_order_value': 0,
+                'pending_revenue': 0,
+                'completed_revenue': 0,
+                'active_products': 0,
+                'total_products': 0,
+                'current_balance': store.balance or 0,
+                'revenue_this_month': 0,
+                'revenue_last_month': 0,
+                'growth_rate': 0
+            })
+            continue
+        
+        # Calculate total revenue from completed orders
+        completed_orders = db.session.query(
+            func.count(Order.id).label('order_count'),
+            func.sum(Order.total_amount).label('total_revenue')
+        ).join(LineItem, Order.id == LineItem.order_id)\
+         .filter(
+             LineItem.product_id.in_(product_ids),
+             Order.status == 'closed'
+         ).first()
+        
+        # Calculate pending revenue (orders not yet closed)
+        pending_orders = db.session.query(
+            func.sum(Order.total_amount).label('pending_revenue')
+        ).join(LineItem, Order.id == LineItem.order_id)\
+         .filter(
+             LineItem.product_id.in_(product_ids),
+             Order.status.in_(['received', 'processed', 'shipped'])
+         ).first()
+        
+        # Total products sold (quantity from completed orders)
+        products_sold = db.session.query(
+            func.sum(LineItem.quantity).label('total_sold')
+        ).join(Order, LineItem.order_id == Order.id)\
+         .filter(
+             LineItem.product_id.in_(product_ids),
+             Order.status == 'closed'
+         ).first()
+        
+        # Active products count
+        active_products = Product.query.filter(
+            Product.store_id == store.id,
+            Product.is_active == True,
+            Product.is_deleted == False
+        ).count()
+        
+        total_products = Product.query.filter(
+            Product.store_id == store.id,
+            Product.is_deleted == False
+        ).count()
+        
+        # Revenue this month
+        first_day_this_month = datetime.now().replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+        revenue_this_month = db.session.query(
+            func.sum(Order.total_amount)
+        ).join(LineItem, Order.id == LineItem.order_id)\
+         .filter(
+             LineItem.product_id.in_(product_ids),
+             Order.status == 'closed',
+             Order.completion_time >= first_day_this_month
+         ).scalar() or 0
+        
+        # Revenue last month
+        first_day_last_month = (first_day_this_month - timedelta(days=1)).replace(day=1)
+        revenue_last_month = db.session.query(
+            func.sum(Order.total_amount)
+        ).join(LineItem, Order.id == LineItem.order_id)\
+         .filter(
+             LineItem.product_id.in_(product_ids),
+             Order.status == 'closed',
+             Order.completion_time >= first_day_last_month,
+             Order.completion_time < first_day_this_month
+         ).scalar() or 0
+        
+        # Calculate growth rate
+        if revenue_last_month > 0:
+            growth_rate = ((revenue_this_month - revenue_last_month) / revenue_last_month) * 100
+        elif revenue_this_month > 0:
+            growth_rate = 100
+        else:
+            growth_rate = 0
+        
+        total_revenue = completed_orders.total_revenue or 0
+        order_count = completed_orders.order_count or 0
+        avg_order_value = (total_revenue / order_count) if order_count > 0 else 0
+        
+        financial_data.append({
+            'store_id': store.id,
+            'store_name': store.name,
+            'total_revenue': total_revenue,
+            'total_orders': order_count,
+            'total_products_sold': products_sold.total_sold or 0,
+            'average_order_value': avg_order_value,
+            'pending_revenue': pending_orders.pending_revenue or 0,
+            'completed_revenue': total_revenue,
+            'active_products': active_products,
+            'total_products': total_products,
+            'current_balance': store.balance or 0,
+            'revenue_this_month': revenue_this_month,
+            'revenue_last_month': revenue_last_month,
+            'growth_rate': round(growth_rate, 2)
+        })
+    
+    # Calculate platform totals
+    platform_totals = {
+        'total_revenue': sum(s['total_revenue'] for s in financial_data),
+        'total_orders': sum(s['total_orders'] for s in financial_data),
+        'total_products_sold': sum(s['total_products_sold'] for s in financial_data),
+        'pending_revenue': sum(s['pending_revenue'] for s in financial_data),
+        'total_stores': len(stores),
+        'active_stores': sum(1 for s in financial_data if s['active_products'] > 0)
+    }
+    
+    return render_template(
+        'admin/financial_report.html',
+        financial_data=financial_data,
+        platform_totals=platform_totals
+    )
+
+
+@users.route('/financial_report/<int:store_id>')
+@login_required
+def store_financial_detail(store_id):
+    # Admin only
+    if not current_user.a_flag:
+        abort(403)
+    
+    store = Store.query.get_or_404(store_id)
+    
+    # Get detailed product performance
+    product_performance = db.session.query(
+        Product.id,
+        Product.name,
+        Product.sell_price,
+        Product.buy_price,
+        Product.stock,
+        func.sum(LineItem.quantity).label('total_sold'),
+        func.sum(LineItem.total_price).label('total_revenue'),
+        func.count(LineItem.id).label('order_count')
+    ).join(LineItem, Product.id == LineItem.product_id)\
+     .join(Order, LineItem.order_id == Order.id)\
+     .filter(
+         Product.store_id == store_id,
+         Order.status == 'closed'
+     ).group_by(Product.id).all()
+    
+    products_data = []
+    for p in product_performance:
+        profit_per_unit = p.sell_price - p.buy_price
+        total_profit = profit_per_unit * (p.total_sold or 0)
+        products_data.append({
+            'id': p.id,
+            'name': p.name,
+            'sell_price': p.sell_price,
+            'buy_price': p.buy_price,
+            'stock': p.stock,
+            'total_sold': p.total_sold or 0,
+            'total_revenue': p.total_revenue or 0,
+            'total_profit': total_profit,
+            'order_count': p.order_count or 0
+        })
+    
+    # Sort by total revenue
+    products_data.sort(key=lambda x: x['total_revenue'], reverse=True)
+    
+    # Get monthly revenue trend (last 6 months)
+    monthly_data = []
+    for i in range(5, -1, -1):
+        month_start = (datetime.now().replace(day=1) - timedelta(days=i*30)).replace(day=1)
+        if i > 0:
+            month_end = (datetime.now().replace(day=1) - timedelta(days=(i-1)*30)).replace(day=1)
+        else:
+            month_end = datetime.now()
+        
+        product_ids = [p.id for p in store.products]
+        monthly_revenue = db.session.query(
+            func.sum(Order.total_amount)
+        ).join(LineItem, Order.id == LineItem.order_id)\
+         .filter(
+             LineItem.product_id.in_(product_ids),
+             Order.status == 'closed',
+             Order.completion_time >= month_start,
+             Order.completion_time < month_end
+         ).scalar() or 0
+        
+        monthly_data.append({
+            'month': month_start.strftime('%B %Y'),
+            'revenue': monthly_revenue
+        })
+    
+    return render_template(
+        'admin/store_financial_detail.html',
+        store=store,
+        products_data=products_data,
+        monthly_data=monthly_data
     )
