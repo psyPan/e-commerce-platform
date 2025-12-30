@@ -31,7 +31,7 @@ class EditStoreForm(FlaskForm):
     
     def validate_name(self, name):
         store = Store.query.filter_by(name=name.data).first()
-        if store:
+        if store and store.id != self._store_id:
             raise ValidationError('That store name is already taken. Please choose a different one.')
 
     def validate_email(self, email):

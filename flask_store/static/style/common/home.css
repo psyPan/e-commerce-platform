@@ -221,8 +221,32 @@
     justify-content: center;
     align-items: center;
     gap: 20px;
-    margin-top: 30px;
     padding: 20px 0;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+.page-btn {
+    padding: 12px 28px;
+    border-radius: 16px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background 0.2s;
+    background: #1a1a1a;;
+    color: #fff;
+    border: none;
+    outline: none;
+    box-shadow: none;
+}
+.page-btn:hover {
+    background: #e2d2c2;
+}
+.page-btn.active {
+    color: white;
+    cursor: default;
+}
+.page-ellipsis {
+    padding: 8px;
+    color: #888;
 }
 
 .pagination-btn {

@@ -84,10 +84,12 @@
             <a href="{{ url_for('products.add_product', page=pagination.next_num, search=request.args.get('search', ''), filter_by=request.args.get('filter_by', 'all')) }}" class="page-btn">Next</a>
         {% endif %}
     </div>
+
     <!-- ================= ADD PRODUCT BUTTON ================= -->
     <div class="action-buttons action-buttons-view">
         <button class="edit-btn" onclick="enterAdd()">Add a Product</button>
     </div>
+    
     <!-- ================= ADD PRODUCT FORM ================= -->
     <div class="form-container">
         <form method="POST" class="dashboard-form" id="addProductForm" enctype="multipart/form-data" action="">

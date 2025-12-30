@@ -259,14 +259,39 @@ def store_info():
         form=form
     )
 
-#admin store management
-@stores.route('/store_management')
+# admin store management
+@stores.route('/store_management', methods=['GET', 'POST'])
 @login_required
 def store_management():
     # Security: admin only
     if not current_user.a_flag:
         abort(403)
 
+    from flask_store.stores.forms import StoreForm
+
+    form = EditStoreForm()
+
+    # ===============================
+    # HANDLE ADD STORE (POST)
+    # ===============================
+    if form.validate_on_submit():
+        new_store = Store(
+            name=form.name.data,
+            email=form.email.data,
+            phone=form.phone.data,
+            balance=0
+        )
+
+        db.session.add(new_store)
+        db.session.commit()
+
+        flash(f'Store "{new_store.name}" successfully added!', 'success')
+        return redirect(url_for('stores.store_management'))
+
+    # ===============================
+    # LIST + SEARCH + PAGINATION (GET)
+    # ===============================
+    page = request.args.get('page', 1, type=int)
     search = request.args.get('search', '').strip()
 
     query = Store.query
@@ -280,9 +305,15 @@ def store_management():
             )
         )
 
-    stores = query.order_by(Store.id).all()
+    pagination = query.order_by(Store.id).paginate(
+        page=page,
+        per_page=5,
+        error_out=False
+    )
 
     return render_template(
         'admin/store_management.html',
-        stores=stores
+        stores=pagination.items,
+        pagination=pagination,
+        form=form
     )
