@@ -2,6 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, DateField, SelectField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
 from flask_store.users.models import User
+from flask_store.stores.models import Store
 
 class RegistrationForm(FlaskForm):
     f_name = StringField('First Name', 
@@ -69,7 +70,7 @@ class CreateCustomerForm(FlaskForm):
             raise ValidationError('Email already exists.')
 
 # ===============================
-# ADMIN – CREATE OWNER + ASSIGN STORE
+# ADMIN – CREATE OWNER
 # ===============================
 class CreateOwnerForm(FlaskForm):
     f_name = StringField('First Name', validators=[DataRequired()])

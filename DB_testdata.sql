@@ -54,16 +54,19 @@ VALUES
    3. DISCOUNT
    ===================================================== */
 INSERT INTO discount
-(name, description, discount_percent, is_active, code, type, creator_id)
+(name, description, discount_percent, is_active, code, type, creator_id, store_id)
 VALUES
-('Free Shipping Over 1000', 'Free shipping for orders above NT$1000',
- 0.00, TRUE, 'SHIP1000', 'shipping', 1),
+('Free Shipping Over 1000',
+ 'Free shipping for orders above NT$1000',
+ 0.00, TRUE, 'SHIP1000', 'shipping', 1, 1),
 
-('Accessory Sale', '10% discount on accessories',
- 0.10, TRUE, 'ACC10', 'seasoning', 1),
+('Accessory Sale',
+ '10% discount on accessories',
+ 0.10, TRUE, 'ACC10', 'seasoning', 1, 1),
 
-('Flash Sale Event', '50% off selected electronics',
- 0.50, TRUE, 'FLASH50', 'special_event', 1);
+('Flash Sale Event',
+ '50% off selected electronics',
+ 0.50, TRUE, 'FLASH50', 'special_event', 1, 1);
 
 
 /* =====================================================

@@ -251,7 +251,6 @@
     text-decoration: none;
     outline: none;
 }
-
 /* ===============================
    TABLE HEADER
 ================================ */
@@ -316,33 +315,114 @@
     display: none;
 }
 
-/* ===============================
-   USER MANAGEMENT – EDIT MODE
-================================ */
-
-/* Hide forms by default */
-#userBox .form-container {
+.dashboard-card.editing .table-header,
+.dashboard-card.editing .table-body,
+.dashboard-card.editing .pagination-controls,
+.dashboard-card.editing .action-buttons-view {
     display: none;
 }
 
-/* Show CUSTOMER form */
-#userBox.editing-customer .customer-form {
+.dashboard-card.editing .form-container {
     display: block;
 }
 
-/* Show OWNER form */
-#userBox.editing-owner .owner-form {
-    display: block;
+.modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.45);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
 }
 
-/* Hide list view while editing */
-#userBox.editing-customer .dashboard-view,
-#userBox.editing-owner .dashboard-view {
-    display: none;
+.modal-box {
+    background: white;
+    padding: 28px;
+    border-radius: 18px;
+    width: 360px;
+    text-align: center;
 }
 
-/* Hide pagination while editing */
-#userBox.editing-customer .pagination-controls,
-#userBox.editing-owner .pagination-controls {
+.modal-box h3 {
+    margin-bottom: 10px;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: center;
+    gap: 14px;
+    margin-top: 20px;
+}
+
+.delete-btn {
+    padding: 6px 28px;
+    border-radius: 16px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background 0.2s;
+    background: #1a1a1a;;
+    color: #fff;
+    border: none;
+    outline: none;
+    box-shadow: none;
+}
+
+.delete-btn:hover {
+    background: #2c2c2c;           /* Lighter black on hover */
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.delete-btn,
+.delete-btn:visited,
+.delete-btn:active {
+  transform: translateY(0);
+}
+
+/* MODAL OVERLAY */
+.modal {
     display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 999;
+    background: rgba(0,0,0,0.45);
+
+    align-items: center;
+    justify-content: center;
+}
+
+
+/* MODAL CONTENT*/
+.modal-content {
+    background: #fff;
+    padding: 28px 32px;
+    border-radius: 20px;
+
+    width: 100%;
+    max-width: 420px;
+    text-align: center;
+
+    box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+}
+
+/* TITLE */
+.modal-content h2 {
+    margin-bottom: 10px;
+    font-size: 22px;
+    font-weight: 600;
+}
+
+/* TEXT */
+.modal-content p {
+    margin-bottom: 22px;
+    color: #555;
+    font-size: 15px;
+}
+
+/* BUTTON AREA */
+.modal-content form {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
 }

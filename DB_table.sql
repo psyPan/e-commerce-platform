@@ -1,7 +1,13 @@
+-- ===============================
+-- ENUM TYPES
+-- ===============================
 CREATE TYPE discount_type AS ENUM ('shipping', 'seasoning', 'special_event');
 CREATE TYPE lineitem_type AS ENUM ('cart', 'order');
 CREATE TYPE order_status AS ENUM ('received', 'processed', 'shipped', 'closed');
 
+-- ===============================
+-- STORE
+-- ===============================
 CREATE TABLE store (
     id SERIAL PRIMARY KEY,
     name VARCHAR(50) UNIQUE NOT NULL,
@@ -11,6 +17,9 @@ CREATE TABLE store (
     balance INTEGER
 );
 
+-- ===============================
+-- USER
+-- ===============================
 CREATE TABLE "user" (
     id SERIAL PRIMARY KEY,
     f_name VARCHAR(20) NOT NULL,
@@ -33,23 +42,37 @@ CREATE TABLE "user" (
         ON DELETE SET NULL
 );
 
+-- ===============================
+-- DISCOUNT
+-- ===============================
 CREATE TABLE discount (
     id SERIAL PRIMARY KEY,
     name VARCHAR(100),
     description TEXT,
     discount_percent FLOAT,
-    is_active BOOLEAN DEFAULT FALSE,
+    is_active BOOLEAN DEFAULT TRUE,
     code VARCHAR(50) UNIQUE,
     type discount_type NOT NULL,
+
     creator_id INTEGER,
+    store_id INTEGER NOT NULL,
 
     CONSTRAINT fk_discount_creator
         FOREIGN KEY (creator_id)
         REFERENCES "user"(id)
         ON UPDATE CASCADE
-        ON DELETE SET NULL
+        ON DELETE SET NULL,
+
+    CONSTRAINT fk_discount_store
+        FOREIGN KEY (store_id)
+        REFERENCES store(id)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
 );
 
+-- ===============================
+-- SHIPPING
+-- ===============================
 CREATE TABLE shipping (
     discount_id INTEGER PRIMARY KEY,
     min_purchase INTEGER,
@@ -61,6 +84,9 @@ CREATE TABLE shipping (
         ON DELETE CASCADE
 );
 
+-- ===============================
+-- SEASONING
+-- ===============================
 CREATE TABLE seasoning (
     discount_id INTEGER PRIMARY KEY,
     start_date DATE NOT NULL,
@@ -76,6 +102,9 @@ CREATE TABLE seasoning (
         ON DELETE CASCADE
 );
 
+-- ===============================
+-- SPECIAL EVENT
+-- ===============================
 CREATE TABLE special_event (
     discount_id INTEGER PRIMARY KEY,
     start_date DATE NOT NULL,
@@ -91,6 +120,9 @@ CREATE TABLE special_event (
         ON DELETE CASCADE
 );
 
+-- ===============================
+-- PRODUCT
+-- ===============================
 CREATE TABLE product (
     id SERIAL PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
@@ -120,7 +152,9 @@ CREATE TABLE product (
         ON DELETE SET NULL
 );
 
-
+-- ===============================
+-- CART
+-- ===============================
 CREATE TABLE cart (
     id SERIAL PRIMARY KEY,
     quantity INTEGER NOT NULL DEFAULT 1,
@@ -139,6 +173,9 @@ CREATE TABLE cart (
         ON DELETE CASCADE
 );
 
+-- ===============================
+-- ORDER
+-- ===============================
 CREATE TABLE "order" (
     id SERIAL PRIMARY KEY,
     status order_status NOT NULL,
@@ -171,6 +208,9 @@ CREATE TABLE "order" (
         REFERENCES cart(id)
 );
 
+-- ===============================
+-- LINE ITEM
+-- ===============================
 CREATE TABLE line_item (
     id SERIAL PRIMARY KEY,
     quantity INTEGER NOT NULL,
@@ -197,6 +237,9 @@ CREATE TABLE line_item (
         ON DELETE CASCADE
 );
 
+-- ===============================
+-- REVIEWS
+-- ===============================
 CREATE TABLE reviews (
     id SERIAL PRIMARY KEY,
     stars INTEGER NOT NULL,

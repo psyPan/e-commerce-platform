@@ -482,90 +482,100 @@ def delete_card(card_id):
     return redirect(url_for('users.credit'))
 
 #admin user management
-@users.route("/user_management", methods=["GET", "POST"])
+@users.route('/user_management', methods=['GET', 'POST'])
 @login_required
 def user_management():
+    # Admin only
     if not current_user.a_flag:
         abort(403)
 
-    customer_form = CreateCustomerForm()
-    owner_form = CreateOwnerForm()
+    form = CreateOwnerForm()
+
+    # Populate store dropdown
+    form.store_id.choices = [
+        (s.id, s.name) for s in Store.query.order_by(Store.name).all()
+    ]
 
     # ===============================
-    # STORE DROPDOWN (OWNER FORM)
+    # DELETE USER
     # ===============================
-    stores = Store.query.all()
-    owner_form.store_id.choices = [(s.id, s.name) for s in stores]
+    if request.method == "POST" and "delete_user_id" in request.form:
+        user = User.query.get_or_404(request.form.get("delete_user_id"))
 
-    # ===============================
-    # HANDLE POST
-    # ===============================
-    if request.method == "POST":
-
-        # ---------- CREATE CUSTOMER ----------
-        if "create_customer" in request.form and customer_form.validate_on_submit():
-            hashed = bcrypt.generate_password_hash(customer_form.password.data).decode("utf-8")
-
-            customer = User(
-                f_name=customer_form.f_name.data,
-                l_name=customer_form.l_name.data,
-                email=customer_form.email.data,
-                phone=customer_form.phone.data,
-                address=customer_form.address.data,
-                password=hashed,
-                c_flag=True,
-                o_flag=False,
-                a_flag=False
-            )
-            db.session.add(customer)
+        if user.a_flag:
+            flash("Cannot delete administrator", "danger")
+        else:
+            db.session.delete(user)
             db.session.commit()
+            flash("User deleted successfully", "success")
 
-            flash("Customer created successfully!", "success")
-            return redirect(url_for("users.user_management"))
+        return redirect(url_for('users.user_management'))
 
-        # ---------- CREATE OWNER + ASSIGN STORE ----------
-        if "create_owner" in request.form and owner_form.validate_on_submit():
-            hashed = bcrypt.generate_password_hash(owner_form.password.data).decode("utf-8")
+    # ===============================
+    # CREATE OWNER
+    # ===============================
+    if "create_owner" in request.form and form.validate_on_submit():
+        owner = User(
+            f_name=form.f_name.data,
+            l_name=form.l_name.data,
+            email=form.email.data,
+            phone=form.phone.data,
+            password=form.password.data,
+            a_flag=False,
+            o_flag=True,
+            c_flag=False,
+            store_id=form.store_id.data
+        )
+        db.session.add(owner)
+        db.session.commit()
 
-            owner = User(
-                f_name=owner_form.f_name.data,
-                l_name=owner_form.l_name.data,
-                email=owner_form.email.data,
-                phone=owner_form.phone.data,
-                password=hashed,
-                o_flag=True,
-                c_flag=False,
-                a_flag=False,
-                store_id=owner_form.store_id.data
+        flash("Owner created successfully", "success")
+        return redirect(url_for('users.user_management'))
+
+    # ===============================
+    # LIST + SEARCH + FILTER
+    # ===============================
+    page = request.args.get('page', 1, type=int)
+    search = request.args.get('search', '').strip()
+    filter_by = request.args.get('filter_by', 'all')
+
+    query = User.query
+
+    if search:
+        query = query.filter(
+            or_(
+                User.f_name.ilike(f'%{search}%'),
+                User.l_name.ilike(f'%{search}%'),
+                User.email.ilike(f'%{search}%')
             )
-            db.session.add(owner)
-            db.session.commit()
+        )
 
-            flash("Owner created and assigned to store!", "success")
-            return redirect(url_for("users.user_management"))
+    if filter_by == "administrator":
+        query = query.filter(User.a_flag == True)
+    elif filter_by == "owner":
+        query = query.filter(User.o_flag == True)
+    elif filter_by == "customer":
+        query = query.filter(User.c_flag == True)
 
-    # ===============================
-    # LIST USER (GET)
-    # ===============================
-    page = request.args.get("page", 1, type=int)
+    pagination = query.order_by(User.id).paginate(
+        page=page,
+        per_page=5,
+        error_out=False
+    )
 
-    query = db.session.query(User, Store).outerjoin(Store, User.store_id == Store.id)
-    pagination = query.order_by(User.id).paginate(page=page, per_page=5, error_out=False)
-
-    users = []
-    for user, store in pagination.items:
-        users.append({
-            "id": user.id,
-            "name": f"{user.f_name} {user.l_name}",
-            "email": user.email,
-            "type": "Admin" if user.a_flag else "Owner" if user.o_flag else "Customer",
-            "store_name": store.name if store else "-"
+    users_data = []
+    for u in pagination.items:
+        role = "Administrator" if u.a_flag else "Owner" if u.o_flag else "Customer"
+        users_data.append({
+            "id": u.id,
+            "name": f"{u.f_name} {u.l_name}",
+            "email": u.email,
+            "type": role
         })
 
     return render_template(
         "admin/user_management.html",
-        users=users,
+        users=users_data,
         pagination=pagination,
-        customer_form=customer_form,
-        owner_form=owner_form
+        owner_form=form
     )
