@@ -1,0 +1,44 @@
+{% extends "/common/base.html" %}
+
+{% block content %}
+
+<link rel="stylesheet" href="{{ url_for('static', filename='style/common/dashboard.css') }}">
+
+<div class="dashboard-wrapper">
+    <div class="dashboard-sidebar">
+        <a class="side-btn {% if request.endpoint == 'users.profile' %} active {% endif %}" 
+           href="{{ url_for('users.profile') }}">My Profile</a>
+        
+        <a class="side-btn {% if request.endpoint == 'users.credit' %} active {% endif %}" 
+           href="{{ url_for('users.credit') }}">My Credit Card</a>
+
+        <a class="side-btn {% if request.endpoint == 'users.change_password' %} active {% endif %}" 
+           href="{{ url_for('users.change_password') }}">Change Password</a>
+        
+        <a class="side-btn {% if request.endpoint == 'users.order_history' %} active {% endif %}" 
+           href="{{ url_for('users.order_history') }}">My Orders</a>
+        
+        <a class="side-btn {% if request.endpoint == 'cart.My_cart' %} active {% endif %}" 
+           href="{{ url_for('cart.My_cart') }}">My Cart</a>
+    </div>
+
+    <div class="dashboard-content">
+        {% if request.endpoint == 'users.profile' %}
+            {% block my_profile %}{% endblock my_profile %}
+            
+        {% elif request.endpoint == 'users.change_password' %}
+            {% block change_password %}{% endblock change_password %}
+            
+        {% elif request.endpoint == 'users.order_history' %}
+            {% block my_order %}{% endblock my_order %}
+            
+        {% elif request.endpoint == 'cart.My_cart' %}
+            {% block my_cart %}{% endblock my_cart %}
+
+        {% elif request.endpoint == 'users.credit' %}
+            {% block credit_card %}{% endblock credit_card %}
+            
+        {% endif %}
+    </div>
+</div>
+{% endblock content %}

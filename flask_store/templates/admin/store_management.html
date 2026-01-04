@@ -1,0 +1,130 @@
+{% extends "/admin/base_dashboard.html" %}
+
+{% block store_management %}
+<link rel="stylesheet" href="{{ url_for('static', filename='style/admin/store_management.css') }}">
+<div class="dashboard-card {% if form.errors %}editing{% endif %}">
+    <div class="dashboard-view">
+        <!-- ================= HEADER + FILTER ================= -->
+        <div class="search-filter-bar">
+            <h1 class="dashboard-title">Store Management</h1>
+            <form method="GET" action="{{ url_for('stores.store_management') }}" class="search-form">
+                <div class="search-box">
+                    <input type="text" name="search" placeholder="Search stores..." class="search-input" value="{{ request.args.get('search', '') }}">
+                    <button type="submit" class="search-btn">Search</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- TABLE HEADER -->
+        <div class="table-header">
+            <span>ID</span>
+            <span>Name</span>
+            <span>Email</span>
+            <span>Phone</span>
+        </div>
+
+        <div class="table-body">
+            {% for store in stores %}
+            <div class="table-row">
+                <span>{{ store.id }}</span>
+                <span>{{ store.name }}</span>
+                <span>{{ store.email }}</span>
+                <span>{{ store.phone }}</span>
+                <button type="button"
+                        class="delete-btn"
+                        onclick="openDelete({{ store.id }})">
+                    Delete
+                </button>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div id="deleteModal" class="modal">
+            <div class="modal-content">
+                <h2>Delete Store</h2>
+                <p>Are you sure?</p>
+
+                <form method="POST">
+                    {{ form.hidden_tag() }}
+                    <input type="hidden" id="delete_store_id" name="delete_store_id">
+                    <button type="button" class="cancel-btn" onclick="closeDelete()">Cancel</button>
+                    <button type="submit" class="save-btn">Delete</button>
+                </form>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ================= ADD STORE BUTTON ================= -->
+    <div class="action-buttons action-buttons-view">
+        <button class="edit-btn" onclick="enterAdd()">Add a Store</button>
+    </div>
+
+    <!-- Pagination Controls -->
+    <div class="pagination-controls">
+        {% if pagination.has_prev %}
+            <a href="{{ url_for('stores.store_management', page=pagination.prev_num, search=request.args.get('search', '')) }}" class="page-btn">Previous</a>
+        {% endif %}
+        
+        {% for page_num in pagination.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+            {% if page_num %}
+                {% if page_num == pagination.page %}
+                    <span class="page-btn active">{{ page_num }}</span>
+                {% else %}
+                    <a href="{{ url_for('stores.store_management', page=page_num, search=request.args.get('search', '')) }}" class="page-btn">{{ page_num }}</a>
+                {% endif %}
+            {% else %}
+                <span class="page-ellipsis">...</span>
+            {% endif %}
+        {% endfor %}
+        
+        {% if pagination.has_next %}
+            <a href="{{ url_for('stores.store_management', page=pagination.next_num) }}" class="page-btn">Next</a>
+        {% endif %}
+    </div>
+
+    <!-- ================= ADD STORE FORM ================= -->
+    <div class="form-container">
+        <form method="POST" class="dashboard-form" id="addProductForm" action="">
+
+            <h1 class="dashboard-title">Add Store</h1>
+            {{ form.hidden_tag() }}
+
+            <!-- Store Name -->
+            <div class="dashboard-form-row">
+                {{ form.name.label(class="form-label") }}
+                {{ form.name(class="profile-input is-invalid" if form.name.errors else "profile-input") }}
+                {% for error in form.name.errors %}
+                    <div class="invalid-feedback">{{ error }}</div>
+                {% endfor %}
+            </div>
+            
+            <!-- Store Email -->
+            <div class="dashboard-form-row">
+                {{ form.email.label(class="form-label") }}
+                {{ form.email(class="profile-input is-invalid" if form.email.errors else "profile-input") }}
+                {% for error in form.email.errors %}
+                    <div class="invalid-feedback">{{ error }}</div>
+                {% endfor %}
+            </div>
+
+            <!-- Store Phone -->
+            <div class="dashboard-form-row">
+                {{ form.phone.label(class="form-label") }}
+                {{ form.phone(class="profile-input is-invalid" if form.phone.errors else "profile-input") }}
+                {% for error in form.phone.errors %}
+                    <div class="invalid-feedback">{{ error }}</div>
+                {% endfor %}
+            </div>
+
+            <!-- ACTION BUTTONS -->
+            <div class="action-buttons action-buttons-form">
+                <button type="button" class="cancel-btn" onclick="exitAdd()">Cancel</button>
+                {{ form.submit(class="save-btn") }}
+            </div>
+
+        </form>
+    </div>
+</div>
+<script src="{{ url_for('static', filename='script/store_management.js') }}"></script>
+{% endblock store_management %}

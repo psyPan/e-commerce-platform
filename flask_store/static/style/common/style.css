@@ -1,0 +1,186 @@
+/* GLOBAL RESET */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+/* PAGE BACKGROUND */
+html, body { height: 100%; }
+/* Global Font Configuration */
+:root {
+    --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    --font-size-base: 16px;
+    --line-height-base: 1.6;
+    --text-color: #1a1a1a;
+}
+
+body {
+    font-family: var(--font-family);
+    font-size: var(--font-size-base);
+    line-height: var(--line-height-base);
+    color: var(--text-color);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Ensure form elements inherit fonts */
+input, textarea, select, button {
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+}
+
+/* Headings consistency */
+h1, h2, h3, h4, h5, h6 {
+    font-family: inherit;
+}
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 50%, #dee2e6 100%);
+    min-height: 100%;
+    height: auto;
+    overflow-x: hidden;
+    background-attachment: fixed;
+    display: flex;
+    flex-direction: column;
+}
+/* WRAPPERS */
+.container-fluid {
+    flex: 1; /* Pushes footer down */
+    width: 100%;
+    background: transparent !important;
+    padding: 0 !important; /* Override Bootstrap */
+}
+/* NAVBAR */
+.navbar {
+    width: 100vw;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Pushes Logo left, Links right */
+    padding: 15px 40px;
+    background: #212529;
+    color: white;
+    margin-bottom: 40px;
+}
+
+.logo a {
+    font-size: 22px;
+    font-weight: 700;
+    color: white;
+    text-decoration: none;
+    transition: 0.2s;
+}
+
+.navbar-logo {
+    height: 50px;
+    width: auto;
+    display: block;
+}
+
+/* SEARCH BAR */
+.search-container {
+    /* --- NEW CENTERING LOGIC --- */
+    position: absolute;            /* 1. Take out of the flex "flow" */
+    left: 50%;                     /* 2. Move left edge to the exact center of navbar */
+    transform: translateX(-50%);   /* 3. Shift back left by 50% of its own width */
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    /* transform: translateX(50px); Nudge right */
+}
+.search-box {
+    padding: 7px 15px;
+    border-radius: 20px;
+    border: 2px solid #e0e0e0;
+    width: 250px;
+    font-size: 14px;
+    transition: all 0.2s ease;
+    background: white;
+}
+.search-box:focus {
+    outline: none;
+    border-color: #c9a876;
+    box-shadow: 0 0 0 3px rgba(201, 168, 118, 0.15);
+}
+/* NAV LINKS */
+.nav-links a {
+    margin-left: 22px;
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 600;
+    color: white;
+    transition: 0.2s;
+}
+.nav-links a:hover { color: #c9a876; }
+/* BANNER (I added HTML for this below so you can see it) */
+.banner {
+    width: 100%;
+    max-width: 1000px;
+    background: #fefaf5;
+    padding: 100px; /* Reduced slightly for demo */
+    border-radius: 12px;
+    margin: 0 auto 60px auto;
+    text-align: center;
+    font-size: 16px;
+    color: #444;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.05);
+}
+/* PRODUCT GRID (Responsive Magic) */
+.product-grid {
+    max-width: 1000px;
+    margin: 0 auto;
+    display: grid;
+    /* TRY CHANGING 190px TO 300px LATER */
+    grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+    gap: 28px;
+    padding: 0 20px; /* Added side padding so it doesn't touch edges on mobile */
+}
+.product {
+    background: white;
+    padding: 15px;
+    border-radius: 12px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05);
+    text-align: center;
+    transition: transform 0.2s ease;
+}
+.product:hover { transform: translateY(-5px); }
+.img-box {
+    background: #ccc;
+    width: 100%;
+    height: 150px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    display: flex;             /* Centering text in placeholder */
+    align-items: center;       
+    justify-content: center;   
+    color: #777;               
+}
+.product-name { font-size: 14px; font-weight: 600; color: #444; }
+.product-price { margin-top: 5px; font-size: 14px; color: #666; }
+.pagination {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-top:40px;
+    margin-bottom: 80px;
+}
+/* FOOTER */
+.footer {
+    background: #212529;
+    padding: 40px 0;
+    width: 100%;
+    margin-top: auto !important; /* Sticks to bottom */
+}
+.footer-grid {
+    display: flex;
+    justify-content: space-around;
+    max-width: 1200px;
+    margin: auto;
+    color: white;
+    text-align: center;
+    flex-wrap: wrap; /* Allows footer to stack on mobile */
+}
+.f-item { margin: 10px; }
+.f-item p { margin: 3px 0; font-size: 14px; }
+.f-item .name { font-weight: 700; font-size: 15px; }

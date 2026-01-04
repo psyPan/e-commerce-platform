@@ -1,0 +1,239 @@
+{% extends "/common/base.html" %}
+
+{% block title %}{{ product.name }} - {{ store.name }}{% endblock %}
+
+{% block content %}
+<style>
+    .detail-container {
+        max_width: 1000px;
+        margin: 40px auto;
+        padding: 0 20px;
+        background: transparent;
+    }
+
+    .product-main {
+        display: flex;
+        gap: 40px;
+        background: white;
+        padding: 40px;
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        margin-bottom: 40px;
+    }
+
+    /* Left Side: Image */
+    .product-image-col {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #fcfcfc;
+        border-radius: 8px;
+        border: 1px solid #eee;
+        min-height: 400px;
+    }
+    .product-image-col img {
+        max-width: 100%;
+        max-height: 400px;
+        object-fit: contain;
+    }
+
+    /* Right Side: Info */
+    .product-info-col {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .brand-tag {
+        color: #c9a876;
+        font-weight: 700;
+        text-transform: uppercase;
+        font-size: 0.9rem;
+        letter-spacing: 1px;
+        margin-bottom: 10px;
+    }
+
+    .product-title {
+        font-size: 2.5rem;
+        color: #43341e;
+        margin-bottom: 15px;
+        line-height: 1.2;
+    }
+
+    .price-area {
+        margin-bottom: 25px;
+    }
+    .old-price {
+        text-decoration: line-through;
+        color: #999;
+        font-size: 1.2rem;
+        margin-right: 10px;
+    }
+    .current-price {
+        font-size: 2rem;
+        color: #d32f2f; /* Red for price pop */
+        font-weight: bold;
+    }
+    .discount-badge {
+        background: #d32f2f;
+        color: white;
+        padding: 4px 10px;
+        border-radius: 4px;
+        font-size: 0.8rem;
+        vertical-align: middle;
+        margin-left: 10px;
+    }
+
+    .stock-status {
+        margin-bottom: 20px;
+        font-weight: 600;
+    }
+    .in-stock { color: #2e7d32; }
+    .out-stock { color: #c62828; }
+
+    .description-text {
+        color: #555;
+        line-height: 1.6;
+        margin-bottom: 30px;
+        font-size: 1rem;
+    }
+
+    .action-btn {
+        display: inline-block;
+        background: #43341e;
+        color: white;
+        padding: 15px 30px;
+        text-decoration: none;
+        border-radius: 8px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        border: none;
+        cursor: pointer;
+        transition: 0.2s;
+        width: 100%;
+        text-align: center;
+    }
+    .action-btn:hover {
+        background: #c9a876;
+    }
+    .action-btn:disabled {
+        background: #ccc;
+        cursor: not-allowed;
+    }
+
+    /* Reviews Section */
+    .reviews-section {
+        background: white;
+        padding: 40px;
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    }
+    .section-title {
+        border-bottom: 2px solid #f5e6d3;
+        padding-bottom: 15px;
+        margin-bottom: 25px;
+        color: #43341e;
+    }
+    .review-card {
+        border-bottom: 1px solid #eee;
+        padding-bottom: 20px;
+        margin-bottom: 20px;
+    }
+    .review-header {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 5px;
+    }
+    .reviewer-name { font-weight: bold; color: #43341e; }
+    .review-date { color: #999; font-size: 0.9rem; }
+    .star-rating { color: #FFD700; margin-bottom: 10px; }
+
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+        .product-main { flex-direction: column; }
+    }
+</style>
+
+<div class="detail-container">
+    
+    <div class="product-main">
+        <div class="product-image-col">
+            {% if product.image %}
+                <img src="{{ url_for('static', filename='product_pics/' + product.image) }}" alt="{{ product.name }}">
+            {% else %}
+                <img src="https://via.placeholder.com/400x400?text=No+Image" alt="No Image">
+            {% endif %}
+        </div>
+
+        <div class="product-info-col">
+            <div class="brand-tag">
+                <a href="{{ url_for('stores.view_store', store_id=store.id) }}" style="color:inherit; text-decoration:none;">
+                    {{ store.name }}
+                </a>
+            </div>
+            
+            <h1 class="product-title">{{ product.name }}</h1>
+
+            <div class="price-area">
+                {% if product.discount_obj %}
+                    <span class="old-price">${{ "%.2f"|format(product.sell_price) }}</span>
+                    <span class="current-price">${{ "%.2f"|format(product.get_final_price()) }}</span>
+                    <span class="discount-badge">-{{ product.discount_obj.discount_percent|int }}%</span>
+                {% else %}
+                    <span class="current-price">${{ "%.2f"|format(product.sell_price) }}</span>
+                {% endif %}
+            </div>
+
+            <div class="stock-status">
+                {% if product.stock > 0 %}
+                    <span class="in-stock"><i class="fas fa-check-circle"></i> In Stock ({{ product.stock }})</span>
+                {% else %}
+                    <span class="out-stock"><i class="fas fa-times-circle"></i> Out of Stock</span>
+                {% endif %}
+            </div>
+
+            <p class="description-text">
+                {{ product.description }}
+            </p>
+
+            <form action="{{ url_for('cart.add_to_cart', product_id=product.id) }}" method="POST">
+                {% if product.stock > 0 %}
+                    <button type="submit" class="action-btn">
+                        Add to Cart
+                    </button>
+                {% else %}
+                    <button type="button" class="action-btn" disabled>
+                        Sold Out
+                    </button>
+                {% endif %}
+            </form>
+        </div>
+    </div>
+
+    <div class="reviews-section">
+        <h3 class="section-title">Customer Reviews ({{ reviews|length }})</h3>
+
+        {% if reviews %}
+            {% for review in reviews %}
+            <div class="review-card">
+                <div class="review-header">
+                    <span class="reviewer-name">{{ review.user.username }}</span>
+                    <span class="review-date">{{ review.review_time.strftime('%Y-%m-%d') }}</span>
+                </div>
+                
+                <div class="star-rating">
+                    {% for i in range(review.stars) %}★{% endfor %}{% for i in range(5 - review.stars) %}☆{% endfor %}
+                </div>
+                
+                <p style="color: #555;">{{ review.description }}</p>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p style="text-align:center; color:#777; padding: 20px;">No reviews yet. Be the first to review!</p>
+        {% endif %}
+    </div>
+
+</div>
+{% endblock %}

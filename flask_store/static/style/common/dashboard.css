@@ -1,0 +1,310 @@
+/* =========================
+   PROFILE PAGE LAYOUT
+========================= */
+
+.dashboard-wrapper {
+    max-width: 1100px;
+    margin: 5px auto 50px;
+    display: flex;
+    gap: 40px;
+    align-items: flex-start;
+}
+
+/* =========================
+   SIDE MENU LEFT SIDE
+========================= */
+
+.dashboard-sidebar {
+    width: 200px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.dashboard-sidebar a {
+    padding: 12px 20px;
+    background: #1a1a1a;
+    border-radius: 20px;
+    color: white;
+    font-size: 14px;
+    text-align: center;
+    text-decoration: none;
+    transition: 0.2s;
+    font-weight: 500;
+    border: 2px solid transparent;
+}
+
+.dashboard-sidebar a:hover {
+    background: #2c2c2c;           /* Lighter black on hover */
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.dashboard-sidebar a.active {
+    background: white; 
+    color: #1a1a1a;
+    border: 2px solid #1a1a1a;
+    font-weight: 600;
+}
+
+/* =========================
+   DAHSBOARD CONTENT TITLE
+========================= */
+.dashboard-title{
+    font-size: 28px;
+    font-weight: 700;
+    color: #1a1a1a;
+    text-align: center;
+    margin-bottom: 32px;
+}
+
+/* ==============================
+   DASHBOARD CONTENT RIGHT SIDE
+============================== */
+
+.dashboard-content {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
+/* ==============================
+   DASHBOARD CONTENT AREA
+============================== */
+
+.dashboard-card {
+    width: 890px;
+    background: rgba(255, 255, 255, 0.35);
+    padding: 40px 45px;
+    border-radius: 30px;
+    height: 480px;
+    min-height: 0;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.dashboard-view,
+.dashboard-form {
+    flex: 1;
+    min-height: 0;
+}
+
+/* =========================
+    VIEW
+========================= */
+
+.dashboard-view {
+    display: block;
+}
+
+.profile-row {
+    display: grid;
+    grid-template-columns: 150px 1fr;
+    column-gap: 40px;
+    padding: 12px 0;
+}
+
+.profile-row span {
+    font-weight: 600;
+    color: #2c2c2c;
+    font-size: 15px;
+}
+
+.profile-row p {
+    margin: 0;
+    font-size: 15px;
+    color: #1a1a1a;
+}
+
+.owners-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+/* =========================
+   FORM (EDIT MODE)
+========================= */
+
+.dashboard-form {
+    display: none;
+}
+.dashboard-card,
+.dashboard-card.editing {
+    height: auto;      /* Unset fixed height in edit mode */
+    min-height: 480px; /* Keep the minimum size */
+}
+
+.dashboard-card.editing .dashboard-view {
+    display: none;
+}
+
+.dashboard-card.editing .dashboard-form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.dashboard-form-row {
+    align-items: center;
+    display: grid;
+    grid-template-columns: 150px 1fr;
+    column-gap:30px;
+    padding: 3px 0;
+}
+
+.dashboard-form-row label {
+    font-weight: 600;
+    color: #555;
+    font-size: 15px;
+}
+
+.profile-input {
+    padding: 8px 12px;
+    border-radius: 18px;
+    border: 1px solid #ddd;
+    font-size: 14px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.profile-input:focus {
+    outline: none;
+    border-color: #1a1a1a;         /* Black border on focus */
+    background-color: white;
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.05);
+}
+
+.invalid-feedback {
+    grid-column: 1 / -1;
+    color: #dc2626;
+    font-size: 13px;
+    margin-top: 4px;
+}
+
+/* =========================
+   ACTION BUTTONS
+========================= */
+
+.action-buttons {
+    margin-top: auto;
+    display: flex;
+    justify-content: flex-end;
+    gap: 16px;
+    padding-top: 30px;
+}
+
+/* Edit button */
+.edit-btn {
+    background: #1a1a1a;           /* Black background */
+    color: white;
+    padding: 12px 26px;
+    border-radius: 16px;
+    border: none;
+    font-size: 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 600;
+}
+
+.edit-btn:hover {
+    background: #2c2c2c;           /* Lighter black on hover */
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* Cancel button - White with black border */
+.cancel-btn {
+    background: white;
+    color: #1a1a1a;
+    padding: 12px 26px;
+    border-radius: 16px;
+    border: 2px solid #1a1a1a;
+    font-size: 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 600;
+}
+
+.cancel-btn:hover {
+    background: #f5f5f5;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.cancel-btn:active {
+    transform: translateY(0);
+}
+
+/* Save */
+.save-btn {
+    padding: 12px 28px;
+    border-radius: 16px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background 0.2s;
+    background: #1a1a1a;;
+    color: #fff;
+    border: none;
+    outline: none;
+    box-shadow: none;
+}
+
+/* Hide Edit button in edit mode */
+.dashboard-card.editing .action-buttons-view {
+    display: none;
+}
+
+/* ensure link states stay clean */
+.cancel-btn,
+.cancel-btn:visited,
+.cancel-btn:active,
+.edit-btn,
+.edit-btn:visited,
+.edit-btn:active {
+  transform: translateY(0);
+}
+
+.cancel-btn:visited,
+.cancel-btn:active,
+.cancel-btn:focus {
+  color: #43341e;
+}
+
+.profile-actions {
+    margin-top: 50px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 14px;
+}
+/* Save button - Black */
+.btn-gold {
+    background: #1a1a1a;           /* Black background */
+    color: white;
+    padding: 12px 30px;
+    border-radius: 16px;
+    border: none;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-gold:hover {
+    background: #2c2c2c;           /* Lighter black on hover */
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.btn-gold:active {
+    transform: translateY(0);
+}
+.password-form {
+    max-width: 520px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin: 40px auto 0;
+}

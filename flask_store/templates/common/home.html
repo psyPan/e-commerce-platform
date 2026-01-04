@@ -1,0 +1,143 @@
+{% extends "/common/base.html" %}
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='style/common/home.css') }}">
+<div class="container-fluid">
+    <div class="slider-viewport">
+        <div class="slider-track" id="sliderTrack">
+            
+            <div class="slide slide-discount">
+                <h2>BIG SALE!</h2>
+                <p>Get up to 50% off on selected items.</p>
+            </div>
+
+            <a href="{{ url_for('stores.list_stores') }}" class="slide slide-stores">
+                <h2>BROWSE STORES</h2>
+                <p>Explore our wide variety of vendors and shops.</p>
+                <button class="btn btn-light mt-3" style="border-radius: 20px;">View All Stores</button>
+            </a>
+
+        </div>
+
+        <div class="slider-dots">
+            <div class="dot active" onclick="goToSlide(0)"></div>
+            <div class="dot" onclick="goToSlide(1)"></div>
+        </div>
+    </div>
+    <!-- Store Sections -->
+    <div class="stores-container">
+        {% for store in stores %}
+        <div class="store-section">
+            <a href="{{ url_for('stores.view_store', store_id=store.id) }}" class="store-link">
+                <h2 class="store-name">{{ store.name }}</h2>
+            </a>
+            
+            <div class="display-box">
+                <div class="products-scroll">
+                    {% for product in store.products %}
+                        {% if product.is_active %}
+                        <a href="{{ url_for('products.view_product', product_id=product.id) }}" class="product-card-link">
+                            <div class="product-card">
+                                {% set product_discount = product.get_product_discount() %}
+                                
+                                {% if product_discount %}
+                                    <div class="discount-badge">
+                                        <span class="badge bg-danger">
+                                            {{ product_discount.discount_percent }}% OFF
+                                        </span>
+                                    </div>
+                                {% endif %}
+                                
+                                <div class="product-image">
+                                    <img src="{{ url_for('static', filename='product_pics/' + (product.image if product.image else 'default.jpg')) }}" alt="{{ product.name }}">
+                                </div>
+                                <div class="product-info">
+                                    <div class="product-name">{{ product.name }}</div>
+                                    
+                                    {% if product_discount %}
+                                        <div class="product-price-container">
+                                            <div class="product-price discounted">${{ "%.2f"|format(product.get_final_price()) }}</div>
+                                            <div class="product-price-original">${{ "%.2f"|format(product.sell_price) }}</div>
+                                        </div>
+                                    {% else %}
+                                        <div class="product-price">${{ "%.2f"|format(product.sell_price) }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </a>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Pagination Controls -->
+    <div class="pagination-controls">
+        {% if pagination.has_prev %}
+            <a href="{{ url_for('discounts.add_discount', page=pagination.prev_num) }}" class="page-btn">Previous</a>
+        {% endif %}
+        
+        {% for page_num in pagination.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+            {% if page_num %}
+                {% if page_num == pagination.page %}
+                    <span class="page-btn active">{{ page_num }}</span>
+                {% else %}
+                    <a href="{{ url_for('discounts.add_discount', page=page_num) }}" class="page-btn">{{ page_num }}</a>
+                {% endif %}
+            {% else %}
+                <span class="page-ellipsis">...</span>
+            {% endif %}
+        {% endfor %}
+        
+        {% if pagination.has_next %}
+            <a href="{{ url_for('discounts.add_discount', page=pagination.next_num) }}" class="page-btn">Next</a>
+        {% endif %}
+    </div>
+</div>
+
+<style>
+    .product-card {
+        position: relative;
+        height: 100%;
+    }
+    
+    .discount-badge {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        z-index: 10;
+    }
+    
+    .discount-badge .badge {
+        font-size: 0.75rem;
+        padding: 0.4rem 0.6rem;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+    
+    .product-price-container {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        margin-top: auto;
+    }
+    
+    .product-price.discounted {
+        color: #28a745;
+        font-weight: bold;
+        font-size: 1.3em;
+    }
+    
+    .product-price-original {
+        color: #6c757d;
+        text-decoration: line-through;
+        font-size: 0.85em;
+    }
+
+    .product-image {
+        position: relative; /* Make sure image container maintains its space */
+    }
+</style>
+
+<script src="{{ url_for('static', filename='script/home.js') }}"></script>
+{% endblock content %}

@@ -1,0 +1,218 @@
+{% extends "/admin/base_dashboard.html" %}
+
+{% block user_management %}
+<link rel="stylesheet" href="{{ url_for('static', filename='style/admin/user_management.css') }}">
+
+<div class="dashboard-card {% if owner_form.errors %}editing{% endif %}" id="userBox">
+    <div class="dashboard-view">
+
+        <!-- ================= HEADER + FILTER ================= -->
+        <div class="search-filter-bar">
+            <h1 class="dashboard-title">User Management</h1>
+
+            <form method="GET"
+                  action="{{ url_for('users.user_management') }}"
+                  class="search-form">
+
+                <select name="filter_by" class="filter-dropdown">
+                    <option value="all" {% if request.args.get('filter_by') == 'all' %}selected{% endif %}>
+                        All Users
+                    </option>
+                    <option value="administrator" {% if request.args.get('filter_by') == 'administrator' %}selected{% endif %}>
+                        Administrator
+                    </option>
+                    <option value="owner" {% if request.args.get('filter_by') == 'owner' %}selected{% endif %}>
+                        Owner
+                    </option>
+                    <option value="customer" {% if request.args.get('filter_by') == 'customer' %}selected{% endif %}>
+                        Customer
+                    </option>
+                </select>
+
+                <div class="search-box">
+                    <input type="text"
+                           name="search"
+                           placeholder="Search users..."
+                           class="search-input"
+                           value="{{ request.args.get('search', '') }}">
+                    <button type="submit" class="search-btn">Search</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- ================= TABLE HEADER ================= -->
+        <div class="table-header">
+            <span>ID</span>
+            <span>Name</span>
+            <span>Email</span>
+            <span>User Type</span>
+            <span>Action</span>
+        </div>
+
+        <!-- ================= TABLE BODY ================= -->
+        <div class="table-body">
+            {% for user in users %}
+            <div class="table-row">
+                <span>{{ user.id }}</span>
+                <span>{{ user.name }}</span>
+                <span>{{ user.email }}</span>
+                <span>{{ user.type }}</span>
+
+                <button type="button"
+                        class="delete-btn"
+                        onclick="openDelete({{ user.id }})">
+                    Delete
+                </button>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- ================= DELETE MODAL ================= -->
+        <div id="deleteModal" class="modal">
+            <div class="modal-content">
+                <h2>Delete User</h2>
+                <p>Are you sure you want to delete this user?</p>
+
+                <form method="POST">
+                    {{ owner_form.hidden_tag() }}
+                    <input type="hidden" id="delete_user_id" name="delete_user_id">
+                    <button type="button" class="cancel-btn" onclick="closeDelete()">Cancel</button>
+                    <button type="submit" class="save-btn">Delete</button>
+                </form>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ================= ADD OWNER BUTTON ================= -->
+    <div class="action-buttons action-buttons-view">
+        <button class="edit-btn" onclick="enterAdd()">Add Owner</button>
+    </div>
+
+    <!-- ================= PAGINATION ================= -->
+    <div class="pagination-controls">
+        {% if pagination.has_prev %}
+            <a href="{{ url_for('users.user_management',
+                                page=pagination.prev_num,
+                                search=request.args.get('search',''),
+                                filter_by=request.args.get('filter_by','all')) }}"
+               class="page-btn">
+                Previous
+            </a>
+        {% endif %}
+
+        {% for page_num in pagination.iter_pages(left_edge=1, right_edge=1,
+                                                 left_current=1, right_current=2) %}
+            {% if page_num %}
+                {% if page_num == pagination.page %}
+                    <span class="page-btn active">{{ page_num }}</span>
+                {% else %}
+                    <a href="{{ url_for('users.user_management',
+                                        page=page_num,
+                                        search=request.args.get('search',''),
+                                        filter_by=request.args.get('filter_by','all')) }}"
+                       class="page-btn">
+                        {{ page_num }}
+                    </a>
+                {% endif %}
+            {% else %}
+                <span class="page-ellipsis">...</span>
+            {% endif %}
+        {% endfor %}
+
+        {% if pagination.has_next %}
+            <a href="{{ url_for('users.user_management',
+                                page=pagination.next_num,
+                                search=request.args.get('search',''),
+                                filter_by=request.args.get('filter_by','all')) }}"
+               class="page-btn">
+                Next
+            </a>
+        {% endif %}
+    </div>
+
+    <!-- ================= CREATE OWNER FORM ================= -->
+    <div class="form-container owner-form">
+        <form method="POST" class="dashboard-form">
+
+            <h1 class="dashboard-title">Create Owner</h1>
+            {{ owner_form.hidden_tag() }}
+
+            <!-- First Name -->
+            <div class="dashboard-form-row">
+                {{ owner_form.f_name.label(class="form-label") }}
+                {{ owner_form.f_name(
+                    class="profile-input is-invalid" if owner_form.f_name.errors else "profile-input"
+                ) }}
+                {% for error in owner_form.f_name.errors %}
+                    <div class="invalid-feedback">{{ error }}</div>
+                {% endfor %}
+            </div>
+
+            <!-- Last Name -->
+            <div class="dashboard-form-row">
+                {{ owner_form.l_name.label(class="form-label") }}
+                {{ owner_form.l_name(
+                    class="profile-input is-invalid" if owner_form.l_name.errors else "profile-input"
+                ) }}
+                {% for error in owner_form.l_name.errors %}
+                    <div class="invalid-feedback">{{ error }}</div>
+                {% endfor %}
+            </div>
+
+            <!-- Email -->
+            <div class="dashboard-form-row">
+                {{ owner_form.email.label(class="form-label") }}
+                {{ owner_form.email(
+                    class="profile-input is-invalid" if owner_form.email.errors else "profile-input"
+                ) }}
+                {% for error in owner_form.email.errors %}
+                    <div class="invalid-feedback">{{ error }}</div>
+                {% endfor %}
+            </div>
+
+            <!-- Phone -->
+            <div class="dashboard-form-row">
+                {{ owner_form.phone.label(class="form-label") }}
+                {{ owner_form.phone(
+                    class="profile-input is-invalid" if owner_form.phone.errors else "profile-input"
+                ) }}
+                {% for error in owner_form.phone.errors %}
+                    <div class="invalid-feedback">{{ error }}</div>
+                {% endfor %}
+            </div>
+
+            <!-- Password -->
+            <div class="dashboard-form-row">
+                {{ owner_form.password.label(class="form-label") }}
+                {{ owner_form.password(
+                    class="profile-input is-invalid" if owner_form.password.errors else "profile-input"
+                ) }}
+                {% for error in owner_form.password.errors %}
+                    <div class="invalid-feedback">{{ error }}</div>
+                {% endfor %}
+            </div>
+
+            <!-- Assign Store -->
+            <div class="dashboard-form-row">
+                {{ owner_form.store_id.label(class="form-label") }}
+                {{ owner_form.store_id(
+                    class="profile-input is-invalid" if owner_form.store_id.errors else "profile-input"
+                ) }}
+                {% for error in owner_form.store_id.errors %}
+                    <div class="invalid-feedback">{{ error }}</div>
+                {% endfor %}
+            </div>
+
+            <!-- ACTION BUTTONS -->
+            <div class="action-buttons action-buttons-form">
+                <button type="button" class="cancel-btn" onclick="closeForm()">Cancel</button>
+                <button name="create_owner" class="save-btn">Create Owner</button>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+<script src="{{ url_for('static', filename='script/user_management.js') }}"></script>
+{% endblock user_management %}

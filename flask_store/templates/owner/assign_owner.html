@@ -1,0 +1,47 @@
+{% extends "/owner/base_dashboard.html" %}
+
+{% block assign_owner %}
+<div class="dashboard-card editing" id="storeBox">
+    <div class="form-container">
+        <form method="POST" class="dashboard-form" id="addProductForm" enctype="multipart/form-data" action="">
+            <h1 class="dashboard-title">Edit Store</h1>
+            {{ form.hidden_tag() }}
+            <div class="dashboard-form-row">
+                {{ form.owner_email.label(class="form-label") }}
+                {% if form.owner_email.errors %}
+                    {{ form.owner_email(class="form-input is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.owner_email.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.owner_email(class="profile-input") }}
+                {% endif %}
+            </div>
+            <div class="dashboard-form-row">
+                {{ form.store_id.label(class="form-label") }}
+                {% if form.store_id.errors %}
+                    {{ form.store_id(class="form-input is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.store_id.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.store_id(class="profile-input") }}
+                {% endif %}
+            </div>
+            <div class="action-buttons action-buttons-form">
+                <button type="button" class="cancel-btn" onclick="clearForm()">Cancel</button>
+                {{ form.submit(class="save-btn") }}
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+function clearForm() {
+    document.querySelector('form').reset();
+}
+</script>
+{% endblock assign_owner %}

@@ -1,0 +1,162 @@
+{% extends "/common/base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-4">Financial Report - All Stores</h1>
+    
+    <!-- Platform Overview Cards -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card bg-primary text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Total Revenue</h5>
+                    <h2>${{ "{:,.2f}".format(platform_totals.total_revenue) }}</h2>
+                    <small>From all stores</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-success text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Total Orders</h5>
+                    <h2>{{ "{:,}".format(platform_totals.total_orders) }}</h2>
+                    <small>Completed orders</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-warning text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Pending Revenue</h5>
+                    <h2>${{ "{:,.2f}".format(platform_totals.pending_revenue) }}</h2>
+                    <small>From pending orders</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-info text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Active Stores</h5>
+                    <h2>{{ platform_totals.active_stores }} / {{ platform_totals.total_stores }}</h2>
+                    <small>Stores with products</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Store Financial Table -->
+    <div class="card">
+        <div class="card-header">
+            <h3>Store Financial Performance</h3>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Store Name</th>
+                            <th>Total Revenue</th>
+                            <th>Orders</th>
+                            <th>Avg Order Value</th>
+                            <th>Products Sold</th>
+                            <th>Active Products</th>
+                            <th>Pending Revenue</th>
+                            <th>This Month</th>
+                            <th>Growth %</th>
+                            <th>Balance</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for store in financial_data %}
+                        <tr>
+                            <td><strong>{{ store.store_name }}</strong></td>
+                            <td>${{ "{:,.2f}".format(store.total_revenue) }}</td>
+                            <td>{{ store.total_orders }}</td>
+                            <td>${{ "{:,.2f}".format(store.average_order_value) }}</td>
+                            <td>{{ store.total_products_sold }}</td>
+                            <td>{{ store.active_products }} / {{ store.total_products }}</td>
+                            <td class="text-warning">${{ "{:,.2f}".format(store.pending_revenue) }}</td>
+                            <td>${{ "{:,.2f}".format(store.revenue_this_month) }}</td>
+                            <td>
+                                {% if store.growth_rate > 0 %}
+                                    <span class="text-success">+{{ store.growth_rate }}%</span>
+                                {% elif store.growth_rate < 0 %}
+                                    <span class="text-danger">{{ store.growth_rate }}%</span>
+                                {% else %}
+                                    <span class="text-muted">0%</span>
+                                {% endif %}
+                            </td>
+                            <td>${{ "{:,.2f}".format(store.current_balance) }}</td>
+                            <td>
+                                <a href="{{ url_for('users.store_financial_detail', store_id=store.store_id) }}" 
+                                   class="btn btn-sm btn-info">
+                                    View Details
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                    <tfoot class="table-secondary">
+                        <tr>
+                            <th>TOTAL</th>
+                            <th>${{ "{:,.2f}".format(platform_totals.total_revenue) }}</th>
+                            <th>{{ "{:,}".format(platform_totals.total_orders) }}</th>
+                            <th>-</th>
+                            <th>{{ "{:,}".format(platform_totals.total_products_sold) }}</th>
+                            <th>-</th>
+                            <th class="text-warning">${{ "{:,.2f}".format(platform_totals.pending_revenue) }}</th>
+                            <th>-</th>
+                            <th>-</th>
+                            <th>-</th>
+                            <th>-</th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Export Options -->
+    <div class="mt-3">
+        <button class="btn btn-success" onclick="exportToCSV()">
+            Export to CSV
+        </button>
+        <button class="btn btn-primary" onclick="window.print()">
+            Print Report
+        </button>
+    </div>
+</div>
+
+<script>
+function exportToCSV() {
+    let csv = 'Store Name,Total Revenue,Orders,Avg Order Value,Products Sold,Active Products,Pending Revenue,This Month,Growth %,Balance\n';
+    
+    {% for store in financial_data %}
+    csv += '"{{ store.store_name }}",' +
+           '{{ store.total_revenue }},' +
+           '{{ store.total_orders }},' +
+           '{{ store.average_order_value }},' +
+           '{{ store.total_products_sold }},' +
+           '{{ store.active_products }},' +
+           '{{ store.pending_revenue }},' +
+           '{{ store.revenue_this_month }},' +
+           '{{ store.growth_rate }},' +
+           '{{ store.current_balance }}\n';
+    {% endfor %}
+    
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'financial_report_' + new Date().toISOString().split('T')[0] + '.csv';
+    a.click();
+}
+</script>
+
+<style>
+@media print {
+    .btn, .card-header { display: none; }
+}
+</style>
+{% endblock %}

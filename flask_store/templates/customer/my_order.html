@@ -1,0 +1,250 @@
+{% extends "/customer/base_dashboard.html" %}
+{% block my_order %}
+<link rel="stylesheet" href="{{ url_for('static', filename='style/customer/my_order.css') }}">
+
+<div class="dashboard-card">
+    <h1 class="dashboard-title">Order History</h1>
+    
+    <!-- Filter Buttons -->
+    <div class="filter-buttons">
+        <button class="filter-btn active" data-status="all">All Orders</button>
+        <button class="filter-btn" data-status="received">Received</button>
+        <button class="filter-btn" data-status="processing">Processing</button>
+        <button class="filter-btn" data-status="shipped">Shipped</button>
+        <button class="filter-btn" data-status="closed">Closed</button>
+        <button class="filter-btn" data-status="cancelled">Cancelled</button>
+    </div>
+    
+    <div class="order-wrapper">
+        {% if not orders %}
+            <div style="text-align: center; padding: 50px;">
+                <h3>You have no orders yet.</h3>
+                <a href="{{ url_for('stores.list_stores') }}" style="color: blue; text-decoration: underline;">Start Shopping</a>
+            </div>
+        {% else %}
+            {% for order in orders %}
+            <div class="order-card" data-status="{{ order.status|lower }}">
+                <div class="order-header">
+                    <div>
+                        <h3>Order #{{ order.id }}</h3>
+                        <small>{{ order.order_time.strftime('%Y-%m-%d %H:%M') }}</small>
+                    </div>
+                    <span class="badge-status status-{{ order.status|lower }}">
+                        {{ order.status }}
+                    </span>
+                </div>
+
+                <div class="order-items">
+                    {% for item in order.items %}
+                    <div class="order-item">
+                        <div class="product-info">
+                            <div class="product-img">
+                                {% if item.product.image %}
+                                <img src="{{ url_for('static', filename='product_pics/' + item.product.image) }}" 
+                                     alt="{{ item.product.name }}" style="width:100%; height:100%; object-fit:contain;">
+                                {% else %}
+                                <div style="background:#ddd; width:100%; height:100%; display:flex; justify-content:center; align-items:center;">No Img</div>
+                                {% endif %}
+                            </div>
+                            <div class="product-details">
+                                <strong>{{ item.product.name }}</strong>
+                                <br>
+                                <small style="color:gray;">Qty: {{ item.quantity }} × ${{ item.product.price }}</small>
+                            </div>
+                        </div>
+                        
+                        <div class="item-total">
+                            <div class="price">${{ item.total_price }}</div>
+                            {% set unique_key = order.id|string + "-" + item.product.id|string %}
+                            {% if unique_key in reviewed_map %}
+                                <span class="reviewed-badge">✓ Reviewed</span>
+                            {% else %}
+                                <button type="button" class="review-btn" 
+                                        data-bs-toggle="modal" 
+                                        data-bs-target="#reviewModal-{{ order.id }}-{{ item.product.id }}">
+                                    Write Review
+                                </button>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Review Modal -->
+                    <div class="modal fade" id="reviewModal-{{ order.id }}-{{ item.product.id }}" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Review: {{ item.product.name }}</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
+                                <form method="POST" action="{{ url_for('users.add_review', order_id=order.id, product_id=item.product.id) }}">
+                                    {{ review_form.hidden_tag() }}
+                                    <div class="modal-body text-start">
+                                        <div class="mb-3">
+                                            <label class="form-label text-dark">Rating</label>
+                                            {{ review_form.stars(class="form-select") }}
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label text-dark">Comment</label>
+                                            {{ review_form.description(class="form-control", rows=3) }}
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        {{ review_form.submit(class="btn btn-primary") }}
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <div class="order-footer">
+                    <div class="shipping-info">
+                        <h4>Shipping Address</h4>
+                        <p>{{ order.cust_address }}</p>
+                    </div>
+                    
+                    <div class="order-summary">
+                        <div class="summary-row">
+                            <span>Subtotal (Shipping included)</span>
+                            <span>${{ order.shipping_cost }}</span>
+                        </div>
+                        <div class="summary-row total">
+                            <span>Total</span>
+                            <span>${{ order.total_amount }}</span>
+                        </div>
+                        
+                        {% if order.status == 'processing' %}
+                        <form action="{{ url_for('users.cancel_order', order_id=order.id) }}" method="POST" 
+                              onsubmit="return confirm('Cancel this order?');" style="margin-top: 15px;">
+                            <button type="submit" class="cancel-order-btn">Cancel Order</button>
+                        </form>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            
+            <!-- No Results Message -->
+            <div class="no-results" style="display: none; text-align: center; padding: 50px;">
+                <h3>No orders found for this status.</h3>
+            </div>
+            
+            <!-- Pagination Controls -->
+            <div class="pagination-controls">
+                <button class="pagination-btn" id="prevBtn" disabled>← Previous</button>
+                <span class="pagination-info" id="pageInfo">Page 1</span>
+                <button class="pagination-btn" id="nextBtn">Next →</button>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+// Pagination and Filter functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const orderCards = document.querySelectorAll('.order-card');
+    const noResults = document.querySelector('.no-results');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const pageInfo = document.getElementById('pageInfo');
+    
+    const ITEMS_PER_PAGE = 5;
+    let currentPage = 1;
+    let currentFilter = 'all';
+    let filteredOrders = [];
+    
+    // Initialize
+    updateFilteredOrders();
+    
+    // Filter functionality
+    filterButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const status = this.getAttribute('data-status');
+            currentFilter = status;
+            currentPage = 1; // Reset to first page when filter changes
+            
+            // Update active button
+            filterButtons.forEach(btn => btn.classList.remove('active'));
+            this.classList.add('active');
+            
+            updateFilteredOrders();
+        });
+    });
+    
+    // Update filtered orders based on current filter
+    function updateFilteredOrders() {
+        filteredOrders = [];
+        
+        orderCards.forEach(card => {
+            const cardStatus = card.getAttribute('data-status');
+            if (currentFilter === 'all' || cardStatus === currentFilter) {
+                filteredOrders.push(card);
+            }
+        });
+        
+        displayCurrentPage();
+    }
+    
+    // Display current page
+    function displayCurrentPage() {
+        // Hide all cards first
+        orderCards.forEach(card => card.style.display = 'none');
+        
+        const totalPages = Math.ceil(filteredOrders.length / ITEMS_PER_PAGE);
+        const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+        const endIndex = startIndex + ITEMS_PER_PAGE;
+        
+        // Show cards for current page
+        const cardsToShow = filteredOrders.slice(startIndex, endIndex);
+        cardsToShow.forEach(card => card.style.display = 'block');
+        
+        // Update pagination controls
+        if (filteredOrders.length === 0) {
+            noResults.style.display = 'block';
+            document.querySelector('.pagination-controls').style.display = 'none';
+        } else {
+            noResults.style.display = 'none';
+            document.querySelector('.pagination-controls').style.display = 'flex';
+            pageInfo.textContent = `Page ${currentPage} of ${totalPages}`;
+            
+            // Update button states
+            prevBtn.disabled = currentPage === 1;
+            nextBtn.disabled = currentPage === totalPages;
+        }
+    }
+    
+    // Previous button
+    prevBtn.addEventListener('click', function() {
+        if (currentPage > 1) {
+            currentPage--;
+            displayCurrentPage();
+            scrollToTop();
+        }
+    });
+    
+    // Next button
+    nextBtn.addEventListener('click', function() {
+        const totalPages = Math.ceil(filteredOrders.length / ITEMS_PER_PAGE);
+        if (currentPage < totalPages) {
+            currentPage++;
+            displayCurrentPage();
+            scrollToTop();
+        }
+    });
+    
+    // Scroll to top of order list
+    function scrollToTop() {
+        document.querySelector('.order-wrapper').scrollIntoView({ 
+            behavior: 'smooth', 
+            block: 'start' 
+        });
+    }
+});
+</script>
+
+{% endblock my_order %}

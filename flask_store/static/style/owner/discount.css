@@ -1,0 +1,286 @@
+/* Discount List Styles */
+.discount-view {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+.discount-item {
+    display: flex;
+    align-items: center;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    overflow: hidden;
+    background: white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    transition: box-shadow 0.2s;
+    padding: 0px;
+    gap: 0px; 
+}
+.discount-item:hover {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+.discount-badge {
+    /* 1. Define the Background Image */
+    /* Note: Update the path to match where your image is stored */
+    background-image: url("/static/img/discount-badge.png");
+    background-size: contain;  /* Ensures the whole star fits */
+    background-repeat: no-repeat;
+    background-position: center;
+
+    /* 2. Layout (Centers the text inside the star) */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    
+    /* 3. Size (Must match or be proportional to your image aspect ratio) */
+    width: 100px;
+    height: 100px;
+    flex-shrink: 0;
+    
+    /* 4. Text Styling */
+    color: rgb(254, 64, 64); 
+    font-size: 1.5em; /* Adjusted to fit inside the image */
+    font-weight: bold;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.3); /* Optional: helps text pop */
+    padding: 0; /* Reset padding to ensure centering */
+    padding-right: 15px;
+    padding-bottom: 5px;
+    margin-left: 40px;
+}
+.discount-value {
+    z-index: 1;
+}
+.discount-details {
+    flex: 1;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-left: 40px;
+}
+.discount-title {
+    margin: 0;
+    font-size: 1.1em;
+    font-weight: 600;
+    color: #333;
+}
+.discount-description {
+    margin: 0;
+    color: #666;
+    font-size: 0.75em;
+    line-height: 1.5;
+}
+.discount-validity {
+    margin: 0;
+    color: #888;
+    font-size: 0.85em;
+}
+.invalid-feedback { 
+    color: #dc3545; 
+    font-size: 0.875em; 
+    margin-top: 0.25rem; 
+}
+
+.is-invalid { 
+    border-color: #dc3545 !important; 
+}
+.two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+/* When editing mode is active - works for both profileBox and storeBox */
+.dashboard-card.editing .discount-view,
+#storeBox.editing .discount-view {
+    display: none;  /* Hide discount list */
+}
+
+.dashboard-card.editing .dashboard-form,
+#storeBox.editing .dashboard-form {
+    display: flex;  /* Show form */
+    flex-direction: column;
+    gap: 18px;
+}
+
+.dashboard-card.editing .action-buttons-view,
+#storeBox.editing .action-buttons-view {
+    display: none;  /* Hide "Add New Discount" button */
+}
+#storeBox.editing .pagination-controls {
+    display: none;  /* Add this line */
+}
+.dashboard-card.editing .action-buttons-form,
+#storeBox.editing .action-buttons-form {
+    display: flex;  /* Show Cancel/Save buttons */
+    gap: 14px;
+    justify-content: flex-end;
+}
+.pagination-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+.page-btn {
+    padding: 12px 28px;
+    border-radius: 16px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background 0.2s;
+    background: #1a1a1a;;
+    color: #fff;
+    border: none;
+    outline: none;
+    box-shadow: none;
+}
+.page-btn:hover {
+    background: #88847f;
+}
+.page-btn.active {
+    color: white;
+    cursor: default;
+}
+.page-ellipsis {
+    padding: 8px;
+    color: #888;
+}
+.page-btn,
+.page-btn:visited,
+.page-btn:hover,
+.page-btn:active,
+.page-btn:focus {
+    color: #fff;
+    text-decoration: none;
+    outline: none;
+}
+
+/* ===== DISCOUNT ACTIONS ===== */
+.discount-item {
+    position: relative;
+}
+
+.discount-actions {
+    margin-top: 10px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.delete-discount-btn {
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: 2px solid #dc3545;
+    background: white;
+    color: #dc3545;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-block;
+    margin: 20px;
+}
+
+.delete-discount-btn:hover {
+    background: #dc3545;
+    color: white;
+    transform: translateY(-2px);
+}
+
+.delete-discount-btn:active {
+    transform: translateY(0);
+}
+
+/* ===== DELETED DISCOUNT STYLING ===== */
+.discount-item.discount-deleted {
+    opacity: 0.6;
+    background: #f8f8f8;
+}
+
+.deleted-text {
+    color: #6c757d;
+    font-size: 13px;
+    font-style: italic;
+}
+
+.search-filter-bar {
+    margin-bottom: 20px;
+}
+
+#storeBox.editing .search-filter-bar {
+    display: none;
+}
+
+.search-form {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.filter-dropdown {
+    padding: 10px 15px;
+    border-radius: 18px;
+    border: 1px solid #ddd;
+    font-size: 14px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: white;
+    color: #43341e;
+    cursor: pointer;
+    min-width: 150px;
+}
+
+.filter-dropdown:focus {
+    outline: none;
+    border-color: #c9a876;
+}
+
+.search-box {
+    display: flex;
+    flex: 1;
+    gap: 10px;
+    background: transparent;
+    border: none;
+}
+
+.search-input {
+    flex: 1;
+    padding: 10px 15px;
+    border-radius: 18px;
+    border: 1px solid #ddd;
+    font-size: 14px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: #c9a876;
+}
+
+.search-btn {
+    padding: 12px 28px;
+    border-radius: 16px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background 0.2s;
+    background: #1a1a1a;;
+    color: #fff;
+    border: none;
+    outline: none;
+    box-shadow: none;
+}
+
+.search-btn:hover {
+    background: #2c2c2c;           /* Lighter black on hover */
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.search-btn,
+.search-btn:visited,
+.search-btn:active {
+  transform: translateY(0);
+}

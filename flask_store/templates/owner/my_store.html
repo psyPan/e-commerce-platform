@@ -1,0 +1,82 @@
+{% extends "/owner/base_dashboard.html" %}
+
+{% block my_store %}
+<div class="dashboard-card {% if form.errors %}editing{% endif %}" id="storeBox">
+    <div class="dashboard-view">
+        <h1 class="dashboard-title">My Store</h1> 
+        {% if not current_user.store_id %}
+            <p>No Information Available</p>
+        {% else %}
+        <div class="profile-row">
+            <span>Store Name</span>
+            <p>{{ current_user.store.name }}</p>
+        </div>
+        <div class="profile-row">
+            <span>Store Email</span>
+            <p>{{ current_user.store.email }}</p>
+        </div>
+        <div class="profile-row">
+            <span>Store Phone</span>
+            <p>{{ current_user.store.phone }}</p>
+        </div>
+        <div class="profile-row">
+            <span>Owners</span>
+            <div class="owners-list">
+                {% for owner in current_user.store.owners %}
+                    <p>{{ owner.f_name }} {{ owner.l_name }}</p>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+        <div class="action-buttons action-buttons-view">
+            <button type="action-button" class="edit-btn" onclick="enterEdit()">Edit Store</button>
+        </div>
+    </div>
+
+    <div class="form-container">
+        <form method="POST" class="dashboard-form" id="addProductForm" enctype="multipart/form-data" action="">
+            <h1 class="dashboard-title">Edit Store</h1>
+            <!-- 12/29 new error popup code -->
+            {{ form.hidden_tag() }}
+            <div class="dashboard-form-row" style="grid-template-columns: 15fr 85fr;">
+                {{ form.name.label(class="form-label") }}
+                {{ form.name(class="profile-input is-invalid" if form.name.errors else "profile-input") }}
+                {% if form.name.errors %}
+                    <div class="invalid-feedback">
+                        {% for error in form.name.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            <div class="dashboard-form-row"  style="grid-template-columns: 15fr 85fr;">
+                {{ form.email.label(class="form-label") }}
+                {{ form.email(class="profile-input is-invalid" if form.email.errors else "profile-input") }}
+                {% if form.email.errors %}
+                    <div class="invalid-feedback">
+                        {% for error in form.email.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            <div class="dashboard-form-row"  style="grid-template-columns: 15fr 85fr;">
+                {{ form.phone.label(class="form-label") }}
+                {{ form.phone(class="profile-input is-invalid" if form.phone.errors else "profile-input") }}
+                {% if form.phone.errors %}
+                    <div class="invalid-feedback">
+                        {% for error in form.phone.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            <div class="action-buttons action-buttons-form">
+                <button type="button" class="cancel-btn" onclick="exitEdit()">Cancel</button>
+                {{ form.submit(class="save-btn", value="Update") }}
+            </div>
+        </form>
+    </div>
+</div>
+<script src="{{ url_for('static', filename='script/edit_store.js') }}"></script>
+{% endblock my_store %}

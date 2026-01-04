@@ -1,0 +1,175 @@
+{% extends "/customer/base_dashboard.html" %}
+
+{% block credit_card %}
+<link rel="stylesheet" href="{{ url_for('static', filename='style/customer/credit_card.css') }}">
+
+<div class="dashboard-card">
+    <h1 class="dashboard-title">My Credit Cards</h1>
+    
+    <div class="card-wrapper">
+        {% if not current_user.credit_cards or not current_user.credit_cards|selectattr('is_active')|list %}
+            <div class="no-results">
+                <h3>You haven't added any credit cards yet.</h3>
+                <button class="add-card-main-btn" onclick="openPopup()">Add Your First Card</button>
+            </div>
+        {% else %}
+            {% for card in current_user.credit_cards %}
+                {% if card.is_active %}
+                <div class="card-card">
+                    <div class="card-header">
+                        <div class="card-info-header">
+                            <span class="card-icon">💳</span>
+                            <div>
+                                <h3>{{ card.name }}</h3>
+                                <small>**** **** **** {{ card.Card_Number[-4:] }}</small>
+                            </div>
+                        </div>
+                        <span class="badge-status status-active">
+                            Active
+                        </span>
+                    </div>
+
+                    <div class="card-details-section">
+                        <div class="card-detail-row">
+                            <span class="detail-label">Cardholder Name</span>
+                            <span class="detail-value">{{ card.name }}</span>
+                        </div>
+                        <div class="card-detail-row">
+                            <span class="detail-label">Card Number</span>
+                            <span class="detail-value">**** **** **** {{ card.Card_Number[-4:] }}</span>
+                        </div>
+                        <div class="card-detail-row">
+                            <span class="detail-label">Expiration Date</span>
+                            <span class="detail-value">{{ card.Expiration_Date.strftime('%m/%y') }}</span>
+                        </div>
+                    </div>
+
+                    <div class="card-footer">
+                        <div class="card-actions">
+                            <form action="{{ url_for('users.delete_card', card_id=card.id) }}" method="POST" style="display: inline;">
+                                <button type="button" class="delete-card-btn" onclick="confirmDelete(this.form)">
+                                    Remove Card
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            {% endfor %}
+
+            <!-- Add Card Button at Bottom -->
+            <div style="text-align: center; margin-top: 30px;">
+                <button class="add-card-floating-btn" onclick="openPopup()">+ Add New Card</button>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Add Card Popup Modal -->
+<div id="popup" class="popup">
+    <div class="popup-inner">
+        <div class="modal-header-custom">
+            <h2 class="popup-title">Add New Card</h2>
+            <button type="button" class="btn-close-custom" onclick="closePopup()">×</button>
+        </div>
+
+        <form method="POST" action="{{ url_for('users.add_card') }}">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() if csrf_token else '' }}">
+
+            <div class="form-group">
+                <label class="form-label">Cardholder Name</label>
+                <input type="text" name="name" class="form-input" placeholder="John Doe" required>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Card Number</label>
+                <input type="text" name="card_number" class="input-field form-input" id="cardNumberInput"
+                        placeholder="1234 5678 9012 3456" 
+                        inputmode="numeric"
+                        maxlength="19" 
+                        pattern="[\d\s]{13,19}" 
+                        title="Please enter a valid card number" required>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Expiry Date</label>
+                    <input type="text" name="expiry" class="form-input" placeholder="MM/YY" 
+                           pattern="(0[1-9]|1[0-2])\/[0-9]{2}" title="Format: MM/YY" required>
+                </div>
+                       
+                <div class="form-group">
+                    <label class="form-label">CVV</label>
+                    <input type="text" name="cvv" class="form-input" placeholder="123" 
+                           maxlength="4" pattern="\d{3,4}" required>
+                </div>
+            </div>
+
+            <div class="popup-buttons">
+                <button type="button" class="cancel-btn" onclick="closePopup()">Cancel</button>
+                <button type="submit" class="submit-btn">Add Card</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    // Popup Logic
+    function openPopup() { 
+        document.getElementById("popup").classList.add("active"); 
+    }
+    
+    function closePopup() { 
+        document.getElementById("popup").classList.remove("active"); 
+    }
+
+    // Mode Toggle (Optional - for future use)
+    document.getElementById('viewModeBtn')?.addEventListener('click', function() {
+        document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+        this.classList.add('active');
+        // Could hide delete buttons here if needed
+    });
+
+    document.getElementById('manageModeBtn')?.addEventListener('click', function() {
+        document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+        this.classList.add('active');
+        // Show delete buttons
+    });
+    
+    // Delete Confirmation
+    function confirmDelete(form) {
+        if (confirm("Are you sure you want to remove this card? This action cannot be undone.")) {
+            form.submit();
+        }
+    }
+
+    // Auto-format card number with spaces
+    document.addEventListener('DOMContentLoaded', function() {
+        const cardInput = document.getElementById('cardNumberInput');
+        if (cardInput) {
+            cardInput.addEventListener('input', function(e) {
+                let value = e.target.value.replace(/\s/g, '').replace(/\D/g, '');
+                let formattedValue = value.match(/.{1,4}/g)?.join(' ') || value;
+                e.target.value = formattedValue;
+            });
+        }
+
+        // Close popup when clicking outside
+        const popup = document.getElementById('popup');
+        popup?.addEventListener('click', function(e) {
+            if (e.target === popup) {
+                closePopup();
+            }
+        });
+    });
+    // Add an ID to your form, e.g., <form id="addCardForm" ...>
+const form = document.querySelector('form[action="{{ url_for("users.add_card") }}"]');
+
+    form.addEventListener('submit', function() {
+        const cardInput = document.getElementById('cardNumberInput');
+        // Remove all spaces before the data leaves the browser
+        cardInput.value = cardInput.value.replace(/\s/g, '');
+    });
+</script>
+
+{% endblock credit_card %}
