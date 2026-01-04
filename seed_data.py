@@ -14,7 +14,7 @@ from datetime import date
 
 POSTGRES = {
    'user':'postgres',
-   'password':'Keren_12345',
+   'password':'test',
    'db':'mystore',
    'host':'localhost',
    'port':'5432',
@@ -27,131 +27,8 @@ with app.app_context():
     db.drop_all()
     db.create_all()
 
-    # # 2. Create a test Store
-    # store1 = Store(
-    #     id = 20000009,
-    #     name="Tech Haven", 
-    #     email="contact@techhaven.com", 
-    #     phone="1234567890", 
-    #     reg_date = date(2025,12,13),
-    #     balance=1000.0
-    # )
-
-    # db.session.add_all([store1])
-    # db.session.commit() # Commit to generate IDs
-
-    # owner = User(
-    #     id = 12345678,
-    #     f_name="John", 
-    #     l_name="Doe", 
-    #     email="owner@test.com", 
-    #     password=bcrypt.generate_password_hash("OwnerPass").decode('utf-8'),
-    #     store_id=store1.id,
-    #     phone = 912345678,
-    #     birth = date(2025,12,13),
-    #     reg_date = date(2025,12,13),
-    #     o_flag=True, 
-    #     a_flag=False, 
-    #     c_flag=False
-    # )
-    # db.session.add(owner)
-
-    # UserCust = User(
-    #     id = 991234567,
-    #     f_name="Abdulahad", 
-    #     l_name="Aswat", 
-    #     email="cust@test.com", 
-    #     password=bcrypt.generate_password_hash("Password1").decode('utf-8'),
-    #     phone = 912345678,
-    #     birth = date(2000,12,13),
-    #     reg_date = date(2025,12,13),
-    #     o_flag=False, 
-    #     a_flag=False, 
-    #     c_flag=True
-    # )
-    # db.session.add(UserCust)
-
-    # # 4. Create a Discount
-    # summer_sale = Discount(
-    #     name="Summer Sale", 
-    #     discount_percent=20.0, 
-    #     code="SUMMER20",
-    #     type='seasoning'
-    # )
-    # db.session.add(summer_sale)
-    # db.session.commit()
-
-    # # 5. Create some Products for Tech Haven
-    # p1 = Product(
-    #     id = 44444444,
-    #     store_id=store1.id,
-    #     name="Gaming Laptop", 
-    #     description="High performance laptop",
-    #     buy_price=1000,
-    #     sell_price=1200, 
-    #     stock=10, 
-    #     manufacturer="Asus", 
-    #     type="Electronics",
-    #     discount_id=summer_sale.id
-    # )
-    # p2 = Product(
-    #     id = 55555555,        
-    #     store_id=store1.id,
-    #     name="Wireless Mouse", 
-    #     description="Ergonomic mouse",
-    #     buy_price=30,
-    #     sell_price=50.0, 
-    #     stock=10, # Out of stock to test filter
-    #     manufacturer="Logitech", 
-    #     type="Electronics"
-    # )
-    # order1 = Order(
-    #     id = 9990001,
-    #     customer_id = UserCust.id,
-    #     total_amount = 1205,
-    #     shipping_cost = 5,
-    #     cust_address = "123 Test St",
-    #     status = 'closed',
-    #     order_time = datetime.utcnow(),
-    #     estimated_delivery_date = date(2025,12,20)
-    # )
-    # db.session.add(order1)
-    # db.session.commit()
-
-    # order2 = Order(
-    #     id = 9990002,
-    #     customer_id = UserCust.id,
-    #     total_amount = 1205,
-    #     shipping_cost = 5,
-    #     cust_address = "123 Test St",
-    #     status = 'closed',
-    #     order_time = datetime.utcnow(),
-    #     estimated_delivery_date = date(2025,12,20)
-    # )
-    # db.session.add(order2)
-    # db.session.commit()
-
-    # r1 = Review(
-    # id = 3030303,
-    # stars = 4,
-    # description = "Good product",
-    # review_time = datetime.utcnow(),
-    # user_id = UserCust.id,   # The customer who wrote it
-    # product_id = p1.id,      # The laptop
-    # order_id = order1.id
-    # )
-
-    # db.session.add(r1)
-    # db.session.commit()
-
-
-    # db.session.add_all([p1, p2])
-    # db.session.commit()
-
-    # print("Database seeded successfully!")
-
     admin = User(f_name='John', l_name='Doe', email='admin@email.com',
-                 password=bcrypt.generate_password_hash('passwordadmin').decode('utf-8'),
+                 password=bcrypt.generate_password_hash('adminpass').decode('utf-8'),
                  phone='0911223344', birth=date(2000, 1, 1), address='taipei',
                  a_flag=True, o_flag=False, c_flag=False)
     db.session.add(admin)
@@ -165,77 +42,77 @@ with app.app_context():
     db.session.flush()
 
     owner1 = User(f_name='Barry', l_name='Allen', email='owner1@email.com',
-                 password=bcrypt.generate_password_hash('passwordowner1').decode('utf-8'),
+                 password=bcrypt.generate_password_hash('ownerpass').decode('utf-8'),
                  phone='0911223345', birth=date(2000, 1, 1), address='taipei',
                  a_flag=False, o_flag=True, c_flag=False, store_id=store1.id)
     owner2 = User(f_name='Bruce', l_name='Wayne', email='owner2@email.com',
-                 password=bcrypt.generate_password_hash('passwordowner2').decode('utf-8'),
+                 password=bcrypt.generate_password_hash('ownerpass').decode('utf-8'),
                  phone='0911223346', birth=date(2000, 1, 1), address='taipei',
                  a_flag=False, o_flag=True, c_flag=False, store_id=store1.id)
     owner3 = User(f_name='Bruce', l_name='Banner', email='owner3@email.com',
-                 password=bcrypt.generate_password_hash('passwordowner3').decode('utf-8'),
+                 password=bcrypt.generate_password_hash('ownerpass').decode('utf-8'),
                  phone='0911223347', birth=date(2000, 1, 1), address='taipei',
                  a_flag=False, o_flag=True, c_flag=False, store_id=store2.id)
     owner4 = User(f_name='Tony', l_name='Stark', email='owner4@email.com',
-                 password=bcrypt.generate_password_hash('passwordowner4').decode('utf-8'),
+                 password=bcrypt.generate_password_hash('ownerpass').decode('utf-8'),
                  phone='0911223348', birth=date(2000, 1, 1), address='taipei',
                  a_flag=False, o_flag=True, c_flag=False, store_id=store2.id)
     owner5 = User(f_name='Harry', l_name='Potter', email='owner5@email.com',
-                 password=bcrypt.generate_password_hash('passwordowner5').decode('utf-8'),
+                 password=bcrypt.generate_password_hash('ownerpass').decode('utf-8'),
                  phone='0911223349', birth=date(2000, 1, 1), address='taipei',
                  a_flag=False, o_flag=True, c_flag=False, store_id=store3.id)
     owner6 = User(f_name='Ronald', l_name='Wesley', email='owner6@email.com',
-                 password=bcrypt.generate_password_hash('passwordowner6').decode('utf-8'),
+                 password=bcrypt.generate_password_hash('ownerpass').decode('utf-8'),
                  phone='0911223350', birth=date(2000, 1, 1), address='taipei',
                  a_flag=False, o_flag=True, c_flag=False, store_id=store3.id)
     owner7 = User(f_name='Johnny', l_name='Depp', email='owner7@email.com',
-                 password=bcrypt.generate_password_hash('passwordowner7').decode('utf-8'),
+                 password=bcrypt.generate_password_hash('ownerpass').decode('utf-8'),
                  phone='0911223351', birth=date(2000, 1, 1), address='taipei',
                  a_flag=False, o_flag=True, c_flag=False, store_id=store4.id)
     owner8 = User(f_name='Justin', l_name='Bieber', email='owner8@email.com',
-                 password=bcrypt.generate_password_hash('passwordowner8').decode('utf-8'),
+                 password=bcrypt.generate_password_hash('ownerpass').decode('utf-8'),
                  phone='0911223352', birth=date(2000, 1, 1), address='taipei',
                  a_flag=False, o_flag=True, c_flag=False, store_id=store4.id)
     owner9 = User(f_name='John', l_name='Cena', email='owner9@email.com',
-                 password=bcrypt.generate_password_hash('passwordowner9').decode('utf-8'),
+                 password=bcrypt.generate_password_hash('ownerpass').decode('utf-8'),
                  phone='0911223353', birth=date(2000, 1, 1), address='taipei',
                  a_flag=False, o_flag=True, c_flag=False, store_id=store5.id)
     owner10 = User(f_name='Justin', l_name='Timberlake', email='owner10@email.com',
-                 password=bcrypt.generate_password_hash('passwordowner10').decode('utf-8'),
+                 password=bcrypt.generate_password_hash('ownerpass').decode('utf-8'),
                  phone='0911223354', birth=date(2000, 1, 1), address='taipei',
                  a_flag=False, o_flag=True, c_flag=False, store_id=store5.id)
     db.session.add_all([owner1, owner2, owner3, owner4, owner5, owner6, owner7, owner8, owner9, owner10])
 
     cust1 = User(f_name='Liam', l_name='Allen', email='cust1@email.com',
-                 password=bcrypt.generate_password_hash('passwordcust1').decode('utf-8'),
+                 password=bcrypt.generate_password_hash('customerpass').decode('utf-8'),
                  phone='0933445566', birth=date(2000, 1, 1), address='taipei',
                  a_flag=False, o_flag=False, c_flag=True)
     cust2 = User(f_name='Sophia', l_name='Rossi', email='cust2@email.com',
-                 password=bcrypt.generate_password_hash('passwordcust2').decode('utf-8'),
+                 password=bcrypt.generate_password_hash('customerpass').decode('utf-8'),
                  phone='0933445567', birth=date(2000, 1, 1), address='taipei',
                  a_flag=False, o_flag=False, c_flag=True)
     cust3 = User(f_name='Noah', l_name='Sato', email='cust3@email.com',
-                 password=bcrypt.generate_password_hash('passwordcust4').decode('utf-8'),
+                 password=bcrypt.generate_password_hash('customerpass').decode('utf-8'),
                  phone='0933445568', birth=date(2000, 1, 1), address='taipei',
                  a_flag=False, o_flag=False, c_flag=True)
     cust4 = User(f_name='Ava', l_name='Patel', email='cust4@email.com',
-                 password=bcrypt.generate_password_hash('passwordcust5').decode('utf-8'),
+                 password=bcrypt.generate_password_hash('customerpass').decode('utf-8'),
                  phone='0933445569', birth=date(2000, 1, 1), address='taipei',
                  a_flag=False, o_flag=False, c_flag=True)
     cust5 = User(f_name='Elijah', l_name='Bennett', email='cust5@email.com',
-                 password=bcrypt.generate_password_hash('passwordcust6').decode('utf-8'),
+                 password=bcrypt.generate_password_hash('customerpass').decode('utf-8'),
                  phone='0933445570', birth=date(2000, 1, 1), address='taipei',
                  a_flag=False, o_flag=False, c_flag=True)
     cust6 = User(f_name='Isabella', l_name='Morales', email='cust6@email.com',
-                 password=bcrypt.generate_password_hash('passwordcust7').decode('utf-8'),
+                 password=bcrypt.generate_password_hash('customerpass').decode('utf-8'),
                  phone='0933445571', birth=date(2000, 1, 1), address='taipei',
                  a_flag=False, o_flag=False, c_flag=True)
     cust7 = User(f_name='Jameson', l_name='Hughes', email='cust7@email.com',
-                 password=bcrypt.generate_password_hash('passwordcust8').decode('utf-8'),
+                 password=bcrypt.generate_password_hash('customerpass').decode('utf-8'),
                  phone='0933445572', birth=date(2000, 1, 1), address='taipei',
                  a_flag=False, o_flag=False, c_flag=True)
     cust8 = User(f_name='Mia', l_name='Chen', email='cust8@email.com',
-                 password=bcrypt.generate_password_hash('passwordcust9').decode('utf-8'),
+                 password=bcrypt.generate_password_hash('customerpass').decode('utf-8'),
                  phone='0933445573', birth=date(2000, 1, 1), address='taipei',
                  a_flag=False, o_flag=False, c_flag=True)
     db.session.add_all([cust1, cust2, cust3, cust4, cust5, cust6, cust7, cust8])
@@ -433,95 +310,110 @@ with app.app_context():
     db.session.add_all([s5_sub1, s5_sub2, s5_sub3, s5_sub4, s5_sub5, s5_sub6, s5_sub7, s5_sub8, s5_sub9, s5_sub10])
     db.session.flush()
 
-    # ... [Previous User/Admin/Store logic remains the same] ...
-    # (Assuming admin, stores, owners, customers, and discounts are defined as above)
+    # STORE 1: 5 Laptops
+    product1 = Product(name="Dell XPS 15", description="15.6-inch premium laptop with Intel i7, 16GB RAM, 512GB SSD, and stunning 4K OLED display.",
+                    buy_price=1200, sell_price=1599, stock=12, manufacturer="Dell", image='product1.webp',
+                    type='Laptop', model="XPS-15-9520", store_id=store1.id, discount_id=s1_d2.id) # Tech Summer Sale
 
-    # --- UNIQUE PRODUCT GENERATION ---
+    product2 = Product(name="MacBook Air M2", description="Lightweight 13-inch laptop with Apple M2 chip, 8GB RAM, 256GB SSD, all-day battery life.",
+                    buy_price=900, sell_price=1199, stock=20, manufacturer="Apple", image='product2.webp',
+                    type='Laptop', model="MBA-M2-2024", store_id=store1.id, discount_id=s1_d1.id) # Welcome Discount
 
-    # STORE 1: High-End Computing
-    product1 = Product(name="Zenith X1 Carbon", description="Ultralight business laptop with carbon fiber chassis and AI-powered noise cancellation.",
-                       buy_price=1100, sell_price=1450, stock=15, manufacturer="ZenithComp", image='1.png',
-                       type='Laptop', model="ZC-X1-2024", store_id=store1.id, discount_id=s1_d2.id) # Tech Summer Sale
-    product2 = Product(name="MechMaster Pro Keyboard", description="Wireless mechanical keyboard with hot-swappable switches and PBT keycaps.",
-                       buy_price=80, sell_price=150, stock=50, manufacturer="KeyFlow", image='2.png',
-                       type='Peripherals', model="KF-MM-PRO", store_id=store1.id, discount_id=s1_d1.id) # Welcome Discount
-    product3 = Product(name="ErgoLift Vertical Mouse", description="Ergonomic vertical mouse designed to reduce wrist strain during long sessions.",
-                       buy_price=40, sell_price=89, stock=30, manufacturer="ErgoTech", image='3.png',
-                       type='Peripherals', model="ET-VM-02", store_id=store1.id, discount_id=s1_d10.id) # Member Exclusive
-    product4 = Product(name="ThunderBolt Dock G4", description="12-in-1 docking station supporting dual 4K monitors and 100W PD charging.",
-                       buy_price=150, sell_price=299, stock=20, manufacturer="LinkSys", image='4.png',
-                       type='Accessories', model="LS-TB-G4", store_id=store1.id) # NO DISCOUNT
-    product5 = Product(name="Portable SSD 2TB", description="Rugged external SSD with 1050MB/s read speeds, water and dust resistant.",
-                       buy_price=110, sell_price=220, stock=40, manufacturer="DataSwift", image='5.png',
-                       type='Storage', model="DS-Rugged-2T", store_id=store1.id, discount_id=s1_d8.id) # Free Shipping
+    product3 = Product(name="ASUS ROG Strix G16", description="Gaming powerhouse with RTX 4060, Intel i7-13650HX, 16GB DDR5 RAM, 1TB SSD, 165Hz display.",
+                    buy_price=1300, sell_price=1799, stock=8, manufacturer="ASUS", image='product3.webp',
+                    type='Laptop', model="G16-G614JV", store_id=store1.id, discount_id=s1_d10.id) # Member Exclusive
 
-    # STORE 2: Audio & Music
-    product6 = Product(name="StudioRef 5 Monitors", description="Pair of near-field studio monitors with flat frequency response for mixing.",
-                       buy_price=300, sell_price=499, stock=10, manufacturer="SoundWave", image='6.png',
-                       type='Audio', model="SW-SR5-Pair", store_id=store2.id, discount_id=s2_d5.id) # Audiophile Week
-    product7 = Product(name="Vinyl Classic Turntable", description="Belt-drive turntable with built-in preamp and USB output for digital archiving.",
-                       buy_price=180, sell_price=279, stock=15, manufacturer="RetroSpin", image='7.png',
-                       type='Audio', model="RS-VC-01", store_id=store2.id, discount_id=s2_d2.id) # Fall Sound Event
-    product8 = Product(name="Podcaster USB Mic", description="Cardioid condenser microphone with integrated pop filter and shock mount.",
-                       buy_price=90, sell_price=149, stock=35, manufacturer="VoiceClear", image='8.png',
-                       type='Audio', model="VC-Pod-USB", store_id=store2.id, discount_id=s2_d4.id) # Music Day Special
-    product9 = Product(name="BassBoom Bluetooth Speaker", description="Waterproof portable speaker with 24-hour battery life and 360-degree sound.",
-                       buy_price=60, sell_price=119, stock=60, manufacturer="UrbanBeat", image='9.png',
-                       type='Audio', model="UB-BB-360", store_id=store2.id, discount_id=s2_d8.id) # Free Shipping
-    product10 = Product(name="NoiseGuard ANC Headphones", description="Premium over-ear headphones with industry-leading active noise cancellation.",
-                       buy_price=200, sell_price=349, stock=25, manufacturer="SilenceTech", image='10.png',
-                       type='Audio', model="ST-NG-ANC", store_id=store2.id) # NO DISCOUNT
+    product4 = Product(name="HP Pavilion 14", description="Budget-friendly 14-inch laptop with AMD Ryzen 5, 8GB RAM, 512GB SSD, perfect for students.",
+                    buy_price=450, sell_price=699, stock=25, manufacturer="HP", image='product4.webp',
+                    type='Laptop', model="PAV-14-EK1023", store_id=store1.id) # NO DISCOUNT
 
-    # STORE 3: Smart Home & IoT
-    product11 = Product(name="SmartGuard Doorbell", description="1080p HD video doorbell with two-way talk and AI package detection.",
-                       buy_price=100, sell_price=179, stock=40, manufacturer="SecureHome", image='11.png',
-                       type='SmartHome', model="SH-DB-V2", store_id=store3.id, discount_id=s3_d5.id) # Black Friday Home
-    product12 = Product(name="EcoThermostat Premium", description="Smart thermostat that learns your schedule and saves energy automatically.",
-                       buy_price=140, sell_price=249, stock=30, manufacturer="EcoLive", image='12.png',
-                       type='SmartHome', model="EL-TP-01", store_id=store3.id, discount_id=s3_d4.id) # Earth Day Sale
-    product13 = Product(name="RoboClean S7", description="Robot vacuum and mop hybrid with LiDAR navigation and self-emptying base.",
-                       buy_price=450, sell_price=799, stock=12, manufacturer="CleanBot", image='13.png',
-                       type='Appliance', model="CB-S7-Plus", store_id=store3.id, discount_id=s3_d3.id) # Spring Cleaning
-    product14 = Product(name="Luma Smart Bulb Kit", description="Pack of 4 color-changing LED bulbs compatible with Alexa and Google Home.",
-                       buy_price=30, sell_price=69, stock=100, manufacturer="LumaLight", image='14.png',
-                       type='SmartHome', model="LL-RGB-4PK", store_id=store3.id, discount_id=s3_d8.id) # Free Shipping
-    product15 = Product(name="Smart Lock Touch", description="Fingerprint and keypad entry door lock with remote access via Wi-Fi bridge.",
-                       buy_price=130, sell_price=229, stock=20, manufacturer="SecureHome", image='15.png',
-                       type='SmartHome', model="SH-SL-Touch", store_id=store3.id) # NO DISCOUNT
+    product5 = Product(name="Lenovo ThinkPad X1 Carbon", description="Business-class ultrabook with Intel i5, 16GB RAM, 512GB SSD, military-grade durability.",
+                    buy_price=1100, sell_price=1499, stock=15, manufacturer="Lenovo", image='product5.webp',
+                    type='Laptop', model="X1C-Gen11", store_id=store1.id, discount_id=s1_d8.id) # Free Shipping
 
-    # STORE 4: Photography & Drones
-    product16 = Product(name="SkyMaster Mini Drone", description="Sub-250g camera drone with 4K video, 30-min flight time, and obstacle avoidance.",
-                       buy_price=350, sell_price=549, stock=18, manufacturer="SkyTech",
-                       type='Drone', model="ST-Mini-3", store_id=store4.id, discount_id=s4_d7.id) # Drone Day
-    product17 = Product(name="ProLens 50mm f/1.8", description="Prime portrait lens with fast aperture and silent autofocus motor.",
-                       buy_price=150, sell_price=299, stock=22, manufacturer="OpticGlass",
-                       type='CameraLens', model="OG-50-18", store_id=store4.id, discount_id=s4_d8.id) # Free Shipping
-    product18 = Product(name="ActionCam Hero 5", description="Rugged waterproof action camera with HyperSmooth stabilization and 5.3K video.",
-                       buy_price=280, sell_price=399, stock=30, manufacturer="AdventureCam",
-                       type='Camera', model="AC-H5-Black", store_id=store4.id, discount_id=s4_d4.id) # World Photo Day
-    product19 = Product(name="TravelTripod Carbon", description="Lightweight carbon fiber tripod with ball head, folds down to 15 inches.",
-                       buy_price=90, sell_price=189, stock=25, manufacturer="SteadyShot",
-                       type='Accessory', model="SS-TT-Carbon", store_id=store4.id) # NO DISCOUNT
-    product20 = Product(name="Ring Light Studio 18", description="18-inch dimmable LED ring light with phone holder and tall stand for streaming.",
-                       buy_price=45, sell_price=99, stock=45, manufacturer="GlowStream",
-                       type='Lighting', model="GS-RL-18", store_id=store4.id, discount_id=s4_d6.id) # Creator Week
+    # STORE 2: 5 Headphones
+    product6 = Product(name="Sony WH-1000XM5", description="Industry-leading noise cancelling wireless headphones with 30-hour battery and premium sound.",
+                    buy_price=280, sell_price=399, stock=18, manufacturer="Sony", image='product6.webp',
+                    type='Headphones', model="WH-1000XM5", store_id=store2.id, discount_id=s2_d5.id) # Audiophile Week
 
-    # STORE 5: Gaming & Streaming
-    product21 = Product(name="Console X Series", description="Next-gen gaming console capable of 4K 120FPS gaming with 1TB SSD.",
-                       buy_price=450, sell_price=499, stock=5, manufacturer="GameBox",
-                       type='Console', model="GB-XS-1TB", store_id=store5.id) # NO DISCOUNT (High Demand)
-    product22 = Product(name="Handheld Deck 512", description="Portable PC gaming handheld with 7-inch touchscreen and custom APU.",
-                       buy_price=550, sell_price=649, stock=8, manufacturer="ValveStream",
-                       type='Console', model="VS-HD-512", store_id=store5.id, discount_id=s5_d8.id) # Free Shipping
-    product23 = Product(name="StreamDeck Controller", description="15 LCD keys to trigger actions in apps and tools like OBS and Twitch.",
-                       buy_price=90, sell_price=149, stock=25, manufacturer="StreamLive",
-                       type='Accessory', model="SL-SD-MK2", store_id=store5.id, discount_id=s5_d4.id) # E3 Celebration
-    product24 = Product(name="Racer Pro Gaming Chair", description="Ergonomic racing-style chair with lumbar support and 4D armrests.",
-                       buy_price=180, sell_price=329, stock=15, manufacturer="SitZone",
-                       type='Furniture', model="SZ-RP-Chair", store_id=store5.id, discount_id=s5_d1.id) # Gaming Summer
-    product25 = Product(name="Curved Ultrawide 34", description="34-inch UWQHD gaming monitor with 165Hz refresh rate and 1ms response.",
-                       buy_price=320, sell_price=599, stock=10, manufacturer="ViewMaster",
-                       type='Monitor', model="VM-34-UW", store_id=store5.id, discount_id=s5_d5.id) # Black Friday Gaming
+    product7 = Product(name="Bose QuietComfort 45", description="Legendary comfort with world-class noise cancellation and balanced audio performance.",
+                    buy_price=250, sell_price=329, stock=22, manufacturer="Bose", image='product7.webp',
+                    type='Headphones', model="QC45", store_id=store2.id, discount_id=s2_d2.id) # Fall Sound Event
+
+    product8 = Product(name="Apple AirPods Max", description="Premium over-ear headphones with spatial audio, transparency mode, and seamless Apple integration.",
+                    buy_price=400, sell_price=549, stock=12, manufacturer="Apple", image='product8.webp',
+                    type='Headphones', model="APM-2024", store_id=store2.id, discount_id=s2_d4.id) # Music Day Special
+
+    product9 = Product(name="Sennheiser HD 660S2", description="Open-back audiophile headphones with natural sound reproduction for critical listening.",
+                    buy_price=350, sell_price=499, stock=15, manufacturer="Sennheiser", image='product9.webp',
+                    type='Headphones', model="HD660S2", store_id=store2.id, discount_id=s2_d8.id) # Free Shipping
+
+    product10 = Product(name="Beats Studio Pro", description="Stylish wireless headphones with powerful bass, ANC, and up to 40 hours of battery life.",
+                    buy_price=200, sell_price=349, stock=30, manufacturer="Beats", image='product10.webp',
+                    type='Headphones', model="BSP-2024", store_id=store2.id) # NO DISCOUNT
+
+    # STORE 3: 5 Cameras
+    product11 = Product(name="Canon EOS R6 Mark II", description="Full-frame mirrorless camera with 24.2MP sensor, 40fps burst, and advanced autofocus.",
+                    buy_price=1800, sell_price=2499, stock=10, manufacturer="Canon", image='product11.webp',
+                    type='Camera', model="EOS-R6-II", store_id=store3.id, discount_id=s3_d5.id) # Black Friday Home
+
+    product12 = Product(name="Sony A7 IV", description="Versatile hybrid camera with 33MP sensor, 4K 60p video, and exceptional low-light performance.",
+                    buy_price=1900, sell_price=2599, stock=8, manufacturer="Sony", image='product12.webp',
+                    type='Camera', model="ILCE-7M4", store_id=store3.id, discount_id=s3_d4.id) # Earth Day Sale
+
+    product13 = Product(name="Fujifilm X-T5", description="Retro-styled APS-C camera with 40MP sensor, in-body stabilization, and film simulations.",
+                    buy_price=1200, sell_price=1699, stock=15, manufacturer="Fujifilm", image='product13.webp',
+                    type='Camera', model="X-T5", store_id=store3.id, discount_id=s3_d3.id) # Spring Cleaning
+
+    product14 = Product(name="Nikon Z6 III", description="Hybrid shooter with 24MP sensor, partially stacked sensor for fast readout, and N-RAW video.",
+                    buy_price=1700, sell_price=2399, stock=12, manufacturer="Nikon", image='product14.webp',
+                    type='Camera', model="Z6-III", store_id=store3.id, discount_id=s3_d8.id) # Free Shipping
+
+    product15 = Product(name="Panasonic Lumix S5 II", description="Compact full-frame camera with phase-detect AF, 6K video, and weather-sealed body.",
+                    buy_price=1500, sell_price=1999, stock=18, manufacturer="Panasonic", image='product15.webp',
+                    type='Camera', model="DC-S5M2", store_id=store3.id) # NO DISCOUNT
+
+    # STORE 4: 5 Monitors
+    product16 = Product(name="Dell UltraSharp U2723DE", description="27-inch QHD IPS monitor with USB-C hub, 99% sRGB coverage, and height-adjustable stand.",
+                    buy_price=350, sell_price=549, stock=20, manufacturer="Dell", image='product16.webp',
+                    type='Monitor', model="U2723DE", store_id=store4.id, discount_id=s4_d7.id) # Drone Day
+
+    product17 = Product(name="LG 27GN950-B", description="27-inch 4K gaming monitor with 144Hz, Nano IPS, 1ms response time, and G-Sync compatible.",
+                    buy_price=500, sell_price=799, stock=15, manufacturer="LG", image='product17.webp',
+                    type='Monitor', model="27GN950-B", store_id=store4.id, discount_id=s4_d8.id) # Free Shipping
+
+    product18 = Product(name="ASUS ProArt PA278CV", description="27-inch color-accurate monitor with 100% sRGB/Rec.709, factory calibrated for creators.",
+                    buy_price=250, sell_price=399, stock=25, manufacturer="ASUS", image='product18.webp',
+                    type='Monitor', model="PA278CV", store_id=store4.id, discount_id=s4_d4.id) # World Photo Day
+
+    product19 = Product(name="Samsung Odyssey G7", description="32-inch curved QHD gaming monitor with 240Hz, 1ms, HDR600, and aggressive 1000R curvature.",
+                    buy_price=450, sell_price=699, stock=12, manufacturer="Samsung", image='product19.webp',
+                    type='Monitor', model="G7-C32G75T", store_id=store4.id) # NO DISCOUNT
+
+    product20 = Product(name="BenQ SW270C", description="27-inch PhotoVue monitor with hardware calibration, 99% Adobe RGB, and shading hood included.",
+                    buy_price=400, sell_price=649, stock=18, manufacturer="BenQ", image='product20.webp',
+                    type='Monitor', model="SW270C", store_id=store4.id, discount_id=s4_d6.id) # Creator Week
+
+    # STORE 5: 5 Fancy Keyboards
+    product21 = Product(name="Keychron Q6 Pro", description="Full-size wireless mechanical keyboard with gasket mount, hot-swappable switches, and QMK/VIA support.",
+                    buy_price=150, sell_price=229, stock=20, manufacturer="Keychron", image='product21.webp',
+                    type='Keyboard', model="Q6-Pro", store_id=store5.id) # NO DISCOUNT (High Demand)
+
+    product22 = Product(name="Logitech G915 TKL", description="Low-profile wireless gaming keyboard with GL mechanical switches, LIGHTSYNC RGB, and 40-hour battery.",
+                    buy_price=180, sell_price=279, stock=15, manufacturer="Logitech", image='product22.webp',
+                    type='Keyboard', model="G915-TKL", store_id=store5.id, discount_id=s5_d8.id) # Free Shipping
+
+    product23 = Product(name="Razer BlackWidow V4 Pro", description="Premium gaming keyboard with analog optical switches, command dial, and per-key Chroma RGB.",
+                    buy_price=200, sell_price=299, stock=18, manufacturer="Razer", image='product23.webp',
+                    type='Keyboard', model="BWV4-Pro", store_id=store5.id, discount_id=s5_d4.id) # E3 Celebration
+
+    product24 = Product(name="Corsair K100 RGB", description="Flagship keyboard with Cherry MX Speed switches, iCUE control wheel, and PBT double-shot keycaps.",
+                    buy_price=190, sell_price=279, stock=12, manufacturer="Corsair", image='product24.webp',
+                    type='Keyboard', model="K100-RGB", store_id=store5.id, discount_id=s5_d1.id) # Gaming Summer
+
+    product25 = Product(name="SteelSeries Apex Pro TKL", description="Esports-grade TKL keyboard with adjustable OmniPoint switches, OLED display, and aircraft-grade aluminum.",
+                    buy_price=160, sell_price=249, stock=22, manufacturer="SteelSeries", image='product25.webp',
+                    type='Keyboard', model="Apex-Pro-TKL", store_id=store5.id, discount_id=s5_d5.id) # Black Friday Gaming
 
     db.session.add_all([product1, product2, product3, product4, product5,
                         product6, product7, product8, product9, product10,
@@ -539,3 +431,4 @@ with app.app_context():
     cart8 = Cart(user_id=cust8.id)
     db.session.add_all([cart1, cart2, cart3, cart4, cart5, cart6, cart7, cart8])
     db.session.commit()
+    print("Database Created!")

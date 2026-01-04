@@ -10,7 +10,7 @@ class Discount(db.Model):
     discount_percent = db.Column(db.Float)
     is_active = db.Column(db.Boolean, default=True)
     code = db.Column(db.String(50), unique=True)
-    type = db.Column(db.Enum('shipping', 'seasoning', 'special_event'), nullable=False)
+    type = db.Column(db.Enum('shipping', 'seasoning', 'special_event', name='discount_type_enum'), nullable=False)
 
     # Foreign Keys
     # admin/owner who creates the discount

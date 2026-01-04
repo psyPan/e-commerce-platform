@@ -1,7 +1,7 @@
 from flask_store import create_app
 POSTGRES = {
    'user':'postgres',
-   'password':'Keren_12345',
+   'password':'test',
    'db':'mystore',
    'host':'localhost',
    'port':'5432',

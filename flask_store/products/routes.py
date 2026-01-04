@@ -22,7 +22,7 @@ def add_product():
         flash('You need to create a store first', 'danger')
         return redirect(url_for('stores.store_info'))
     form = ProductForm()
-    discounts = Discount.query.all()
+    discounts = Discount.query.filter_by(store_id=current_user.store_id)
     form.discount_code.choices = [(d.code, d.code) for d in discounts]
      # Get page number and filters
     page = request.args.get('page', 1, type=int)

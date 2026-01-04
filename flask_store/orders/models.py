@@ -6,7 +6,7 @@ class Order(db.Model):
     __tablename__ = 'order'
     
     id = db.Column(db.Integer, primary_key=True)
-    status = db.Column(db.Enum('received', 'processed', 'shipped', 'closed'), nullable=False)
+    status = db.Column(db.Enum('received', 'processed', 'shipped', 'closed', name='order_status'), nullable=False)
     total_amount = db.Column(db.Integer, nullable=False)
     shipping_cost = db.Column(db.Integer, nullable=False)
     cust_address = db.Column(db.String, nullable=False)
