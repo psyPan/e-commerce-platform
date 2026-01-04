@@ -1,8 +1,0 @@
-.btn-group-custom {
-    display: flex;
-    gap: 10px;
-    margin-top: 20px;
-}
-.btn-group-custom button {
-    flex: 1;
-}
