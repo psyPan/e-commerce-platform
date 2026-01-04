@@ -187,7 +187,8 @@ def edit_product(product_id):
             # Save image logic here
             filename = save_picture(file)  # Your image saving function
             product.image = filename
-    
+    product.is_active = True
+    product.is_deleted = False
     db.session.commit()
     flash('Product updated successfully!', 'success')
     return redirect(url_for('products.view_product', product_id=product.id))
