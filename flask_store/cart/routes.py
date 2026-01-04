@@ -176,4 +176,4 @@ def checkout():
             flash(f'Error processing order: {str(e)}', 'danger')
             return redirect(url_for('cart.My_cart'))
 
-    return render_template('old/checkout.html', cart_items=cart_items, grand_total=grand_total, shipping_cost=shipping_cost)
+    return render_template('customer/checkout.html', cart_items=cart_items, grand_total=grand_total, shipping_cost=shipping_cost)
