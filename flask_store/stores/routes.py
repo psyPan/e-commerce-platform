@@ -11,42 +11,6 @@ from sqlalchemy import func, or_, and_
 
 stores = Blueprint('stores', __name__)
 
-@stores.route('/add_store', methods=['GET', 'POST'])
-def add_store():
-    form = StoreForm()
-    
-    if form.validate_on_submit():
-        owner = User.query.filter(
-            User.f_name == form.owner_f_name.data,
-            User.l_name == form.owner_l_name.data,
-            or_(
-                User.a_flag == True,
-                User.o_flag == True
-            )
-        ).first()
-        
-        if not owner:
-            flash('Owner not found or the user is not registered as an owner.', 'danger')
-            return render_template('old/add_store.html', title='New Store', form=form)
-        
-        new_store = Store(
-            name=form.store_name.data,
-            email=form.email.data,
-            phone=form.phone.data,
-            balance=0
-        )
-        
-        db.session.add(new_store)
-        db.session.flush()
-        
-        owner.store_id = new_store.id
-        db.session.commit()
-        
-        flash(f'Store {new_store.name} created!', 'success')
-        return redirect(url_for('users.home'))
-    
-    return render_template('old/add_store.html', title='New Store', form=form)
-
 @stores.route('/stores')
 def list_stores():
     """Display all stores with basic info"""
@@ -69,7 +33,7 @@ def list_stores():
             'in_stock_count': in_stock_count
         })
     
-    return render_template('old/stores_list.html', 
+    return render_template('common/stores_list.html', 
                          stores=store_data,
                          pagination=stores_pagination)
 
@@ -189,51 +153,6 @@ def product_detail(store_id, product_id):
                            product=product,
                            related_products=related_products,
                            reviews=reviews) # <--- Pass reviews here
-
-@stores.route('/store/<int:store_id>/deals')
-def store_deals(store_id):
-    """Show all discounted products in the store"""
-    store = Store.query.get_or_404(store_id)
-    
-    # UPDATED QUERY: Use JOIN to find products with active discounts
-    products = Product.query.join(Discount).filter(
-        Product.store_id == store_id,
-        Discount.discount_percent > 0,  # Only products with actual discount
-        Product.stock > 0
-    ).order_by(Discount.discount_percent.desc()).all()
-    
-    return render_template('old/store_deals.html',
-                         store=store,
-                         products=products)
-
-
-# @stores.route('/search')
-# def global_search():
-#     """Search across all stores and products"""
-#     query = request.args.get('q', '').strip()
-    
-#     if not query:
-#         return redirect(url_for('stores.list_stores'))
-    
-#     products = Product.query.filter(
-#         or_(
-#             Product.name.ilike(f'%{query}%'),
-#             Product.description.ilike(f'%{query}%'),
-#             Product.manufacturer.ilike(f'%{query}%')
-#         )
-#     ).limit(20).all()
-    
-#     stores_found = Store.query.filter(
-#         or_(
-#             Store.name.ilike(f'%{query}%'),
-#             Store.address.ilike(f'%{query}%')
-# #        )
-# #    ).limit(10).all()
-# #    
-# #    return render_template('search_results.html',
-# #                         query=query,
-# #                         products=products,
-# #                         stores=stores_found)
 
 @stores.route('/store_info', methods=['GET', 'POST'])
 @login_required

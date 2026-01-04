@@ -38,29 +38,6 @@ def register():
         return redirect(url_for('users.login'))
     return render_template('common/register.html',title='Register', form=form)
 
-@users.route('/register_owner', methods=['GET', 'POST'])
-@login_required
-def register_owner():
-    if not current_user.a_flag:
-        flash('You do not have permission to this page', 'danger')
-        return redirect(url_for('users.home'))
-    form = RegistrationForm()
-    if form.validate_on_submit():
-        hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-        owner = User(f_name=form.f_name.data, l_name=form.l_name.data, 
-                    email=form.email.data, password=hashed_password, phone=form.phone.data,
-                    birth=form.birth.data, address=form.address.data, a_flag=False, o_flag=True, c_flag=False)
-        try:
-            db.session.add(owner)
-            db.session.commit()
-            flash(f'Owner account "{owner.email}" created successfully!', 'success')
-            return redirect(url_for('users.home'))
-        except Exception as e:
-            db.session.rollback()
-            flash('An error occurred while creating the owner account.', 'danger')
-            return render_template('old/test_product.html', form=form)
-    return render_template('common/register.html',title='Register Owner', form=form)
-
 @users.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
@@ -174,33 +151,6 @@ def order_history():
                            review_form=review_form,
                            reviewed_map=reviewed_map)
 
-# admin youssel test
-# @login_required
-@users.route('/admin/user-management')
-def user_list():
-    return render_template('old/admin/user_management.html')
-
-@users.route('/admin/user/1')
-# @login_required
-def user_detail():
-    return render_template('old/admin/user_detail.html')
-
-@users.route('/admin/user/1/edit')
-# @login_required
-def user_edit():
-    return render_template('old/admin/user_edit.html')
-
-# to see credit card page
-@users.route('/cart')
-# @login_required
-def my_cart():
-    return render_template('old/cart.html')
-
-@users.route('/test_product')
-def test_product():
-    form = ProductForm()
-    return render_template('old/test_product.html', form=form)
-
 @users.route("/order/<int:order_id>/cancel", methods=['POST'])
 @login_required
 def cancel_order(order_id):
@@ -231,36 +181,6 @@ def cancel_order(order_id):
     
     flash('Your order has been successfully cancelled.', 'success')
     return redirect(url_for('users.order_history'))
-
-@users.route("/assign_owner", methods=["GET", "POST"])
-@login_required
-def assign_owner():
-    if not current_user.a_flag:
-        flash('You do not have permission to this page', 'danger')
-        return redirect(url_for('users.home'))
-    form = AssignOwnerForm()
-    stores = Store().query.all()
-    form.store_id.choices = [(s.id, s.name) for s in stores]
-    if form.validate_on_submit():
-        owner = User.query.filter_by(email=form.owner_email.data, o_flag=True).first()
-        store = Store.query.filter_by(id=form.store_id.data).first()
-        if not owner:
-            flash('Owner Not Found!', 'danger')
-            return redirect(url_for('users.assign_owner'))
-        elif not store:
-            flash('Store Not Found!', 'danger')
-            return redirect(url_for('users.assign_owner'))
-        else:
-            owner.store_id = store.id
-        try:
-            db.session.commit()
-            flash('Owner assigned to store successfully!', 'success')
-        except Exception as e:
-            db.session.rollback()
-            flash('Error assigning owner to store. Please try again.', 'danger')
-    else:
-        print(f"Form validation failed: {form.errors}")
-    return render_template("owner/assign_owner.html", form=form)
 
 @users.route("/store/manage-orders", methods=["GET", "POST"])
 @login_required
@@ -417,13 +337,6 @@ def add_review(order_id, product_id):
 
     # CRITICAL CHANGE: Redirect back to Order History, not Order Details
     return redirect(url_for('users.order_history'))
-
-
-users.route("/credit", methods=['GET'])
-@login_required
-def credit():
-    return render_template('credit.html')
-
 
 @users.route("/credit/add", methods=['POST'])
 @login_required

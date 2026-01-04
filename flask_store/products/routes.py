@@ -76,27 +76,6 @@ def add_product():
                            products=products_pagination.items,
                            pagination=products_pagination)
 
-def list_products():
-    page = request.args.get('page', 1, type=int)
-    per_page = 9
-    
-    products_pagination = Product.query.paginate(page=page, per_page=per_page, error_out=False)
-    
-    # Enhance store data with product counts
-    product_data = []
-    for product in products_pagination.items:
-        product_data.append({
-            'name': product.name,
-            'in_stock_quantity': product.stock,
-            'description': product.description,
-            'sell_price': product.sell_price,
-            'type': product.type
-        })
-
-    return render_template('old/stores_list.html', 
-                         products=product_data,
-                         pagination=products_pagination)
-
 @products.route('/product/<int:product_id>')
 def view_product(product_id):
     """Display product details"""
