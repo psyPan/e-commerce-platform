@@ -162,10 +162,11 @@ def edit_product(product_id):
     # Handle image upload
     if 'image' in request.files:
         file = request.files['image']
-        if file and file.filename:
-            # Save image logic here
-            filename = save_picture(file)  # Your image saving function
+        if file and file.filename != '':
+            filename = save_picture(file)
             product.image = filename
+        else:
+            print("No valid file uploaded")
     product.is_active = True
     product.is_deleted = False
     db.session.commit()
