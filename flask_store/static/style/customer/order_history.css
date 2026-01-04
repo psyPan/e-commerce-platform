@@ -1,0 +1,245 @@
+/* ===== LAYOUT ===== */
+
+/* ===== FONT CONSISTENCY ===== */
+.dashboard-card,
+.dashboard-card * {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.dashboard-card,
+.card-list {
+    width: 800px;
+    max-width: 800px;
+}
+
+
+.credit-wrapper {
+    max-width: 1100px;
+    margin: 5px auto;
+    display: flex;
+    gap: 40px;
+}
+
+/* ===== SIDEBAR ===== */
+.side-menu {
+    width: 200px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.side-btn {
+    padding: 12px 20px;
+    background: #f3e8dd;
+    border-radius: 20px;
+    color: #43341e;
+    font-size: 14px;
+    text-align: center;
+    text-decoration: none;
+    transition: 0.2s;
+}
+
+.side-btn:hover {
+    background: #e2d2c2;
+}
+
+.side-btn.active {
+    background: #c9a876;
+    color: white;
+}
+
+/* ===== MAIN CARD ===== */
+.profile-container {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
+.dashboard-card {
+    width: 890px;
+    max-width: 890px;
+    background: rgba(255, 255, 255, 0.35);
+    padding: 40px 45px;
+    border-radius: 30px;
+
+    height: 480px;          /* 🔥 FIXED HEIGHT */
+    min-height: 0;          /* 🔥 MATIIN min-height lama */
+    overflow: hidden;       /* 🔥 BIAR YANG SCROLL CUMA DALAM */
+
+    position: relative;
+
+    display: flex;          /* 🔥 PENTING */
+    flex-direction: column; /* 🔥 PENTING */
+}
+
+/* TITLE */
+.dashboard-title {
+    font-size: 28px;
+    font-weight: 700;
+    color: #43341e;
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+/* ===== FORM ===== */
+.password-form {
+    max-width: 520px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+}
+
+.dashboard-form-row {
+    display: grid;
+    grid-template-columns: 170px 1fr;
+    align-items: center;
+    gap: 18px;
+}
+
+.dashboard-form-row label {
+    font-weight: 600;
+    color: #555;
+}
+
+.profile-input {
+    padding: 10px 16px;
+    border-radius: 22px;
+    border: 1px solid #ddd;
+    font-size: 14px;
+}
+
+/* ===== BUTTONS ===== */
+.action-buttons-form {
+    position: absolute;
+    right: 45px;
+    bottom: 35px;
+    display: flex;
+    gap: 14px;
+}
+
+.cancel-btn {
+    background: #e0e0e0;
+    color: #333;
+    padding: 12px 26px;
+    border-radius: 18px;
+    border: none;
+    cursor: pointer;
+}
+
+.save-btn {
+    background: #c9a876;
+    color: white;
+    padding: 12px 30px;
+    border-radius: 18px;
+    border: none;
+    cursor: pointer;
+}
+
+.save-btn:hover {
+    background: #b89763;
+}
+
+/* =========================
+   ORDER TABS (CENTERED)
+========================= */
+.order-tabs {
+    display: flex;
+    justify-content: center;   /* 🔥 CENTER FIX */
+    gap: 12px;
+    margin-bottom: 28px;       /* 🔥 JARAK KE ORDER */
+}
+
+.dashboard-title {
+    font-size: 28px;
+    font-weight: 700;
+    color: #43341e;
+    text-align: center;
+    margin-bottom: 22px;   /* jangan terlalu mepet */
+}
+
+.order-list {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    padding-right: 6px;
+}
+
+.order-box {
+    background: white;
+    border-radius: 18px;
+    padding: 18px 22px;
+    margin-bottom: 24px;
+    box-shadow: 0 8px 22px rgba(0,0,0,0.08);
+}
+
+.order-header {
+    font-weight: 600;
+    color: #555;
+    margin-bottom: 14px;
+}
+
+.order-row {
+    display: grid;
+    grid-template-columns: 80px 1fr 80px 100px 120px;
+    align-items: center;
+    gap: 16px;
+}
+
+.order-img {
+    width: 60px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 6px;
+}
+
+.order-name {
+    font-weight: 600;
+    color: #333;
+}
+
+.order-qty,
+.order-price {
+    text-align: center;
+    font-size: 14px;
+}
+
+.order-status {
+    text-align: center;
+    padding: 6px 12px;
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.order-status.shipping {
+    background: #f3e8dd;
+    color: #7a5a2e;
+}
+
+.order-status.closed {
+    background: #e0e0e0;
+    color: #444;
+}
+
+.order-tab {
+    padding: 10px 22px;
+    border-radius: 14px;
+    border: 1px solid #ddd;
+    background: white;
+    font-size: 14px;
+    font-weight: 600;
+    color: #555;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.order-tab:hover {
+    background: #f3e8dd;
+}
+
+.order-tab.active {
+    background: #43341e;
+    color: white;
+    border-color: #43341e;
+}
